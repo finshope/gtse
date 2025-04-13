@@ -1,10 +1,15 @@
 plugins {
+//    id "dev.architectury"
+//    id "dev.architectury.loom" version "1.6-SNAPSHOT"
     id "idea"
     id "maven-publish"
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'com.diffplug.spotless' version '7.0.2'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
+
+//apply plugin: "dev.architectury.loom"
 
 def generatedResources = file("src/generated")
 
@@ -59,9 +64,9 @@ repositories {
     }
     maven {
         // EMI
-		name = "TerraformersMC"
-		url = "https://maven.terraformersmc.com/"
-	}
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
 
     maven {
         url = "https://maven.architectury.dev"
@@ -69,6 +74,9 @@ repositories {
     maven {
         url = "https://thedarkcolour.github.io/KotlinForForge/"
     }
+
+    maven { url = "https://maven.parchmentmc.org" } // Parchment mappings
+    maven { url = "https://maven.quiltmc.org/repository/release/" } // Quilt Mappings
 
 }
 
@@ -105,14 +113,46 @@ minecraft {
 
 apply from: "$rootDir/gradle/scripts/spotless.gradle"
 
+mixin {
+    // MixinGradle Settings
+    add sourceSets.main, 'mixins.gtse.refmap.json'
+    config 'gtse.mixins.json'
+
+    debug.verbose = true
+    debug.export = true
+}
+
+//loom {
+//    silentMojangMappingsLicense()
+//    forge {
+//        mixinConfigs = [
+//                "gtse.mixin.json"
+//        ]
+//
+//        dataGen {
+//            mod(mod_id)
+//        }
+//    }
+//
+//    runConfigs.named("data").configure {
+//        programArg("--existing=" + file("src/main/resources").absolutePath)
+//    }
+//}
+
 dependencies {
+//    mappings loom.layered {
+//        it.mappings("org.quiltmc:quilt-mappings:${libs.versions.minecraft.get()}+build.${libs.versions.quiltMappings.get()}:intermediary-v2")
+//        it.parchment("org.parchmentmc.data:parchment-${libs.versions.minecraft.get()}:${libs.versions.parchment.get()}@zip")
+//        it.officialMojangMappings { nameSyntheticMembers = false }
+//    }
+
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // JEI, EMI, Jade
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}+${minecraft_version}")
+//    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}+${minecraft_version}")
     runtimeOnly fg.deobf("curse.maven:jade-324717:5390389")
 
     // GregTech and dependencies
@@ -127,19 +167,22 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    implementation 'org.spongepowered:mixin:0.8.5'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 tasks.named('processResources', ProcessResources).configure {
     var properties = [
-            "mod_license": mod_license,
-            "mod_id": mod_id,
-            "version": version,
-            "mod_name": mod_name,
-            "mod_url": mod_url,
-            "mod_author": mod_author,
-            "forge_version": forge_version.split("\\.")[0], // only specify major version of forge
+            "mod_license"      : mod_license,
+            "mod_id"           : mod_id,
+            "version"          : version,
+            "mod_name"         : mod_name,
+            "mod_url"          : mod_url,
+            "mod_author"       : mod_author,
+            "forge_version"    : forge_version.split("\\.")[0], // only specify major version of forge
             "minecraft_version": minecraft_version,
-            "gtceu_version": gtceu_version,
+            "gtceu_version"    : gtceu_version,
     ]
     inputs.properties(properties)
 
