@@ -1,5 +1,8 @@
 package com.finshope.gtsecore;
 
+import com.finshope.gtsecore.api.registries.GTSERegistires;
+import com.finshope.gtsecore.common.data.GTSECreativeModeTabs;
+import com.finshope.gtsecore.common.data.GTSEItems;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -22,14 +25,21 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
+
 @Mod(GTSECore.MOD_ID)
 public class GTSECore {
+    static {
+        REGISTRATE.creativeModeTab(() -> GTSECreativeModeTabs.GTSE);
+    }
 
     public static final String MOD_ID = "gtse";
     public static final Logger LOGGER = LogManager.getLogger();
     public static GTRegistrate EXAMPLE_REGISTRATE = GTRegistrate.create(GTSECore.MOD_ID);
 
     public GTSECore() {
+        init();
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
@@ -47,6 +57,12 @@ public class GTSECore {
         // If we want to use annotations to register event listeners,
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
+
+    }
+
+    private void init() {
+        GTSEItems.init();
+        REGISTRATE.registerRegistrate();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -74,7 +90,7 @@ public class GTSECore {
      * Create a material manager for your mod using GT's API.
      * You MUST have this if you have custom materials.
      * Remember to register them not to GT's namespace, but your own.
-     * 
+     *
      * @param event
      */
     private void addMaterialRegistries(MaterialRegistryEvent event) {
@@ -84,7 +100,7 @@ public class GTSECore {
     /**
      * You will also need this for registering custom materials
      * Call init() from your Material class(es) here
-     * 
+     *
      * @param event
      */
     private void addMaterials(MaterialEvent event) {
@@ -93,7 +109,7 @@ public class GTSECore {
 
     /**
      * (Optional) Used to modify pre-existing materials from GregTech
-     * 
+     *
      * @param event
      */
     private void modifyMaterials(PostMaterialEvent event) {
@@ -103,7 +119,7 @@ public class GTSECore {
     /**
      * Used to register your own new RecipeTypes.
      * Call init() from your RecipeType class(es) here
-     * 
+     *
      * @param event
      */
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
@@ -113,7 +129,7 @@ public class GTSECore {
     /**
      * Used to register your own new RecipeTypes.
      * Call init() from your Machine class(es) here
-     * 
+     *
      * @param event
      */
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
@@ -123,7 +139,7 @@ public class GTSECore {
     /**
      * Used to register your own new sounds
      * Call init from your Sound class(es) here
-     * 
+     *
      * @param event
      */
     public void registerSounds(GTCEuAPI.RegisterEvent<ResourceLocation, SoundEntry> event) {

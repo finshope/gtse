@@ -1,5 +1,7 @@
 package com.finshope.gtsecore;
 
+import com.finshope.gtsecore.api.registries.GTSERegistires;
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
 import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
@@ -10,15 +12,18 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 @GTAddon
-public class ExampleGTAddon implements IGTAddon {
+public class GTSEGTAddon implements IGTAddon {
 
     @Override
     public GTRegistrate getRegistrate() {
-        return GTSECore.EXAMPLE_REGISTRATE;
+        return GTSERegistires.REGISTRATE;
     }
 
     @Override
-    public void initializeAddon() {}
+    public void initializeAddon() {
+        System.out.println("ExampleGTAddon initialized!");
+        GTCEu.LOGGER.info("ExampleGTAddon initialized![]");
+    }
 
     @Override
     public String addonModId() {
@@ -28,11 +33,13 @@ public class ExampleGTAddon implements IGTAddon {
     @Override
     public void registerTagPrefixes() {
         // CustomTagPrefixes.init();
+        System.out.println("ExampleGTAddon TagPrefixes initialized!");
     }
 
     @Override
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         // CustomRecipes.init(provider);
+        System.out.println("ExampleGTAddon Recipes initialized!");
     }
 
     // If you have custom ingredient types, uncomment this & change to match your capability.

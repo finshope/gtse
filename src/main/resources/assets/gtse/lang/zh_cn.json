@@ -1,0 +1,4 @@
+{
+  "item.gtse.complete_card": "完成卡",
+  "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
+}
