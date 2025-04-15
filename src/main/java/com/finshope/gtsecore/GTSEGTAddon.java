@@ -1,6 +1,7 @@
 package com.finshope.gtsecore;
 
 import com.finshope.gtsecore.api.registries.GTSERegistires;
+import com.finshope.gtsecore.common.data.GTSERecipes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;
@@ -40,6 +41,7 @@ public class GTSEGTAddon implements IGTAddon {
     public void addRecipes(Consumer<FinishedRecipe> provider) {
         // CustomRecipes.init(provider);
         System.out.println("ExampleGTAddon Recipes initialized!");
+        GTSERecipes.init(provider);
     }
 
     // If you have custom ingredient types, uncomment this & change to match your capability.

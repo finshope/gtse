@@ -3,6 +3,8 @@ package com.finshope.gtsecore;
 import com.finshope.gtsecore.api.registries.GTSERegistires;
 import com.finshope.gtsecore.common.data.GTSECreativeModeTabs;
 import com.finshope.gtsecore.common.data.GTSEItems;
+import com.finshope.gtsecore.common.data.GTSEMachines;
+import com.finshope.gtsecore.common.data.GTSERecipeTypes;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -123,7 +125,7 @@ public class GTSECore {
      * @param event
      */
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
-        // CustomRecipeTypes.init();
+        GTSERecipeTypes.init();
     }
 
     /**
@@ -133,7 +135,7 @@ public class GTSECore {
      * @param event
      */
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        // CustomMachines.init();
+        GTSEMachines.init();
     }
 
     /**

@@ -1,4 +1,10 @@
 {
+  "block.gtse.ev_nether_collector": "下界拾荒器(§5EV§r)",
+  "block.gtse.iv_nether_collector": "下界拾荒器(§1IV§r)",
+  "block.gtse.luv_nether_collector": "下界拾荒器(§dLuV§r)",
+  "block.gtse.zpm_nether_collector": "下界拾荒器(§cZPM§r)",
+  "block.gtse.uv_nether_collector": "下界拾荒器(§3UV§r)",
+  "block.gtse.uhv_nether_collector": "下界拾荒器(§4UHV§r)",
   "item.gtse.complete_card": "完成卡",
   "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
 }
