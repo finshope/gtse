@@ -52,6 +52,10 @@ repositories {
         name = "BlameJared"
         url = "https://maven.blamejared.com/"
     }
+    maven { // JEI mirror, AE2
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
     maven {
         url = "https://maven.theillusivec4.top/"
     }
@@ -163,6 +167,9 @@ dependencies {
     implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
     runtimeOnly fg.deobf("dev.toma.configuration:configuration-forge-${minecraft_version}:${configuration_version}")
     runtimeOnly fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+
+    // ae2
+    runtimeOnly fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}")
 
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'

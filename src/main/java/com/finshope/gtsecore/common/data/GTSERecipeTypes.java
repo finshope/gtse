@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ELECTRIC;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.MULTIBLOCK;
 import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection.LEFT_TO_RIGHT;
 
 public class GTSERecipeTypes {
@@ -14,6 +15,10 @@ public class GTSERecipeTypes {
     public static final GTRecipeType NETHER_COLLECTOR_RECIPES = GTRecipeTypes.register("nether_collector", ELECTRIC).setMaxIOSize(3, 6, 1, 0).setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.MOTOR);
+
+    public static final GTRecipeType TREE_FARM_RECIPES = GTRecipeTypes.register("tree_farm", MULTIBLOCK).setMaxIOSize(3, 6, 1, 0).setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.SCIENCE);
 
     public static void init() {
 
