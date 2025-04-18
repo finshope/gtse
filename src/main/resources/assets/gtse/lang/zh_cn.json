@@ -5,7 +5,14 @@
   "block.gtse.zpm_nether_collector": "下界拾荒器(§cZPM§r)",
   "block.gtse.uv_nether_collector": "下界拾荒器(§3UV§r)",
   "block.gtse.uhv_nether_collector": "下界拾荒器(§4UHV§r)",
-  "block.gtse.tree_farm": "树场",
+  "block.gtse.tree_farm": "工业树场",
+  "block.gtceu.ev_combustion": "§5进阶内燃发电机 III§r",
+  "block.gtceu.iv_combustion": "§9精英内燃发电机§r",
+  "block.gtceu.ev_gas_turbine": "§5进阶燃气轮机 III§r",
+  "block.gtceu.iv_gas_turbine": "§9精英燃气轮机§r",
+  "block.gtceu.luv_plasma_turbine": "§d精英等离子发电机 II§r",
+  "block.gtceu.zpm_plasma_turbine": "§c精英等离子发电机 III§r",
+  "block.gtceu.uv_plasma_turbine": "§3终极等离子发电机§r",
   "item.gtse.complete_card": "完成卡",
   "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
 }

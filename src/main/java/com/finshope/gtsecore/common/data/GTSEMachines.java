@@ -14,6 +14,8 @@ import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.TieredHullMachineRenderer;
+import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -26,9 +28,13 @@ import static com.gregtechceu.gtceu.api.GTValues.VNF;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_ALUMINIUM_FROSTPROOF;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
-import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.defaultTankSizeFunction;
+import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 
 public class GTSEMachines {
+    public static final Int2IntFunction largeTankSizeFunction = (tier) -> {
+        return Math.min(4 * (1 << tier - 1), 256) * 1000;
+    };
+
     public static final int[] NETHER_COLLECTOR_TIERS = GTValues.tiersBetween(GTValues.EV, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV);
     public final static MachineDefinition[] NETHER_COLLECTOR = registerTieredMachines("nether_collector", NetherCollectorMachine::new,
             (tier, builder) -> builder
@@ -41,6 +47,14 @@ public class GTSEMachines {
                     .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, GTSERecipeTypes.NETHER_COLLECTOR_RECIPES, defaultTankSizeFunction.apply(tier), true))
                     .register(),
             NETHER_COLLECTOR_TIERS);
+
+    // generator
+    public static final MachineDefinition[] COMBUSTION = registerSimpleGenerator("combustion",
+            GTRecipeTypes.COMBUSTION_GENERATOR_FUELS, largeTankSizeFunction, 0.1f, GTValues.EV, GTValues.IV);
+    public static final MachineDefinition[] GAS_TURBINE = registerSimpleGenerator("gas_turbine",
+            GTRecipeTypes.GAS_TURBINE_FUELS, largeTankSizeFunction, 0.1f, GTValues.EV, GTValues.IV);
+    public static final MachineDefinition[] PLASMA_TURBINE = registerSimpleGenerator("plasma_turbine",
+            GTRecipeTypes.PLASMA_GENERATOR_FUELS, largeTankSizeFunction, 0.1f, GTValues.LuV, GTValues.ZPM, GTValues.UV);
 
     public static final MultiblockMachineDefinition TREE_FARM = REGISTRATE.multiblock("tree_farm", TreeFarmMachine::new)
             .rotationState(RotationState.ALL)
@@ -59,6 +73,8 @@ public class GTSEMachines {
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_frost_proof"),
                     GTCEu.id("block/multiblock/vacuum_freezer"), false)
             .register();
+
+
 
     public static Component[] workableTiered(int tier, long voltage, long energyCapacity, GTRecipeType recipeType, long tankCapacity, boolean input) {
         List<Component> tooltipComponents = new ArrayList<>();
