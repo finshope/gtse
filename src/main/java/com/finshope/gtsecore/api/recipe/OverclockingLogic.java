@@ -52,4 +52,44 @@ public class OverclockingLogic {
 
         return new com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult(Math.pow(voltageFactor, ocLevel), durationMultiplier, ocLevel, (int) parallel);
     }
+
+    public static OCResult industrialHeatingCoilOC(OCParams params, long maxVoltage, int recipeTemp, int machineTemp) {
+        double duration = (double)params.duration();
+        double eut = (double)params.eut();
+        int ocAmount = params.ocAmount();
+        int maxParallels = params.maxParallels();
+        double parallel = 1.0;
+        boolean shouldParallel = false;
+        int ocLevel = 0;
+
+        double durationMultiplier;
+        for(durationMultiplier = 1.0; ocAmount-- > 0; ++ocLevel) {
+            double potentialEUt = eut * 4.0;
+            if (potentialEUt > (double)maxVoltage) {
+                break;
+            }
+
+            double dFactor = 0.25;
+            if (!shouldParallel && !(duration * dFactor < 1.0)) {
+                duration *= dFactor;
+                durationMultiplier *= dFactor;
+            } else {
+                double pFactor = 4.0;
+                double potentialParallel = parallel * pFactor;
+                if (potentialParallel > (double)maxParallels) {
+                    break;
+                }
+
+                if (potentialParallel > maxParallels) break;
+
+                parallel = potentialParallel;
+                shouldParallel = true;
+            }
+
+            eut = potentialEUt;
+        }
+
+        return new OCResult(Math.pow(4.0, (double)ocLevel), durationMultiplier, ocLevel, (int)parallel);
+    }
+
 }

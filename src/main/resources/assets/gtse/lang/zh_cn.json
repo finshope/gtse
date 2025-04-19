@@ -6,6 +6,8 @@
   "block.gtse.uv_nether_collector": "下界拾荒器(§3UV§r)",
   "block.gtse.uhv_nether_collector": "下界拾荒器(§4UHV§r)",
   "block.gtse.tree_farm": "工业树场",
+  "block.gtse.industrial_pyrolyse_oven": "工业焦炉",
+  "block.gtse.industrial_alloy_blast_smelter": "工业合金冶炼炉",
   "block.gtceu.ev_combustion": "§5进阶内燃发电机 III§r",
   "block.gtceu.iv_combustion": "§9精英内燃发电机§r",
   "block.gtceu.ev_gas_turbine": "§5进阶燃气轮机 III§r",
@@ -14,5 +16,8 @@
   "block.gtceu.zpm_plasma_turbine": "§c精英等离子发电机 III§r",
   "block.gtceu.uv_plasma_turbine": "§3终极等离子发电机§r",
   "item.gtse.complete_card": "完成卡",
+  "item.gtse.complete_card.tooltip": "潜行右键机器以立即完成当前配方",
+  "gtse.machine.industrial_pyrolyse_oven.tooltip.1":"§a白铜§7线圈会使效率降低§f25%%§7，§a坎塔尔合金§7后的每个线圈都会增加§f50%%§7的速度。",
+
   "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
 }

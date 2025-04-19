@@ -1,0 +1,54 @@
+package com.finshope.gtsecore.common.data;
+
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import org.jetbrains.annotations.NotNull;
+
+import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
+import static com.finshope.gtsecore.api.recipe.OverclockingLogic.industrialHeatingCoilOC;
+
+public class GTSERecipeModifiers {
+    public static @NotNull ModifierFunction industrialPyrolyseOvenOverclock(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
+            if (RecipeHelper.getRecipeEUtTier(recipe) > coilMachine.getTier()) {
+                return ModifierFunction.NULL;
+            } else {
+                int tier = coilMachine.getCoilTier();
+                double durationMultiplier = tier == 0 ? 1.3333333333333333 : 2.0 / (double) (tier + 1);
+                ModifierFunction durationModifier = ModifierFunction.builder().durationMultiplier(durationMultiplier).build();
+                ModifierFunction oc = PERFECT_OVERCLOCK_SUBSECOND.getModifier(machine, recipe, coilMachine.getOverclockVoltage());
+                return oc.andThen(durationModifier);
+            }
+        } else {
+            return RecipeModifier.nullWrongType(CoilWorkableElectricMultiblockMachine.class, machine);
+        }
+    }
+
+    public static @NotNull ModifierFunction industrialEbfOverclock(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
+            int blastFurnaceTemperature = coilMachine.getCoilType().getCoilTemperature() + 100 * Math.max(0, coilMachine.getTier() - 2);
+            int recipeTemp = recipe.data.getInt("ebf_temp");
+            if (recipe.data.contains("ebf_temp") && recipeTemp <= blastFurnaceTemperature) {
+                if (RecipeHelper.getRecipeEUtTier(recipe) > coilMachine.getTier()) {
+                    return ModifierFunction.NULL;
+                } else {
+                    ModifierFunction discount = ModifierFunction.builder().eutMultiplier(OverclockingLogic.getCoilEUtDiscount(recipeTemp, blastFurnaceTemperature)).build();
+                    OverclockingLogic logic = (p, v) -> {
+                        return industrialHeatingCoilOC(p, v, recipeTemp, blastFurnaceTemperature);
+                    };
+                    ModifierFunction oc = logic.getModifier(machine, recipe, coilMachine.getOverclockVoltage());
+                    return oc.compose(discount);
+                }
+            } else {
+                return ModifierFunction.NULL;
+            }
+        } else {
+            return RecipeModifier.nullWrongType(CoilWorkableElectricMultiblockMachine.class, machine);
+        }
+    }
+}

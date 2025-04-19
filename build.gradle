@@ -169,7 +169,7 @@ dependencies {
     runtimeOnly fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
     // ae2
-    runtimeOnly fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}")
+    implementation fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}")
 
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'
