@@ -24,6 +24,10 @@ public class GTSERecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
 
+    public static final GTRecipeType MOB_SIMULATOR_RECIPES = GTRecipeTypes.register("mob_simulator", ELECTRIC).setMaxIOSize(3, 6, 2, 0).setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.SCIENCE);
+
     public static void init() {
 
     }

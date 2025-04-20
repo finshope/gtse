@@ -34,6 +34,7 @@ import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.CABLE;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PISTON;
 import static com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader.registerMachineRecipe;
+import static net.minecraft.tags.ItemTags.WOOL;
 import static net.minecraft.world.item.Items.*;
 
 public class MiscRecipeLoader {
@@ -44,12 +45,14 @@ public class MiscRecipeLoader {
         createMultiblockRecipes(provider);
         createGeneratorRecipes(provider);
         createAE2Recipes(provider);
+        createMobSimulatorRecipes(provider);
     }
 
     static void createCustomRecipes(Consumer<FinishedRecipe> provider) {
         registerMachineRecipe(provider, GTSEMachines.NETHER_COLLECTOR, "WFW", "PMP", "CFC", 'M', HULL, 'P', PISTON, 'F',
                 GTItems.ITEM_FILTER, 'C', CIRCUIT, 'W', CABLE_DOUBLE);
         registerMachineRecipe(provider, HARVESTER, "HCH", "PMP", "HCH", 'M', HULL, 'P', PUMP, 'C', CIRCUIT, 'H', CABLE);
+        registerMachineRecipe(provider, MOB_SIMULATOR, "HCH", "PMP", "HCH", 'M', HULL, 'P', FIELD_GENERATOR, 'C', CIRCUIT, 'H', CABLE);
 
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_1").circuitMeta(1).duration(20 * 10).EUt(VA[EV]).chancedOutput(TagPrefix.dust, NetherStar, 1000, 2000).save(provider);
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_2").circuitMeta(2).duration(20 * 10).EUt(VA[EV]).chancedOutput(dustTiny, Netherite, 1000, 2000).save(provider);
@@ -70,6 +73,187 @@ public class MiscRecipeLoader {
         createTreeFarmRecipe(provider, "tree_farm_rubber", RUBBER_SAPLING, RUBBER_LOG, STICKY_RESIN);
         createTreeFarmRecipe(provider, "tree_farm_bamboo", null, BAMBOO, null);
         createTreeFarmRecipe(provider, "tree_farm_cactus", null, CACTUS, null);
+    }
+
+    static void createMobSimulatorRecipes(Consumer<FinishedRecipe> provider) {
+        //////////////////////////////////////
+        // ********* monster *********//
+        //////////////////////////////////////
+        // ender man
+        ASSEMBLER_RECIPES.recipeBuilder("ender_man_spawn_egg")
+                .duration(20 * 10)
+                .EUt(V[HV])
+                .inputItems(new ItemStack(ENDER_PEARL, 8), new ItemStack(EGG))
+                .outputItems(ENDERMAN_SPAWN_EGG)
+                .save(provider);
+
+        MOB_SIMULATOR_RECIPES.recipeBuilder("ender_man")
+                .circuitMeta(1)
+                .notConsumable(ENDERMAN_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[HV])
+                .chancedOutput(new ItemStack(ENDER_PEARL), 1000, 2000)
+                .save(provider);
+
+        // blaze
+        ASSEMBLER_RECIPES.recipeBuilder("blaze_spawn_egg")
+                .duration(20 * 10)
+                .EUt(V[MV])
+                .inputItems(new ItemStack(BLAZE_ROD, 8), new ItemStack(EGG))
+                .outputItems(BLAZE_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("blaze")
+                .circuitMeta(1)
+                .notConsumable(BLAZE_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[MV])
+                .chancedOutput(new ItemStack(BLAZE_ROD), 1000, 2000)
+                .save(provider);
+
+        // witch
+        ASSEMBLER_RECIPES.recipeBuilder("witch_spawn_egg")
+                .duration(20 * 10)
+                .EUt(V[MV])
+                .inputItems(new ItemStack(REDSTONE, 2), new ItemStack(SUGAR, 2), new ItemStack(GLASS_BOTTLE, 2), new ItemStack(GLOWSTONE, 2), new ItemStack(EGG))
+                .outputItems(WITCH_SPAWN_EGG)
+                .save(provider);
+
+        MOB_SIMULATOR_RECIPES.recipeBuilder("witch")
+                .circuitMeta(1)
+                .notConsumable(WITCH_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[MV])
+                .chancedOutput(new ItemStack(REDSTONE), 1000, 2000)
+                .chancedOutput(new ItemStack(SUGAR), 1000, 2000)
+                .chancedOutput(new ItemStack(GLOWSTONE), 1000, 2000)
+                .save(provider);
+
+        // skeleton
+        ASSEMBLER_RECIPES.recipeBuilder("skeleton_spawn_egg")
+                .duration(20 * 10)
+                .EUt(V[MV])
+                .inputItems(new ItemStack(BONE, 8), new ItemStack(EGG))
+                .outputItems(SKELETON_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("skeleton")
+                .circuitMeta(1)
+                .notConsumable(SKELETON_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[MV])
+                .chancedOutput(new ItemStack(BONE), 1000, 2000)
+                .save(provider);
+
+        // wither skeleton
+        ASSEMBLER_RECIPES.recipeBuilder("wither_skeleton_spawn_egg")
+                .duration(20 * 10)
+                .EUt(VA[HV])
+                .inputItems(new ItemStack(WITHER_SKELETON_SKULL, 8), new ItemStack(EGG))
+                .outputItems(WITHER_SKELETON_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("wither_skeleton")
+                .circuitMeta(1)
+                .notConsumable(WITHER_SKELETON_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[HV])
+                .chancedOutput(new ItemStack(WITHER_SKELETON_SKULL), 1000, 2000)
+                .save(provider);
+
+        // phantom
+        ASSEMBLER_RECIPES.recipeBuilder("phantom_spawn_egg")
+                .duration(20 * 10)
+                .EUt(VA[HV])
+                .inputItems(new ItemStack(PHANTOM_MEMBRANE, 8), new ItemStack(EGG))
+                .outputItems(PHANTOM_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("phantom")
+                .circuitMeta(1)
+                .notConsumable(PHANTOM_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[HV])
+                .chancedOutput(new ItemStack(PHANTOM_MEMBRANE), 1000, 2000)
+                .save(provider);
+
+        // shulker
+        ASSEMBLER_RECIPES.recipeBuilder("shulker_spawn_egg")
+                .duration(20 * 10)
+                .EUt(VA[HV])
+                .inputItems(new ItemStack(SHULKER_SHELL, 8), new ItemStack(EGG))
+                .outputItems(SHULKER_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("shulker")
+                .circuitMeta(1)
+                .notConsumable(SHULKER_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[HV])
+                .chancedOutput(new ItemStack(SHULKER_SHELL), 1000, 2000)
+                .save(provider);
+
+        //////////////////////////////////////
+        // ********* animals *********//
+        //////////////////////////////////////
+        // rabbit
+        ASSEMBLER_RECIPES.recipeBuilder("rabbit_spawn_egg")
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .inputItems(new ItemStack(RABBIT_HIDE, 4), new ItemStack(RABBIT_FOOT, 4), new ItemStack(EGG))
+                .outputItems(RABBIT_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("rabbit")
+                .circuitMeta(1)
+                .notConsumable(RABBIT_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .chancedOutput(new ItemStack(RABBIT_HIDE), 1000, 2000)
+                .chancedOutput(new ItemStack(RABBIT_FOOT), 1000, 2000)
+                .save(provider);
+
+        // cow
+        ASSEMBLER_RECIPES.recipeBuilder("cow_spawn_egg")
+                .duration(20 * 10)
+                .EUt(V[LV])
+                .inputItems(new ItemStack(BEEF, 4), new ItemStack(LEATHER, 4), new ItemStack(EGG))
+                .outputItems(COW_SPAWN_EGG)
+                .save(provider);
+
+        MOB_SIMULATOR_RECIPES.recipeBuilder("cow")
+                .circuitMeta(1)
+                .notConsumable(COW_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .chancedOutput(new ItemStack(BEEF), 8000, 2000)
+                .chancedOutput(new ItemStack(LEATHER), 8000, 2000)
+                .save(provider);
+        // sheep
+        ASSEMBLER_RECIPES.recipeBuilder("sheep_spawn_egg")
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .inputItems(WOOL, 8)
+                .inputItems(new ItemStack(EGG))
+                .outputItems(SHEEP_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("sheep")
+                .circuitMeta(1)
+                .notConsumable(SHEEP_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .chancedOutput(new ItemStack(WHITE_WOOL), 8000, 2000)
+                .save(provider);
+
+        // chicken
+        ASSEMBLER_RECIPES.recipeBuilder("chicken_spawn_egg")
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .inputItems(new ItemStack(CHICKEN, 4), new ItemStack(EGG))
+                .outputItems(CHICKEN_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("chicken")
+                .circuitMeta(1)
+                .notConsumable(CHICKEN_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .chancedOutput(new ItemStack(CHICKEN), 8000, 2000)
+                .save(provider);
+
     }
 
     static void createMultiblockRecipes(Consumer<FinishedRecipe> provider) {

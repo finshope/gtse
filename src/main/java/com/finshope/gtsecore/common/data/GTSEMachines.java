@@ -3,6 +3,7 @@ package com.finshope.gtsecore.common.data;
 import com.finshope.gtsecore.GTSECore;
 import com.finshope.gtsecore.common.machine.electric.HarvesterMachine;
 import com.finshope.gtsecore.common.machine.electric.NetherCollectorMachine;
+import com.finshope.gtsecore.common.machine.electric.MobSimulatorMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
@@ -16,6 +17,7 @@ import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.client.renderer.machine.TieredHullMachineRenderer;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -43,8 +45,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.MACHINE_CASING_EV;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
-import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.defaultTankSizeFunction;
-import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.registerSimpleGenerator;
+import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
 
 public class GTSEMachines {
     public static final Int2IntFunction largeTankSizeFunction = (tier) -> {
@@ -76,6 +77,18 @@ public class GTSEMachines {
                     .tooltips(Component.translatable("gtse.machine.harvester.tooltip"))
                     .register(),
             HARVESTER_TIERS);
+
+    public final static MachineDefinition[] MOB_SIMULATOR = registerTieredMachines("mob_simulator", MobSimulatorMachine::new,
+            (tier, builder) -> builder
+                    .langValue("%s Harvester".formatted(GTValues.VNF[tier]))
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("mob_simulator"),
+                            GTSERecipeTypes.MOB_SIMULATOR_RECIPES))
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .renderer(() -> new TieredHullMachineRenderer(tier, GTSECore.id("block/machine/mob_simulator")))
+                    .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+                    .recipeType(GTSERecipeTypes.MOB_SIMULATOR_RECIPES)
+                    .register(),
+            ALL_TIERS);
 
     // generator
     public static final MachineDefinition[] COMBUSTION = registerSimpleGenerator("combustion",

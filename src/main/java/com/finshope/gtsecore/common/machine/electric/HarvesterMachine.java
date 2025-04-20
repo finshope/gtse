@@ -24,9 +24,6 @@ public class HarvesterMachine extends SimpleTieredMachine {
     @Override
     public void afterWorking() {
         super.afterWorking();
-        // Custom logic for the harvester machine can be added here
-        System.out.println("HarvesterMachine: afterWorking");
-        // try harvesting crops
 
         int harvest_radius = 4;
         var pos = getPos();
