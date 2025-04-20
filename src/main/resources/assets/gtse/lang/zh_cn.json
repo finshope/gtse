@@ -5,6 +5,11 @@
   "block.gtse.zpm_nether_collector": "下界拾荒器(§cZPM§r)",
   "block.gtse.uv_nether_collector": "下界拾荒器(§3UV§r)",
   "block.gtse.uhv_nether_collector": "下界拾荒器(§4UHV§r)",
+  "block.gtse.lv_harvester": "基础收割机§r",
+  "block.gtse.mv_harvester": "§b进阶收割机§r",
+  "block.gtse.hv_harvester": "§b进阶收割机 II§r",
+  "block.gtse.ev_harvester": "§5进阶收割机 III§r",
+  "block.gtse.iv_harvester": "§9精英收割机§r",
   "block.gtse.tree_farm": "工业树场",
   "block.gtse.industrial_pyrolyse_oven": "工业焦炉",
   "block.gtse.industrial_alloy_blast_smelter": "工业合金冶炼炉",
@@ -17,7 +22,7 @@
   "block.gtceu.uv_plasma_turbine": "§3终极等离子发电机§r",
   "item.gtse.complete_card": "完成卡",
   "item.gtse.complete_card.tooltip": "潜行右键机器以立即完成当前配方",
-  "gtse.machine.industrial_pyrolyse_oven.tooltip.1":"§a白铜§7线圈会使效率降低§f25%%§7，§a坎塔尔合金§7后的每个线圈都会增加§f50%%§7的速度。",
-
+  "gtse.machine.industrial_pyrolyse_oven.tooltip.1": "§a白铜§7线圈会使效率降低§f25%%§7，§a坎塔尔合金§7后的每个线圈都会增加§f50%%§7的速度。",
+  "gtse.machine.harvester.tooltip": "收割机器正下方9x9范围的作物",
   "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
 }

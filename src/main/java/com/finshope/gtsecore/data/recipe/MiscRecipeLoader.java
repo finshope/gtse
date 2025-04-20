@@ -18,8 +18,7 @@ import java.util.function.Consumer;
 
 import static appeng.core.definitions.AEItems.*;
 import static com.finshope.gtsecore.common.data.GTSEMachines.*;
-import static com.finshope.gtsecore.common.data.GTSERecipeTypes.NETHER_COLLECTOR_RECIPES;
-import static com.finshope.gtsecore.common.data.GTSERecipeTypes.TREE_FARM_RECIPES;
+import static com.finshope.gtsecore.common.data.GTSERecipeTypes.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_LOG;
@@ -50,9 +49,16 @@ public class MiscRecipeLoader {
     static void createCustomRecipes(Consumer<FinishedRecipe> provider) {
         registerMachineRecipe(provider, GTSEMachines.NETHER_COLLECTOR, "WFW", "PMP", "CFC", 'M', HULL, 'P', PISTON, 'F',
                 GTItems.ITEM_FILTER, 'C', CIRCUIT, 'W', CABLE_DOUBLE);
+        registerMachineRecipe(provider, HARVESTER, "HCH", "PMP", "HCH", 'M', HULL, 'P', PUMP, 'C', CIRCUIT, 'H', CABLE);
 
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_1").circuitMeta(1).duration(20 * 10).EUt(VA[EV]).chancedOutput(TagPrefix.dust, NetherStar, 1000, 2000).save(provider);
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_2").circuitMeta(2).duration(20 * 10).EUt(VA[EV]).chancedOutput(dustTiny, Netherite, 1000, 2000).save(provider);
+        HARVESTER_RECIPES
+                .recipeBuilder("harvest")
+                .circuitMeta(1)
+                .duration(10 * 20)
+                .inputFluids(Water.getFluid(100))
+                .EUt(1).save(provider);
 
         createTreeFarmRecipe(provider, "tree_farm_oak", OAK_SAPLING, OAK_LOG, APPLE);
         createTreeFarmRecipe(provider, "tree_farm_birch", BIRCH_SAPLING, BIRCH_LOG, null);

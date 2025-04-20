@@ -1,6 +1,7 @@
 package com.finshope.gtsecore.common.data;
 
 import com.finshope.gtsecore.GTSECore;
+import com.finshope.gtsecore.common.machine.electric.HarvesterMachine;
 import com.finshope.gtsecore.common.machine.electric.NetherCollectorMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
 import com.gregtechceu.gtceu.GTCEu;
@@ -34,7 +35,6 @@ import java.util.function.BiFunction;
 
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
-import static com.gregtechceu.gtceu.api.GTValues.VNF;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.HEAT_VENT;
@@ -52,9 +52,10 @@ public class GTSEMachines {
     };
 
     public static final int[] NETHER_COLLECTOR_TIERS = GTValues.tiersBetween(GTValues.EV, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV);
+    public static final int[] HARVESTER_TIERS = GTValues.tiersBetween(GTValues.LV, GTValues.IV);
     public final static MachineDefinition[] NETHER_COLLECTOR = registerTieredMachines("nether_collector", NetherCollectorMachine::new,
             (tier, builder) -> builder
-                    .langValue("%s Nether collector".formatted(VNF[tier]))
+                    .langValue("%s Nether collector".formatted(GTValues.VNF[tier]))
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("nether_collector"),
                             GTSERecipeTypes.NETHER_COLLECTOR_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
@@ -63,6 +64,18 @@ public class GTSEMachines {
                     .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, GTSERecipeTypes.NETHER_COLLECTOR_RECIPES, defaultTankSizeFunction.apply(tier), true))
                     .register(),
             NETHER_COLLECTOR_TIERS);
+
+    public final static MachineDefinition[] HARVESTER = registerTieredMachines("harvester", HarvesterMachine::new,
+            (tier, builder) -> builder
+                    .langValue("%s Harvester".formatted(GTValues.VNF[tier]))
+                    .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("harvester"),
+                            GTSERecipeTypes.HARVESTER_RECIPES))
+                    .rotationState(RotationState.NON_Y_AXIS)
+                    .renderer(() -> new TieredHullMachineRenderer(tier, GTSECore.id("block/machine/harvester")))
+                    .recipeType(GTSERecipeTypes.HARVESTER_RECIPES)
+                    .tooltips(Component.translatable("gtse.machine.harvester.tooltip"))
+                    .register(),
+            HARVESTER_TIERS);
 
     // generator
     public static final MachineDefinition[] COMBUSTION = registerSimpleGenerator("combustion",
@@ -149,7 +162,7 @@ public class GTSEMachines {
             .langValue("Industrial Alloy Blast Smelter")
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
                     Component.translatable("gtceu.alloy_blast_smelter")
-                    ))
+            ))
             .tooltips(Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.0"),
                     Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.1"),
                     Component.translatable("gtceu.machine.perfect_oc"))

@@ -40,6 +40,16 @@ public class CompleteCardItemBehaviour implements IAddInformation, IInteractionI
         if (recipeLogic != null && recipeLogic.isWorking()) {
             recipeLogic.setProgress(recipeLogic.getDuration());
             recipeLogic.onRecipeFinish();
+
+            // decrease the item stack
+            var player = context.getPlayer();
+            if (player != null) {
+                var hand = context.getHand();
+                var stack = player.getItemInHand(hand);
+                if (!stack.isEmpty()) {
+                    stack.shrink(1);
+                }
+            }
             return InteractionResult.SUCCESS;
         }
 
