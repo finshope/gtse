@@ -60,7 +60,7 @@ public class GTSEMachines {
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("nether_collector"),
                             GTSERecipeTypes.NETHER_COLLECTOR_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .renderer(() -> new TieredHullMachineRenderer(tier, GTSECore.id("block/machine/nether_collector")))
+                    .workableTieredHullRenderer(GTSECore.id("block/machines/nether_collector"))
                     .recipeType(GTSERecipeTypes.NETHER_COLLECTOR_RECIPES)
                     .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, GTSERecipeTypes.NETHER_COLLECTOR_RECIPES, defaultTankSizeFunction.apply(tier), true))
                     .register(),
@@ -72,7 +72,7 @@ public class GTSEMachines {
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("harvester"),
                             GTSERecipeTypes.HARVESTER_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .renderer(() -> new TieredHullMachineRenderer(tier, GTSECore.id("block/machine/harvester")))
+                    .workableTieredHullRenderer(GTSECore.id("block/machines/harvester"))
                     .recipeType(GTSERecipeTypes.HARVESTER_RECIPES)
                     .tooltips(Component.translatable("gtse.machine.harvester.tooltip"))
                     .register(),
@@ -84,7 +84,7 @@ public class GTSEMachines {
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("mob_simulator"),
                             GTSERecipeTypes.MOB_SIMULATOR_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .renderer(() -> new TieredHullMachineRenderer(tier, GTSECore.id("block/machine/mob_simulator")))
+                    .workableTieredHullRenderer(GTSECore.id("block/machines/mob_simulator"))
                     .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
                     .recipeType(GTSERecipeTypes.MOB_SIMULATOR_RECIPES)
                     .register(),
