@@ -5,6 +5,7 @@ import com.finshope.gtsecore.common.data.GTSECreativeModeTabs;
 import com.finshope.gtsecore.common.data.GTSEItems;
 import com.finshope.gtsecore.common.data.GTSEMachines;
 import com.finshope.gtsecore.common.data.GTSERecipeTypes;
+import com.finshope.gtsecore.config.GTSEConfig;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -63,6 +64,7 @@ public class GTSECore {
     }
 
     private void init() {
+        GTSEConfig.init();
         GTSEItems.init();
         REGISTRATE.registerRegistrate();
     }

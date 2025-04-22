@@ -2,13 +2,17 @@ package com.finshope.gtsecore.common.data;
 
 import com.finshope.gtsecore.GTSECore;
 import com.finshope.gtsecore.common.machine.electric.HarvesterMachine;
-import com.finshope.gtsecore.common.machine.electric.NetherCollectorMachine;
 import com.finshope.gtsecore.common.machine.electric.MobSimulatorMachine;
+import com.finshope.gtsecore.common.machine.electric.NetherCollectorMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
+import com.finshope.gtsecore.common.machine.multiblock.part.LargeSteamHatchPartMachine;
+import com.finshope.gtsecore.common.machine.multiblock.steam.SteamOreWaherMachine;
+import com.finshope.gtsecore.config.GTSEConfig;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
@@ -16,12 +20,19 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
+import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.client.renderer.machine.TieredHullMachineRenderer;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.machine.multiblock.part.SteamHatchPartMachine;
+import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minecraft.ChatFormatting;
@@ -29,6 +40,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,14 +50,13 @@ import java.util.function.BiFunction;
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
-import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATURE_SMELTING;
-import static com.gregtechceu.gtceu.common.data.GCYMBlocks.HEAT_VENT;
+import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECIPES;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_STEEL_SOLID;
-import static com.gregtechceu.gtceu.common.data.GTBlocks.MACHINE_CASING_EV;
+import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.*;
+import static net.minecraft.world.level.block.Blocks.WATER;
 
 public class GTSEMachines {
     public static final Int2IntFunction largeTankSizeFunction = (tier) -> {
@@ -97,6 +108,93 @@ public class GTSEMachines {
             GTRecipeTypes.GAS_TURBINE_FUELS, largeTankSizeFunction, 0.1f, GTValues.EV, GTValues.IV);
     public static final MachineDefinition[] PLASMA_TURBINE = registerSimpleGenerator("plasma_turbine",
             GTRecipeTypes.PLASMA_GENERATOR_FUELS, largeTankSizeFunction, 0.1f, GTValues.LuV, GTValues.ZPM, GTValues.UV);
+
+    public static final MachineDefinition LARGE_STEAM_HATCH = REGISTRATE
+            .machine("large_steam_input_hatch", LargeSteamHatchPartMachine::new)
+            .rotationState(RotationState.ALL)
+            .abilities(PartAbility.STEAM)
+            .overlaySteamHullRenderer("large_steam_hatch")
+            .tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
+                            SteamHatchPartMachine.INITIAL_TANK_CAPACITY * 64),
+                    Component.translatable("gtceu.machine.steam.steam_hatch.tooltip"))
+            .register();
+
+    public static final MultiblockMachineDefinition STEAM_CENTRIFUGE = REGISTRATE
+            .multiblock("steam_centrifuge", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .appearanceBlock(CASING_INDUSTRIAL_STEAM)
+            .recipeType(GTRecipeTypes.CENTRIFUGE_RECIPES)
+            .recipeModifier(GTSEMachines::industrialSteamMachineRecipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 4)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle(" FFF ", " FFF ", " FFF ", " FFF ", "     ", " FFF ")
+                    .aisle("FFFFF", "FFPFF", "FFPFF", "FFPFF", "  P  ", "FFFFF")
+                    .aisle("FFFFF", "FPGPF", "FPGPF", "FPGPF", " PGP ", "FFFFF")
+                    .aisle("FFFFF", "FFPFF", "FFPFF", "FFPFF", "  P  ", "FFFFF")
+                    .aisle(" FFF ", " FSF ", " FFF ", " FFF ", "     ", " FFF ")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('P', Predicates.blocks(CASING_BRONZE_PIPE.get()))
+                    .where('G', Predicates.blocks(CASING_BRONZE_GEARBOX.get()))
+                    .where(' ', Predicates.any())
+                    .where('F', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(10)
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS, PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
+                    GTSECore.id("block/multiblock/steam_centrifuge"))
+            .register();
+
+    public static final MultiblockMachineDefinition STEAM_ORE_WASHER = REGISTRATE
+            .multiblock("steam_ore_washer", SteamOreWaherMachine::new)
+            .rotationState(RotationState.NON_Y_AXIS)
+            .appearanceBlock(CASING_INDUSTRIAL_STEAM)
+            .recipeType(GTRecipeTypes.ORE_WASHER_RECIPES)
+            .recipeModifier(GTSEMachines::industrialSteamMachineRecipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 4)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("FFFFF", "FFFFF", "FFFFF")
+                    .aisle("FFFFF", "FPPPF", "F   F")
+                    .aisle("FFFFF", "FWWWF", "F   F")
+                    .aisle("FFFFF", "FPPPF", "F   F")
+                    .aisle("FFFFF", "FFSFF", "FFFFF")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('P', Predicates.blocks(CASING_BRONZE_PIPE.get()))
+                    .where(' ', Predicates.any())
+                    .where('W', Predicates.blocks(WATER))
+                    .where('F', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(40)
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS, PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
+                    GTSECore.id("block/multiblock/steam_ore_washer"))
+            .register();
+
+    public static final MultiblockMachineDefinition STEAM_MIXER = REGISTRATE
+            .multiblock("steam_mixer", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .appearanceBlock(CASING_INDUSTRIAL_STEAM)
+            .recipeType(GTRecipeTypes.MIXER_RECIPES)
+            .recipeModifier(GTSEMachines::industrialSteamMachineRecipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 4)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("FFF", "FFF", "FFF")
+                    .aisle("FFF", "F#F", "FFF")
+                    .aisle("FFF", "FSF", "FFF")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('#', Predicates.air())
+                    .where('F', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(50)
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS, PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
+                    GTSECore.id("block/multiblock/steam_mixer"))
+            .register();
 
     public static final MultiblockMachineDefinition TREE_FARM = REGISTRATE.multiblock("tree_farm", TreeFarmMachine::new)
             .rotationState(RotationState.ALL)
@@ -262,6 +360,21 @@ public class GTSEMachines {
             definitions[i] = builder.apply(tier, register);
         }
         return definitions;
+    }
+
+    public static ModifierFunction industrialSteamMachineRecipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (machine instanceof SteamParallelMultiblockMachine steamMachine) {
+            if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.HV) {
+                return ModifierFunction.NULL;
+            } else {
+                long eut = RecipeHelper.getInputEUt(recipe);
+                int parallelAmount = ParallelLogic.getParallelAmount(machine, recipe, GTSEConfig.INSTANCE.server.industrialSteamMachineMaxParallels);
+                double eutMultiplier = (double) eut * 0.8888 * (double) parallelAmount <= 32.0 ? 0.8888 * (double) parallelAmount : 32.0 / (double) eut;
+                return ModifierFunction.builder().inputModifier(ContentModifier.multiplier((double) parallelAmount)).outputModifier(ContentModifier.multiplier((double) parallelAmount)).durationMultiplier(1.5).eutMultiplier(eutMultiplier).parallels(parallelAmount).build();
+            }
+        } else {
+            return RecipeModifier.nullWrongType(SteamParallelMultiblockMachine.class, machine);
+        }
     }
 
     public static void init() {

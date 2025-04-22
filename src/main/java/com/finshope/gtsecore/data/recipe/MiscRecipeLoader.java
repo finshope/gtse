@@ -5,15 +5,17 @@ import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.data.GTMachines;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
+import com.gregtechceu.gtceu.common.data.*;
+import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
+import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 
+import java.util.Locale;
 import java.util.function.Consumer;
 
 import static appeng.core.definitions.AEItems.*;
@@ -21,13 +23,14 @@ import static com.finshope.gtsecore.common.data.GTSEMachines.*;
 import static com.finshope.gtsecore.common.data.GTSERecipeTypes.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
+import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_INDUSTRIAL_STEAM;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_LOG;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_SAPLING;
 import static com.gregtechceu.gtceu.common.data.GTItems.SHAPE_EMPTY;
 import static com.gregtechceu.gtceu.common.data.GTItems.STICKY_RESIN;
+import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_HATCH;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
-import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.ASSEMBLER_RECIPES;
-import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.FORMING_PRESS_RECIPES;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.machines.GCYMMachines.BLAST_ALLOY_SMELTER;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.PYROLYSE_OVEN;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
@@ -40,8 +43,8 @@ import static net.minecraft.world.item.Items.*;
 public class MiscRecipeLoader {
     public static void init(Consumer<FinishedRecipe> provider) {
 
-
         createCustomRecipes(provider);
+        createSteamMachineRecipes(provider);
         createMultiblockRecipes(provider);
         createGeneratorRecipes(provider);
         createAE2Recipes(provider);
@@ -53,6 +56,34 @@ public class MiscRecipeLoader {
                 GTItems.ITEM_FILTER, 'C', CIRCUIT, 'W', CABLE_DOUBLE);
         registerMachineRecipe(provider, HARVESTER, "HCH", "PMP", "HCH", 'M', HULL, 'P', PUMP, 'C', CIRCUIT, 'H', CABLE);
         registerMachineRecipe(provider, MOB_SIMULATOR, "HCH", "PMP", "HCH", 'M', HULL, 'P', FIELD_GENERATOR, 'C', CIRCUIT, 'H', CABLE);
+
+
+        // add crafting table recipe for hatch
+        for (var machine : GTMachines.FLUID_IMPORT_HATCH) {
+            if (machine == null) continue;
+            int tier = machine.getTier();
+            VanillaRecipeHelper.addShapedRecipe(provider, true, "fluid_import_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+                    machine.asStack(), "D  ", "H  ", "   ", 'H', HULL.get(tier), 'D', DRUM.get(tier));
+        }
+        for (var machine : GTMachines.FLUID_EXPORT_HATCH) {
+            if (machine == null) continue;
+            int tier = machine.getTier();
+            VanillaRecipeHelper.addShapedRecipe(provider, true, "fluid_export_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+                    machine.asStack(), "H  ", "D  ", "   ", 'H', HULL.get(tier), 'D', DRUM.get(tier));
+        }
+        for (var machine : GTMachines.ITEM_IMPORT_BUS) {
+            if (machine == null) continue;
+            int tier = machine.getTier();
+            VanillaRecipeHelper.addShapedRecipe(provider, true, "item_import_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+                    machine.asStack(), "C  ", "H  ", "   ", 'H', HULL.get(tier), 'C', CRATE.get(tier));
+        }
+        for (var machine : GTMachines.ITEM_EXPORT_BUS) {
+            if (machine == null) continue;
+            int tier = machine.getTier();
+            VanillaRecipeHelper.addShapedRecipe(provider, true, "item_export_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+                    machine.asStack(), "H  ", "C  ", "   ", 'H', HULL.get(tier), 'C', CRATE.get(tier));
+        }
+
 
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_1").circuitMeta(1).duration(20 * 10).EUt(VA[EV]).chancedOutput(TagPrefix.dust, NetherStar, 1000, 2000).save(provider);
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_2").circuitMeta(2).duration(20 * 10).EUt(VA[EV]).chancedOutput(dustTiny, Netherite, 1000, 2000).save(provider);
@@ -73,6 +104,35 @@ public class MiscRecipeLoader {
         createTreeFarmRecipe(provider, "tree_farm_rubber", RUBBER_SAPLING, RUBBER_LOG, STICKY_RESIN);
         createTreeFarmRecipe(provider, "tree_farm_bamboo", null, BAMBOO, null);
         createTreeFarmRecipe(provider, "tree_farm_cactus", null, CACTUS, null);
+    }
+
+    static void createSteamMachineRecipes(Consumer<FinishedRecipe> provider) {
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "casing_industrial_steam",
+                GCYMBlocks.CASING_INDUSTRIAL_STEAM.asStack(ConfigHolder.INSTANCE.recipes.casingsPerCraft), "PhP", "PBP",
+                "PwP", 'P', new MaterialEntry(TagPrefix.plate, Steel), 'B',
+                new ItemStack(Blocks.BRICKS));
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_centrifuge", STEAM_CENTRIFUGE.asStack(),
+                "CGC",
+                "FMF", "CGC", 'F', new MaterialEntry(rotor, Bronze), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
+                'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
+                new MaterialEntry(gear, Invar));
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_ore_washer", STEAM_ORE_WASHER.asStack(),
+                "CGC",
+                "FMF", "CGC", 'F', new MaterialEntry(rotor, Steel), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
+                'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
+                new MaterialEntry(pipeLargeFluid, Potin));
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_mixer", STEAM_MIXER.asStack(),
+                "CGC",
+                "FMF", "CGC", 'F', new MaterialEntry(rotor, Steel), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
+                'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
+                new MaterialEntry(rotor, Steel));
+
+        COMPRESSOR_RECIPES.recipeBuilder("large_steam_hatch.json")
+                .EUt(VA[LV])
+                .duration(20 * 10)
+                .inputItems(STEAM_HATCH.asStack(16))
+                .outputItems(LARGE_STEAM_HATCH.asStack())
+                .save(provider);
     }
 
     static void createMobSimulatorRecipes(Consumer<FinishedRecipe> provider) {
@@ -373,6 +433,20 @@ public class MiscRecipeLoader {
                 .inputItems(SILICON_PRINT.asItem())
                 .inputItems(dust, Redstone)
                 .outputItems(LOGIC_PROCESSOR.asItem())
+                .save(provider);
+
+        MIXER_RECIPES.recipeBuilder("ae2_fluix_crystal")
+                .duration(20).EUt(VA[LV])
+                .inputItems(CERTUS_QUARTZ_CRYSTAL_CHARGED.asItem())
+                .inputItems(dust, Redstone)
+                .inputItems(QUARTZ)
+                .outputItems(FLUIX_CRYSTAL.stack(2))
+                .save(provider);
+
+        MACERATOR_RECIPES.recipeBuilder("ae2_certus_quartz_dust")
+                .duration(20).EUt(VA[LV])
+                .inputItems(CERTUS_QUARTZ_CRYSTAL.asItem())
+                .outputItems(CERTUS_QUARTZ_DUST.asItem())
                 .save(provider);
     }
 
