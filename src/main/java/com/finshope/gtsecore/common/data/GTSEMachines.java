@@ -122,6 +122,7 @@ public class GTSEMachines {
     public static final MultiblockMachineDefinition STEAM_CENTRIFUGE = REGISTRATE
             .multiblock("steam_centrifuge", SteamParallelMultiblockMachine::new)
             .rotationState(RotationState.ALL)
+            .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
             .appearanceBlock(CASING_INDUSTRIAL_STEAM)
             .recipeType(GTRecipeTypes.CENTRIFUGE_RECIPES)
             .recipeModifier(GTSEMachines::industrialSteamMachineRecipeModifier, true)
@@ -136,7 +137,7 @@ public class GTSEMachines {
                     .where('P', Predicates.blocks(CASING_BRONZE_PIPE.get()))
                     .where('G', Predicates.blocks(CASING_BRONZE_GEARBOX.get()))
                     .where(' ', Predicates.any())
-                    .where('F', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(10)
+                    .where('F', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(50)
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
@@ -149,6 +150,7 @@ public class GTSEMachines {
     public static final MultiblockMachineDefinition STEAM_ORE_WASHER = REGISTRATE
             .multiblock("steam_ore_washer", SteamOreWaherMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
+            .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
             .appearanceBlock(CASING_INDUSTRIAL_STEAM)
             .recipeType(GTRecipeTypes.ORE_WASHER_RECIPES)
             .recipeModifier(GTSEMachines::industrialSteamMachineRecipeModifier, true)
@@ -176,6 +178,7 @@ public class GTSEMachines {
     public static final MultiblockMachineDefinition STEAM_MIXER = REGISTRATE
             .multiblock("steam_mixer", SteamParallelMultiblockMachine::new)
             .rotationState(RotationState.ALL)
+            .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
             .appearanceBlock(CASING_INDUSTRIAL_STEAM)
             .recipeType(GTRecipeTypes.MIXER_RECIPES)
             .recipeModifier(GTSEMachines::industrialSteamMachineRecipeModifier, true)
@@ -186,7 +189,7 @@ public class GTSEMachines {
                     .aisle("FFF", "FSF", "FFF")
                     .where('S', Predicates.controller(blocks(definition.getBlock())))
                     .where('#', Predicates.air())
-                    .where('F', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(50)
+                    .where('F', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(10)
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
@@ -326,12 +329,7 @@ public class GTSEMachines {
             .additionalDisplay((controller, components) -> {
                 if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
                     components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
-                            Component
-                                    .translatable(
-                                            FormattingUtil
-                                                    .formatNumbers(coilMachine.getCoilType().getCoilTemperature() +
-                                                            100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) +
-                                                    "K")
+                            Component.translatable(FormattingUtil.formatNumbers(coilMachine.getCoilType().getCoilTemperature() + 100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) + "K")
                                     .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
                 }
             })

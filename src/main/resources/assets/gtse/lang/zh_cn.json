@@ -36,5 +36,6 @@
   "item.gtse.complete_card.tooltip": "潜行右键机器以立即完成当前配方",
   "gtse.machine.industrial_pyrolyse_oven.tooltip.1": "§a白铜§7线圈会使效率降低§f25%%§7，§a坎塔尔合金§7后的每个线圈都会增加§f50%%§7的速度。",
   "gtse.machine.harvester.tooltip": "收割机器正下方9x9范围的作物",
+  "gtse.machine.large_steam_machine.tooltip": "最高运行§6HV§r配方",
   "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
 }
