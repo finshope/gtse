@@ -28,6 +28,9 @@ public class GTSERecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
 
+    public static final GTRecipeType STEAM_VOID_MINER_RECIPES = GTRecipeTypes.register("steam_void_miner", MULTIBLOCK).setMaxIOSize(1, 6, 1, 0).setEUIO(IO.IN)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
+            .setSound(GTSoundEntries.SCIENCE);
     public static void init() {
 
     }

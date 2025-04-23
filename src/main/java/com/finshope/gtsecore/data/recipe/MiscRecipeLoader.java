@@ -2,18 +2,30 @@ package com.finshope.gtsecore.data.recipe;
 
 import com.finshope.gtsecore.common.data.GTSEMachines;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
+import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
+import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
+import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
+import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -29,6 +41,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_SAPLING;
 import static com.gregtechceu.gtceu.common.data.GTItems.SHAPE_EMPTY;
 import static com.gregtechceu.gtceu.common.data.GTItems.STICKY_RESIN;
 import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_HATCH;
+import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_MINER;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.machines.GCYMMachines.BLAST_ALLOY_SMELTER;
@@ -49,6 +62,7 @@ public class MiscRecipeLoader {
         createGeneratorRecipes(provider);
         createAE2Recipes(provider);
         createMobSimulatorRecipes(provider);
+        createSteamVoidMinerRecipe(provider);
     }
 
     static void createCustomRecipes(Consumer<FinishedRecipe> provider) {
@@ -127,11 +141,17 @@ public class MiscRecipeLoader {
                 'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
                 new MaterialEntry(rotor, Steel));
 
-        COMPRESSOR_RECIPES.recipeBuilder("large_steam_hatch.json")
+        COMPRESSOR_RECIPES.recipeBuilder("large_steam_hatch")
                 .EUt(VA[LV])
                 .duration(20 * 10)
                 .inputItems(STEAM_HATCH.asStack(16))
-                .outputItems(LARGE_STEAM_HATCH.asStack())
+                .outputItems(LARGE_STEAM_HATCH)
+                .save(provider);
+        COMPRESSOR_RECIPES.recipeBuilder("steam_void_miner")
+                .EUt(VA[LV])
+                .duration(20 * 10)
+                .inputItems(STEAM_MINER.right().asStack(16))
+                .outputItems(STEAM_VOID_MINER)
                 .save(provider);
     }
 
@@ -466,5 +486,55 @@ public class MiscRecipeLoader {
         }
 
         builder.save(provider);
+    }
+
+    static void createSteamVoidMinerRecipe(Consumer<FinishedRecipe> provider) {
+        createChancedInput(STEAM_VOID_MINER_RECIPES
+                .recipeBuilder("bronze_drill_mining"), toolHeadDrill, Bronze, 500, 0)
+                .EUt(VA[LV])
+                .duration(60 * 10)
+                .chancedOutput(ore, Silver, 1000, 0)
+                .chancedOutput(ore, Iron, 1000, 0)
+                .chancedOutput(ore, Tin, 1000, 0)
+                .chancedOutput(ore, Copper, 1000, 0)
+                .chancedOutput(ore, Coal, 2000, 0)
+                .chancedOutput(new ItemStack(CLAY), 2000, 0)
+                .save(provider);
+
+        createChancedInput(STEAM_VOID_MINER_RECIPES
+                .recipeBuilder("steel_drill_mining"), toolHeadDrill, Steel, 400, 0)
+                .EUt(VA[LV])
+                .duration(60 * 10)
+                .chancedOutput(ore, Diamond, 1000, 0)
+                .chancedOutput(ore, Redstone, 1000, 0)
+                .chancedOutput(ore, Lapis, 1000, 0)
+                .chancedOutput(ore, Salt, 1000, 0)
+                .chancedOutput(ore, Gold, 1000, 0)
+                .save(provider);
+
+        createChancedInput(STEAM_VOID_MINER_RECIPES
+                .recipeBuilder("invar_drill_mining"), toolHeadDrill, Invar, 400, 0)
+                .EUt(VA[LV])
+                .duration(60 * 10)
+                .chancedOutput(ore, Lead, 1000, 0)
+                .chancedOutput(ore, Nickel, 1000, 0)
+                .chancedOutput(ore, Oilsands, 1000, 0)
+                .save(provider);
+    }
+
+    static GTRecipeBuilder createChancedInput(GTRecipeBuilder builder, TagPrefix tagPrefix, @NotNull Material material, int chance, int tierChanceBoost) {
+        if (0 >= chance || chance > ChanceLogic.getMaxChancedValue()) {
+            GTCEu.LOGGER.error("Chance cannot be less or equal to 0 or more than {}. Actual: {}.",
+                    ChanceLogic.getMaxChancedValue(), chance, new Throwable());
+            return builder;
+        }
+        int lastChance = builder.chance;
+        int lastTierChanceBoost = builder.tierChanceBoost;
+        builder.chance = chance;
+        builder.tierChanceBoost = tierChanceBoost;
+        builder.inputItems(tagPrefix, material);
+        builder.chance = lastChance;
+        builder.tierChanceBoost = lastTierChanceBoost;
+        return builder;
     }
 }

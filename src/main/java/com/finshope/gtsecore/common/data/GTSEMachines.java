@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -29,6 +30,8 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.common.data.GTMaterialBlocks;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.SteamHatchPartMachine;
@@ -199,6 +202,34 @@ public class GTSEMachines {
                     GTSECore.id("block/multiblock/steam_mixer"))
             .register();
 
+    public static final MultiblockMachineDefinition STEAM_VOID_MINER = REGISTRATE
+            .multiblock("steam_void_miner", SteamParallelMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
+            .appearanceBlock(CASING_INDUSTRIAL_STEAM)
+            .recipeType(GTSERecipeTypes.STEAM_VOID_MINER_RECIPES)
+            .recipeModifier(GTSEMachines::steamVoidMinerMachineRecipeModifier, true)
+            .addOutputLimit(ItemRecipeCapability.CAP, 6)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("F   F", "F   F", "F   F", "XXXXX", "     ", "     ", "     ", "     ", "     ", "     ", "     ")
+                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", "  F  ", "  F  ", "  F  ", "     ", "     ", "     ")
+                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", " FCF ", " FCF ", " FCF ", "  F  ", "  F  ", "  F  ")
+                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", "  F  ", "  F  ", "  F  ", "     ", "     ", "     ")
+                    .aisle("F   F", "F   F", "F   F", "XXSXX", "     ", "     ", "     ", "     ", "     ", "     ", "     ")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where(' ', Predicates.any())
+                    .where('C', blocks(CASING_BRONZE_PIPE.get()))
+                    .where('F', blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.Steel).get()))
+                    .where('X', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(20)
+                            .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
+                            .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
+                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
+                    GTCEu.id("block/multiblock/bedrock_ore_miner"))
+            .register();
+
     public static final MultiblockMachineDefinition TREE_FARM = REGISTRATE.multiblock("tree_farm", TreeFarmMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(GTSERecipeTypes.TREE_FARM_RECIPES)
@@ -367,6 +398,21 @@ public class GTSEMachines {
             } else {
                 long eut = RecipeHelper.getInputEUt(recipe);
                 int parallelAmount = ParallelLogic.getParallelAmount(machine, recipe, GTSEConfig.INSTANCE.server.industrialSteamMachineMaxParallels);
+                double eutMultiplier = (double) eut * 0.8888 * (double) parallelAmount <= 32.0 ? 0.8888 * (double) parallelAmount : 32.0 / (double) eut;
+                return ModifierFunction.builder().inputModifier(ContentModifier.multiplier((double) parallelAmount)).outputModifier(ContentModifier.multiplier((double) parallelAmount)).durationMultiplier(1.5).eutMultiplier(eutMultiplier).parallels(parallelAmount).build();
+            }
+        } else {
+            return RecipeModifier.nullWrongType(SteamParallelMultiblockMachine.class, machine);
+        }
+    }
+
+    public static ModifierFunction steamVoidMinerMachineRecipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (machine instanceof SteamParallelMultiblockMachine steamMachine) {
+            if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.HV) {
+                return ModifierFunction.NULL;
+            } else {
+                long eut = RecipeHelper.getInputEUt(recipe);
+                int parallelAmount = ParallelLogic.getParallelAmount(machine, recipe, 1);
                 double eutMultiplier = (double) eut * 0.8888 * (double) parallelAmount <= 32.0 ? 0.8888 * (double) parallelAmount : 32.0 / (double) eut;
                 return ModifierFunction.builder().inputModifier(ContentModifier.multiplier((double) parallelAmount)).outputModifier(ContentModifier.multiplier((double) parallelAmount)).durationMultiplier(1.5).eutMultiplier(eutMultiplier).parallels(parallelAmount).build();
             }

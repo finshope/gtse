@@ -25,6 +25,7 @@
   "block.gtse.steam_ore_washer": "工业蒸汽洗矿机",
   "block.gtse.steam_mixer": "工业蒸汽搅拌机",
   "block.gtse.large_steam_input_hatch": "大型蒸汽输入仓",
+  "block.gtse.steam_void_miner": "蒸汽虚空矿机",
   "block.gtceu.ev_combustion": "§5进阶内燃发电机 III§r",
   "block.gtceu.iv_combustion": "§9精英内燃发电机§r",
   "block.gtceu.ev_gas_turbine": "§5进阶燃气轮机 III§r",
@@ -37,5 +38,10 @@
   "gtse.machine.industrial_pyrolyse_oven.tooltip.1": "§a白铜§7线圈会使效率降低§f25%%§7，§a坎塔尔合金§7后的每个线圈都会增加§f50%%§7的速度。",
   "gtse.machine.harvester.tooltip": "收割机器正下方9x9范围的作物",
   "gtse.machine.large_steam_machine.tooltip": "最高运行§6HV§r配方",
+  "gtceu.steam_void_miner": "蒸汽虚空采矿",
+  "gtceu.mob_simulator": "生物模拟",
+  "gtceu.harvester": "收割",
+  "gtceu.tree_farm": "工业树场",
+  "gtceu.nether_collector": "下界拾荒",
   "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
 }
