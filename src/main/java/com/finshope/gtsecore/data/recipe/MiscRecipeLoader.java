@@ -49,9 +49,12 @@ public class MiscRecipeLoader {
         createSteamMachineRecipes(provider);
         createMultiblockRecipes(provider);
         createGeneratorRecipes(provider);
-        createAE2Recipes(provider);
         createMobSimulatorRecipes(provider);
         createSteamVoidMinerRecipe(provider);
+
+        if (GTCEu.Mods.isAE2Loaded()) {
+            createAE2Recipes(provider);
+        }
     }
 
     static void createCustomRecipes(Consumer<FinishedRecipe> provider) {
