@@ -1,6 +1,5 @@
 package com.finshope.gtsecore;
 
-import com.finshope.gtsecore.api.registries.GTSERegistires;
 import com.finshope.gtsecore.common.data.GTSECreativeModeTabs;
 import com.finshope.gtsecore.common.data.GTSEItems;
 import com.finshope.gtsecore.common.data.GTSEMachines;
@@ -12,9 +11,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEv
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
-import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -24,7 +21,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +34,6 @@ public class GTSECore {
 
     public static final String MOD_ID = "gtse";
     public static final Logger LOGGER = LogManager.getLogger();
-    public static GTRegistrate EXAMPLE_REGISTRATE = GTRegistrate.create(GTSECore.MOD_ID);
 
     public GTSECore() {
         init();

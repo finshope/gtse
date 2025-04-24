@@ -1,7 +1,6 @@
 package com.finshope.gtsecore.common.data;
 
 import com.finshope.gtsecore.common.items.CompleteCardItemBehaviour;
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
@@ -9,7 +8,6 @@ import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
-import net.minecraft.network.chat.Component;
 
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
 

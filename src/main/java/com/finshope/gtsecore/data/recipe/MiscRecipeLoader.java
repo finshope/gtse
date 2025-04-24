@@ -1,27 +1,18 @@
 package com.finshope.gtsecore.data.recipe;
 
 import com.finshope.gtsecore.common.data.GTSEMachines;
-import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
-import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
-import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialEntry;
-import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.recipe.chance.logic.ChanceLogic;
-import com.gregtechceu.gtceu.api.recipe.ingredient.SizedIngredient;
 import com.gregtechceu.gtceu.common.data.*;
-import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
-import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -38,7 +29,6 @@ import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_INDUSTRIAL_STEAM;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_LOG;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_SAPLING;
-import static com.gregtechceu.gtceu.common.data.GTItems.SHAPE_EMPTY;
 import static com.gregtechceu.gtceu.common.data.GTItems.STICKY_RESIN;
 import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_HATCH;
 import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_MINER;
@@ -46,9 +36,8 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.machines.GCYMMachines.BLAST_ALLOY_SMELTER;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.PYROLYSE_OVEN;
-import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
-import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.CABLE;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PISTON;
+import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
 import static com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader.registerMachineRecipe;
 import static net.minecraft.tags.ItemTags.WOOL;
 import static net.minecraft.world.item.Items.*;
@@ -489,10 +478,12 @@ public class MiscRecipeLoader {
     }
 
     static void createSteamVoidMinerRecipe(Consumer<FinishedRecipe> provider) {
+        int duration = 20 * 2;
+        int EUt = 16;
         createChancedInput(STEAM_VOID_MINER_RECIPES
-                .recipeBuilder("bronze_drill_mining"), toolHeadDrill, Bronze, 500, 0)
-                .EUt(VA[LV])
-                .duration(60 * 10)
+                .recipeBuilder("bronze_drill_mining"), toolHeadDrill, Bronze, 400, 0)
+                .EUt(EUt)
+                .duration(duration)
                 .chancedOutput(ore, Silver, 1000, 0)
                 .chancedOutput(ore, Iron, 1000, 0)
                 .chancedOutput(ore, Tin, 1000, 0)
@@ -502,9 +493,9 @@ public class MiscRecipeLoader {
                 .save(provider);
 
         createChancedInput(STEAM_VOID_MINER_RECIPES
-                .recipeBuilder("steel_drill_mining"), toolHeadDrill, Steel, 400, 0)
-                .EUt(VA[LV])
-                .duration(60 * 10)
+                .recipeBuilder("steel_drill_mining"), toolHeadDrill, Steel, 200, 0)
+                .EUt(EUt)
+                .duration(duration)
                 .chancedOutput(ore, Diamond, 1000, 0)
                 .chancedOutput(ore, Redstone, 1000, 0)
                 .chancedOutput(ore, Lapis, 1000, 0)
@@ -513,9 +504,9 @@ public class MiscRecipeLoader {
                 .save(provider);
 
         createChancedInput(STEAM_VOID_MINER_RECIPES
-                .recipeBuilder("invar_drill_mining"), toolHeadDrill, Invar, 400, 0)
-                .EUt(VA[LV])
-                .duration(60 * 10)
+                .recipeBuilder("invar_drill_mining"), toolHeadDrill, Invar, 200, 0)
+                .EUt(EUt)
+                .duration(duration)
                 .chancedOutput(ore, Lead, 1000, 0)
                 .chancedOutput(ore, Nickel, 1000, 0)
                 .chancedOutput(ore, Oilsands, 1000, 0)
