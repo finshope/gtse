@@ -27,7 +27,10 @@ public class HarvesterMachine extends SimpleTieredMachine {
         int harvest_radius = 4;
         var pos = getPos();
         var level = (ServerLevel) getLevel();
-        // loop 9 x 9 behind the machine
+        if (level == null) {
+            return;
+        }
+        // loop 9 x 9 beyond the machine
         for (int x = -harvest_radius; x <= harvest_radius; x++) {
             for (int z = -harvest_radius; z <= harvest_radius; z++) {
                 var blockPos = new BlockPos(pos.getX() + x, pos.getY() - 1, pos.getZ() + z);

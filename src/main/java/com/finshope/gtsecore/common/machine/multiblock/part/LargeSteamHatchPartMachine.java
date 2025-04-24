@@ -25,7 +25,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class LargeSteamHatchPartMachine extends FluidHatchPartMachine {
 
-    public static final int INITIAL_TANK_CAPACITY = 64 * FluidType.BUCKET_VOLUME;
     public static final boolean IS_STEEL = ConfigHolder.INSTANCE.machines.steelSteamMultiblocks;
 
     public LargeSteamHatchPartMachine(IMachineBlockEntity holder, Object... args) {

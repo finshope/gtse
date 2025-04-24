@@ -14,10 +14,13 @@ public class SteamOreWaherMachine extends IndustrialSteamParallelMultiblockMachi
         super.clientTick();
 
         var recipeLogic = getRecipeLogic();
-        if (recipeLogic == null || !recipeLogic.isWorking()) {
+        if (!recipeLogic.isWorking()) {
             return;
         }
         var level = getLevel();
+        if (level == null) {
+            return;
+        }
         var pos = getPos();
         // get front facing
         var facing = getFrontFacing();
