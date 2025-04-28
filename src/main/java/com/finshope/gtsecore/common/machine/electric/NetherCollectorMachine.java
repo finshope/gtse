@@ -10,5 +10,4 @@ public class NetherCollectorMachine extends SimpleTieredMachine {
     public NetherCollectorMachine(IMachineBlockEntity holder, int tier, Object... args) {
         super(holder, tier, defaultTankSizeFunction, args);
     }
-
 }

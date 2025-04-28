@@ -3,9 +3,17 @@ package com.finshope.gtsecore.api.recipe;
 import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.*;
 
 public class OverclockingLogic {
-    public static com.gregtechceu.gtceu.api.recipe.OverclockingLogic PERFECT_OVERCLOCK_SUBSECOND = (params, maxV) -> subSecondParallelOC(params, maxV, PERFECT_DURATION_FACTOR, STD_VOLTAGE_FACTOR);
 
-    static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult subSecondParallelOC(com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCParams params, long maxVoltage, double durationFactor,
+    public static com.gregtechceu.gtceu.api.recipe.OverclockingLogic PERFECT_OVERCLOCK_SUBSECOND = (params,
+                                                                                                    maxV) -> subSecondParallelOC(
+                                                                                                            params,
+                                                                                                            maxV,
+                                                                                                            PERFECT_DURATION_FACTOR,
+                                                                                                            STD_VOLTAGE_FACTOR);
+
+    static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult subSecondParallelOC(com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCParams params,
+                                                                                           long maxVoltage,
+                                                                                           double durationFactor,
                                                                                            double voltageFactor) {
         double duration = params.duration();
         double eut = params.eut();
@@ -50,12 +58,13 @@ public class OverclockingLogic {
             ocLevel++;
         }
 
-        return new com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult(Math.pow(voltageFactor, ocLevel), durationMultiplier, ocLevel, (int) parallel);
+        return new com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult(Math.pow(voltageFactor, ocLevel),
+                durationMultiplier, ocLevel, (int) parallel);
     }
 
     public static OCResult industrialHeatingCoilOC(OCParams params, long maxVoltage, int recipeTemp, int machineTemp) {
-        double duration = (double)params.duration();
-        double eut = (double)params.eut();
+        double duration = (double) params.duration();
+        double eut = (double) params.eut();
         int ocAmount = params.ocAmount();
         int maxParallels = params.maxParallels();
         double parallel = 1.0;
@@ -63,9 +72,9 @@ public class OverclockingLogic {
         int ocLevel = 0;
 
         double durationMultiplier;
-        for(durationMultiplier = 1.0; ocAmount-- > 0; ++ocLevel) {
+        for (durationMultiplier = 1.0; ocAmount-- > 0; ++ocLevel) {
             double potentialEUt = eut * 4.0;
-            if (potentialEUt > (double)maxVoltage) {
+            if (potentialEUt > (double) maxVoltage) {
                 break;
             }
 
@@ -76,7 +85,7 @@ public class OverclockingLogic {
             } else {
                 double pFactor = 4.0;
                 double potentialParallel = parallel * pFactor;
-                if (potentialParallel > (double)maxParallels) {
+                if (potentialParallel > (double) maxParallels) {
                     break;
                 }
 
@@ -89,7 +98,6 @@ public class OverclockingLogic {
             eut = potentialEUt;
         }
 
-        return new OCResult(Math.pow(4.0, (double)ocLevel), durationMultiplier, ocLevel, (int)parallel);
+        return new OCResult(Math.pow(4.0, (double) ocLevel), durationMultiplier, ocLevel, (int) parallel);
     }
-
 }

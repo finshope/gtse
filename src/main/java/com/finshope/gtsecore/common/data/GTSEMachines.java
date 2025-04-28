@@ -10,6 +10,7 @@ import com.finshope.gtsecore.common.machine.multiblock.steam.IndustrialSteamPara
 import com.finshope.gtsecore.common.machine.multiblock.steam.SteamOreWaherMachine;
 import com.finshope.gtsecore.common.machine.multiblock.steam.SteamVoidMinerMachine;
 import com.finshope.gtsecore.config.GTSEConfig;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -35,15 +36,16 @@ import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.SteamHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
-import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
-import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -64,11 +66,14 @@ import static net.minecraft.world.level.block.Blocks.GLASS;
 import static net.minecraft.world.level.block.Blocks.WATER;
 
 public class GTSEMachines {
+
     public static final Int2IntFunction largeTankSizeFunction = (tier) -> Math.min(4 * (1 << tier - 1), 256) * 1000;
 
-    public static final int[] NETHER_COLLECTOR_TIERS = GTValues.tiersBetween(GTValues.EV, GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV);
+    public static final int[] NETHER_COLLECTOR_TIERS = GTValues.tiersBetween(GTValues.EV,
+            GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV);
     public static final int[] HARVESTER_TIERS = GTValues.tiersBetween(GTValues.LV, GTValues.IV);
-    public final static MachineDefinition[] NETHER_COLLECTOR = registerTieredMachines("nether_collector", NetherCollectorMachine::new,
+    public final static MachineDefinition[] NETHER_COLLECTOR = registerTieredMachines("nether_collector",
+            NetherCollectorMachine::new,
             (tier, builder) -> builder
                     .langValue("%s Nether collector".formatted(GTValues.VNF[tier]))
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("nether_collector"),
@@ -76,7 +81,8 @@ public class GTSEMachines {
                     .rotationState(RotationState.NON_Y_AXIS)
                     .workableTieredHullRenderer(GTSECore.id("block/machines/nether_collector"))
                     .recipeType(GTSERecipeTypes.NETHER_COLLECTOR_RECIPES)
-                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, GTSERecipeTypes.NETHER_COLLECTOR_RECIPES, defaultTankSizeFunction.apply(tier), true))
+                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                            GTSERecipeTypes.NETHER_COLLECTOR_RECIPES, defaultTankSizeFunction.apply(tier), true))
                     .register(),
             NETHER_COLLECTOR_TIERS);
 
@@ -92,7 +98,8 @@ public class GTSEMachines {
                     .register(),
             HARVESTER_TIERS);
 
-    public final static MachineDefinition[] MOB_SIMULATOR = registerTieredMachines("mob_simulator", MobSimulatorMachine::new,
+    public final static MachineDefinition[] MOB_SIMULATOR = registerTieredMachines("mob_simulator",
+            MobSimulatorMachine::new,
             (tier, builder) -> builder
                     .langValue("%s Harvester".formatted(GTValues.VNF[tier]))
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("mob_simulator"),
@@ -118,7 +125,7 @@ public class GTSEMachines {
             .abilities(PartAbility.STEAM)
             .overlaySteamHullRenderer("large_steam_hatch")
             .tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
-                            SteamHatchPartMachine.INITIAL_TANK_CAPACITY * 64),
+                    SteamHatchPartMachine.INITIAL_TANK_CAPACITY * 64),
                     Component.translatable("gtceu.machine.steam.steam_hatch.tooltip"))
             .register();
 
@@ -144,7 +151,8 @@ public class GTSEMachines {
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS, PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
+                                    PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTSECore.id("block/multiblock/steam_centrifuge"))
@@ -172,7 +180,8 @@ public class GTSEMachines {
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS, PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
+                                    PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTSECore.id("block/multiblock/steam_ore_washer"))
@@ -201,7 +210,8 @@ public class GTSEMachines {
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS, PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
+                                    PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTSECore.id("block/multiblock/steam_mixer"))
@@ -216,15 +226,21 @@ public class GTSEMachines {
             .recipeModifier(GTSEMachines::steamVoidMinerMachineRecipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 6)
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("F   F", "F   F", "F   F", "XXXXX", "     ", "     ", "     ", "     ", "     ", "     ", "     ")
-                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", "  F  ", "  F  ", "  F  ", "     ", "     ", "     ")
-                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", " FCF ", " FCF ", " FCF ", "  F  ", "  F  ", "  F  ")
-                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", "  F  ", "  F  ", "  F  ", "     ", "     ", "     ")
-                    .aisle("F   F", "F   F", "F   F", "XXSXX", "     ", "     ", "     ", "     ", "     ", "     ", "     ")
+                    .aisle("F   F", "F   F", "F   F", "XXXXX", "     ", "     ", "     ", "     ", "     ", "     ",
+                            "     ")
+                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", "  F  ", "  F  ", "  F  ", "     ", "     ",
+                            "     ")
+                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", " FCF ", " FCF ", " FCF ", "  F  ", "  F  ",
+                            "  F  ")
+                    .aisle("     ", "     ", "     ", "XXXXX", " XXX ", "  F  ", "  F  ", "  F  ", "     ", "     ",
+                            "     ")
+                    .aisle("F   F", "F   F", "F   F", "XXSXX", "     ", "     ", "     ", "     ", "     ", "     ",
+                            "     ")
                     .where('S', Predicates.controller(blocks(definition.getBlock())))
                     .where(' ', Predicates.any())
                     .where('C', blocks(CASING_BRONZE_PIPE.get()))
-                    .where('F', blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.Steel).get()))
+                    .where('F',
+                            blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.Steel).get()))
                     .where('X', blocks(CASING_INDUSTRIAL_STEAM.get()).setMinGlobalLimited(20)
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
@@ -298,7 +314,8 @@ public class GTSEMachines {
             })
             .workableCasingRenderer(GTCEu.id("block/casings/voltage/ev/side"),
                     GTSECore.id("block/multiblock/industrial_pyrolyse_oven"))
-            .tooltips(Component.translatable("gtse.machine.industrial_pyrolyse_oven.tooltip.1"), Component.translatable("gtceu.machine.perfect_oc"))
+            .tooltips(Component.translatable("gtse.machine.industrial_pyrolyse_oven.tooltip.1"),
+                    Component.translatable("gtceu.machine.perfect_oc"))
             .additionalDisplay((controller, components) -> {
                 if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
                     components.add(Component.translatable("gtceu.multiblock.pyrolyse_oven.speed",
@@ -311,8 +328,7 @@ public class GTSEMachines {
             .multiblock("industrial_alloy_blast_smelter", CoilWorkableElectricMultiblockMachine::new)
             .langValue("Industrial Alloy Blast Smelter")
             .tooltips(Component.translatable("gtceu.machine.available_recipe_map_1.tooltip",
-                    Component.translatable("gtceu.alloy_blast_smelter")
-            ))
+                    Component.translatable("gtceu.alloy_blast_smelter")))
             .tooltips(Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.0"),
                     Component.translatable("gtceu.machine.perfect_oc"))
             .rotationState(RotationState.ALL)
@@ -364,7 +380,12 @@ public class GTSEMachines {
             .additionalDisplay((controller, components) -> {
                 if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
                     components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
-                            Component.translatable(FormattingUtil.formatNumbers(coilMachine.getCoilType().getCoilTemperature() + 100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) + "K")
+                            Component
+                                    .translatable(
+                                            FormattingUtil
+                                                    .formatNumbers(coilMachine.getCoilType().getCoilTemperature() +
+                                                            100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) +
+                                                    "K")
                                     .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
                 }
             })
@@ -377,66 +398,81 @@ public class GTSEMachines {
             .recipeModifiers(GTSERecipeModifiers::macroBlastFurnaceParallel, GTRecipeModifiers::ebfOverclock)
             .appearanceBlock(CASING_INVAR_HEATPROOF)
             .pattern(definition -> FactoryBlockPattern.start()
-                    .aisle("XXXXXXXXXXXXXXX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
-                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
-                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
-                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
-                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
-                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
-                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXMXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
-                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
-                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
-                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
-                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
-                    .aisle("XXXXXXXXXXXXXXX", "XGGGGGGGGGGGGGX", "XGGGGGGSGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
-                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
-                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
-                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXMXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GC           CG", "GC           CG",
+                            "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG",
+                            "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "XGGGGGGGGGGGGGX", "XGGGGGGSGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX",
+                            "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XXXXXXXXXXXXXXX")
                     .where('S', controller(blocks(definition.getBlock())))
                     .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(450)
                             .or(autoAbilities(definition.getRecipeTypes()))
@@ -447,8 +483,8 @@ public class GTSEMachines {
                     .where(' ', any())
                     .build())
             .recoveryItems(
-                    () -> new ItemLike[]{
-                            GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get()})
+                    () -> new ItemLike[] {
+                            GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get() })
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_heatproof"),
                     GTCEu.id("block/multiblock/electric_blast_furnace"))
             .tooltips(Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.0"),
@@ -459,20 +495,29 @@ public class GTSEMachines {
             .additionalDisplay((controller, components) -> {
                 if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
                     components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
-                            Component.translatable(FormattingUtil.formatNumbers(coilMachine.getCoilType().getCoilTemperature() + 100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) + "K")
+                            Component
+                                    .translatable(
+                                            FormattingUtil
+                                                    .formatNumbers(coilMachine.getCoilType().getCoilTemperature() +
+                                                            100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) +
+                                                    "K")
                                     .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
                 }
             })
             .register();
 
-
-    public static Component[] workableTiered(int tier, long voltage, long energyCapacity, GTRecipeType recipeType, long tankCapacity, boolean input) {
+    public static Component[] workableTiered(int tier, long voltage, long energyCapacity, GTRecipeType recipeType,
+                                             long tankCapacity, boolean input) {
         List<Component> tooltipComponents = new ArrayList<>();
-        tooltipComponents.add(input ? Component.translatable("gtceu.universal.tooltip.voltage_in", voltage, GTValues.VNF[tier]) :
-                Component.translatable("gtceu.universal.tooltip.voltage_out", voltage, GTValues.VNF[tier]));
-        tooltipComponents.add(Component.translatable("gtceu.universal.tooltip.energy_storage_capacity", energyCapacity));
-        if (recipeType.getMaxInputs(FluidRecipeCapability.CAP) > 0 || recipeType.getMaxOutputs(FluidRecipeCapability.CAP) > 0)
-            tooltipComponents.add(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity", tankCapacity));
+        tooltipComponents
+                .add(input ? Component.translatable("gtceu.universal.tooltip.voltage_in", voltage, GTValues.VNF[tier]) :
+                        Component.translatable("gtceu.universal.tooltip.voltage_out", voltage, GTValues.VNF[tier]));
+        tooltipComponents
+                .add(Component.translatable("gtceu.universal.tooltip.energy_storage_capacity", energyCapacity));
+        if (recipeType.getMaxInputs(FluidRecipeCapability.CAP) > 0 ||
+                recipeType.getMaxOutputs(FluidRecipeCapability.CAP) > 0)
+            tooltipComponents
+                    .add(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity", tankCapacity));
         return tooltipComponents.toArray(Component[]::new);
     }
 
@@ -483,29 +528,36 @@ public class GTSEMachines {
         MachineDefinition[] definitions = new MachineDefinition[tiers.length];
         for (int i = 0; i < tiers.length; i++) {
             int tier = tiers[i];
-            var register = REGISTRATE.machine(GTValues.VN[tier].toLowerCase() + "_" + name, holder -> factory.apply(holder, tier))
+            var register = REGISTRATE
+                    .machine(GTValues.VN[tier].toLowerCase() + "_" + name, holder -> factory.apply(holder, tier))
                     .tier(tier);
             definitions[i] = builder.apply(tier, register);
         }
         return definitions;
     }
 
-    public static ModifierFunction industrialSteamMachineRecipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+    public static ModifierFunction industrialSteamMachineRecipeModifier(@NotNull MetaMachine machine,
+                                                                        @NotNull GTRecipe recipe) {
         if (machine instanceof IndustrialSteamParallelMultiblockMachine) {
             if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.HV) {
                 return ModifierFunction.NULL;
             } else {
                 long eut = RecipeHelper.getInputEUt(recipe);
-                int parallelAmount = ParallelLogic.getParallelAmount(machine, recipe, GTSEConfig.INSTANCE.server.industrialSteamMachineMaxParallels);
-                double eutMultiplier = (double) eut * 0.8888 * (double) parallelAmount <= 32.0 ? 0.8888 * (double) parallelAmount : 32.0 / (double) eut;
-                return ModifierFunction.builder().inputModifier(ContentModifier.multiplier(parallelAmount)).outputModifier(ContentModifier.multiplier(parallelAmount)).durationMultiplier(1.5).eutMultiplier(eutMultiplier).parallels(parallelAmount).build();
+                int parallelAmount = ParallelLogic.getParallelAmount(machine, recipe,
+                        GTSEConfig.INSTANCE.server.industrialSteamMachineMaxParallels);
+                double eutMultiplier = (double) eut * 0.8888 * (double) parallelAmount <= 32.0 ?
+                        0.8888 * (double) parallelAmount : 32.0 / (double) eut;
+                return ModifierFunction.builder().inputModifier(ContentModifier.multiplier(parallelAmount))
+                        .outputModifier(ContentModifier.multiplier(parallelAmount)).durationMultiplier(1.5)
+                        .eutMultiplier(eutMultiplier).parallels(parallelAmount).build();
             }
         } else {
             return RecipeModifier.nullWrongType(IndustrialSteamParallelMultiblockMachine.class, machine);
         }
     }
 
-    public static ModifierFunction steamVoidMinerMachineRecipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+    public static ModifierFunction steamVoidMinerMachineRecipeModifier(@NotNull MetaMachine machine,
+                                                                       @NotNull GTRecipe recipe) {
         if (machine instanceof SteamParallelMultiblockMachine) {
             if (RecipeHelper.getRecipeEUtTier(recipe) > GTValues.HV) {
                 return ModifierFunction.NULL;
@@ -517,7 +569,5 @@ public class GTSEMachines {
         }
     }
 
-    public static void init() {
-
-    }
+    public static void init() {}
 }

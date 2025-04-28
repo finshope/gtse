@@ -12,26 +12,30 @@ import static com.lowdragmc.lowdraglib.gui.texture.ProgressTexture.FillDirection
 
 public class GTSERecipeTypes {
 
-    public static final GTRecipeType NETHER_COLLECTOR_RECIPES = GTRecipeTypes.register("nether_collector", ELECTRIC).setMaxIOSize(3, 6, 1, 0).setEUIO(IO.IN)
+    public static final GTRecipeType NETHER_COLLECTOR_RECIPES = GTRecipeTypes.register("nether_collector", ELECTRIC)
+            .setMaxIOSize(3, 6, 1, 0).setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.MOTOR);
 
-    public static final GTRecipeType TREE_FARM_RECIPES = GTRecipeTypes.register("tree_farm", MULTIBLOCK).setMaxIOSize(3, 6, 1, 0).setEUIO(IO.IN)
+    public static final GTRecipeType TREE_FARM_RECIPES = GTRecipeTypes.register("tree_farm", MULTIBLOCK)
+            .setMaxIOSize(3, 6, 1, 0).setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
 
-    public static final GTRecipeType HARVESTER_RECIPES = GTRecipeTypes.register("harvester", ELECTRIC).setMaxIOSize(3, 6, 2, 0).setEUIO(IO.IN)
+    public static final GTRecipeType HARVESTER_RECIPES = GTRecipeTypes.register("harvester", ELECTRIC)
+            .setMaxIOSize(3, 6, 2, 0).setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
 
-    public static final GTRecipeType MOB_SIMULATOR_RECIPES = GTRecipeTypes.register("mob_simulator", ELECTRIC).setMaxIOSize(3, 6, 2, 0).setEUIO(IO.IN)
+    public static final GTRecipeType MOB_SIMULATOR_RECIPES = GTRecipeTypes.register("mob_simulator", ELECTRIC)
+            .setMaxIOSize(3, 6, 2, 0).setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
 
-    public static final GTRecipeType STEAM_VOID_MINER_RECIPES = GTRecipeTypes.register("steam_void_miner", MULTIBLOCK).setMaxIOSize(1, 6, 1, 0).setEUIO(IO.IN)
+    public static final GTRecipeType STEAM_VOID_MINER_RECIPES = GTRecipeTypes.register("steam_void_miner", MULTIBLOCK)
+            .setMaxIOSize(1, 6, 1, 0).setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
-    public static void init() {
 
-    }
+    public static void init() {}
 }

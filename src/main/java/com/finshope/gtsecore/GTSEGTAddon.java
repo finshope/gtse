@@ -2,6 +2,7 @@ package com.finshope.gtsecore;
 
 import com.finshope.gtsecore.api.registries.GTSERegistires;
 import com.finshope.gtsecore.common.data.GTSERecipes;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.addon.GTAddon;
 import com.gregtechceu.gtceu.api.addon.IGTAddon;

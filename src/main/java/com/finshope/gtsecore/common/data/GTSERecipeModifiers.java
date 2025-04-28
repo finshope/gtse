@@ -1,8 +1,6 @@
 package com.finshope.gtsecore.common.data;
 
-import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -11,21 +9,26 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+
 import org.jetbrains.annotations.NotNull;
 
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.industrialHeatingCoilOC;
 
 public class GTSERecipeModifiers {
-    public static @NotNull ModifierFunction industrialPyrolyseOvenOverclock(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+
+    public static @NotNull ModifierFunction industrialPyrolyseOvenOverclock(@NotNull MetaMachine machine,
+                                                                            @NotNull GTRecipe recipe) {
         if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
             if (RecipeHelper.getRecipeEUtTier(recipe) > coilMachine.getTier()) {
                 return ModifierFunction.NULL;
             } else {
                 int tier = coilMachine.getCoilTier();
                 double durationMultiplier = tier == 0 ? 1.3333333333333333 : 2.0 / (double) (tier + 1);
-                ModifierFunction durationModifier = ModifierFunction.builder().durationMultiplier(durationMultiplier).build();
-                ModifierFunction oc = PERFECT_OVERCLOCK_SUBSECOND.getModifier(machine, recipe, coilMachine.getOverclockVoltage());
+                ModifierFunction durationModifier = ModifierFunction.builder().durationMultiplier(durationMultiplier)
+                        .build();
+                ModifierFunction oc = PERFECT_OVERCLOCK_SUBSECOND.getModifier(machine, recipe,
+                        coilMachine.getOverclockVoltage());
                 return oc.andThen(durationModifier);
             }
         } else {
@@ -33,15 +36,19 @@ public class GTSERecipeModifiers {
         }
     }
 
-    public static @NotNull ModifierFunction industrialEbfOverclock(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+    public static @NotNull ModifierFunction industrialEbfOverclock(@NotNull MetaMachine machine,
+                                                                   @NotNull GTRecipe recipe) {
         if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
-            int blastFurnaceTemperature = coilMachine.getCoilType().getCoilTemperature() + 100 * Math.max(0, coilMachine.getTier() - 2);
+            int blastFurnaceTemperature = coilMachine.getCoilType().getCoilTemperature() +
+                    100 * Math.max(0, coilMachine.getTier() - 2);
             int recipeTemp = recipe.data.getInt("ebf_temp");
             if (recipe.data.contains("ebf_temp") && recipeTemp <= blastFurnaceTemperature) {
                 if (RecipeHelper.getRecipeEUtTier(recipe) > coilMachine.getTier()) {
                     return ModifierFunction.NULL;
                 } else {
-                    ModifierFunction discount = ModifierFunction.builder().eutMultiplier(OverclockingLogic.getCoilEUtDiscount(recipeTemp, blastFurnaceTemperature)).build();
+                    ModifierFunction discount = ModifierFunction.builder()
+                            .eutMultiplier(OverclockingLogic.getCoilEUtDiscount(recipeTemp, blastFurnaceTemperature))
+                            .build();
                     OverclockingLogic logic = (p, v) -> {
                         return industrialHeatingCoilOC(p, v, recipeTemp, blastFurnaceTemperature);
                     };
@@ -56,11 +63,12 @@ public class GTSERecipeModifiers {
         }
     }
 
-    public static @NotNull ModifierFunction macroBlastFurnaceParallel(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
-        if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine ) {
+    public static @NotNull ModifierFunction macroBlastFurnaceParallel(@NotNull MetaMachine machine,
+                                                                      @NotNull GTRecipe recipe) {
+        if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
             int tier = coilMachine.getCoilTier();
             double power = Math.pow(4, tier + 1);
-            int maxParallels = (int)Math.min(Integer.MAX_VALUE, power);
+            int maxParallels = (int) Math.min(Integer.MAX_VALUE, power);
 
             int parallels = ParallelLogic.getParallelAmount(machine, recipe, maxParallels);
 

@@ -1,6 +1,7 @@
 package com.finshope.gtsecore.data.recipe;
 
 import com.finshope.gtsecore.common.data.GTSEMachines;
+
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
@@ -12,10 +13,12 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
+
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -37,15 +40,15 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.machines.GCYMMachines.BLAST_ALLOY_SMELTER;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.ELECTRIC_BLAST_FURNACE;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.PYROLYSE_OVEN;
-import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PISTON;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
+import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PISTON;
 import static com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader.registerMachineRecipe;
 import static net.minecraft.tags.ItemTags.WOOL;
 import static net.minecraft.world.item.Items.*;
 
 public class MiscRecipeLoader {
-    public static void init(Consumer<FinishedRecipe> provider) {
 
+    public static void init(Consumer<FinishedRecipe> provider) {
         createCustomRecipes(provider);
         createSteamMachineRecipes(provider);
         createMultiblockRecipes(provider);
@@ -62,38 +65,43 @@ public class MiscRecipeLoader {
         registerMachineRecipe(provider, GTSEMachines.NETHER_COLLECTOR, "WFW", "PMP", "CFC", 'M', HULL, 'P', PISTON, 'F',
                 GTItems.ITEM_FILTER, 'C', CIRCUIT, 'W', CABLE_DOUBLE);
         registerMachineRecipe(provider, HARVESTER, "HCH", "PMP", "HCH", 'M', HULL, 'P', PUMP, 'C', CIRCUIT, 'H', CABLE);
-        registerMachineRecipe(provider, MOB_SIMULATOR, "HCH", "PMP", "HCH", 'M', HULL, 'P', FIELD_GENERATOR, 'C', CIRCUIT, 'H', CABLE);
-
+        registerMachineRecipe(provider, MOB_SIMULATOR, "HCH", "PMP", "HCH", 'M', HULL, 'P', FIELD_GENERATOR, 'C',
+                CIRCUIT, 'H', CABLE);
 
         // add crafting table recipe for hatch
         for (var machine : GTMachines.FLUID_IMPORT_HATCH) {
             if (machine == null) continue;
             int tier = machine.getTier();
-            VanillaRecipeHelper.addShapedRecipe(provider, true, "fluid_import_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+            VanillaRecipeHelper.addShapedRecipe(provider, true,
+                    "fluid_import_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
                     machine.asStack(), "D  ", "H  ", "   ", 'H', HULL.get(tier), 'D', DRUM.get(tier));
         }
         for (var machine : GTMachines.FLUID_EXPORT_HATCH) {
             if (machine == null) continue;
             int tier = machine.getTier();
-            VanillaRecipeHelper.addShapedRecipe(provider, true, "fluid_export_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+            VanillaRecipeHelper.addShapedRecipe(provider, true,
+                    "fluid_export_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
                     machine.asStack(), "H  ", "D  ", "   ", 'H', HULL.get(tier), 'D', DRUM.get(tier));
         }
         for (var machine : GTMachines.ITEM_IMPORT_BUS) {
             if (machine == null) continue;
             int tier = machine.getTier();
-            VanillaRecipeHelper.addShapedRecipe(provider, true, "item_import_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+            VanillaRecipeHelper.addShapedRecipe(provider, true,
+                    "item_import_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
                     machine.asStack(), "C  ", "H  ", "   ", 'H', HULL.get(tier), 'C', CRATE.get(tier));
         }
         for (var machine : GTMachines.ITEM_EXPORT_BUS) {
             if (machine == null) continue;
             int tier = machine.getTier();
-            VanillaRecipeHelper.addShapedRecipe(provider, true, "item_export_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
+            VanillaRecipeHelper.addShapedRecipe(provider, true,
+                    "item_export_hatch_" + VN[tier].toLowerCase(Locale.ROOT),
                     machine.asStack(), "H  ", "C  ", "   ", 'H', HULL.get(tier), 'C', CRATE.get(tier));
         }
 
-
-        NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_1").circuitMeta(1).duration(20 * 10).EUt(VA[EV]).chancedOutput(TagPrefix.dust, NetherStar, 1000, 2000).save(provider);
-        NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_2").circuitMeta(2).duration(20 * 10).EUt(VA[EV]).chancedOutput(dustTiny, Netherite, 1000, 2000).save(provider);
+        NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_1").circuitMeta(1).duration(20 * 10).EUt(VA[EV])
+                .chancedOutput(TagPrefix.dust, NetherStar, 1000, 2000).save(provider);
+        NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_2").circuitMeta(2).duration(20 * 10).EUt(VA[EV])
+                .chancedOutput(dustTiny, Netherite, 1000, 2000).save(provider);
         HARVESTER_RECIPES
                 .recipeBuilder("harvest")
                 .circuitMeta(1)
@@ -187,7 +195,8 @@ public class MiscRecipeLoader {
         ASSEMBLER_RECIPES.recipeBuilder("witch_spawn_egg")
                 .duration(20 * 10)
                 .EUt(V[MV])
-                .inputItems(new ItemStack(REDSTONE, 2), new ItemStack(SUGAR, 2), new ItemStack(GLASS_BOTTLE, 2), new ItemStack(GLOWSTONE, 2), new ItemStack(EGG))
+                .inputItems(new ItemStack(REDSTONE, 2), new ItemStack(SUGAR, 2), new ItemStack(GLASS_BOTTLE, 2),
+                        new ItemStack(GLOWSTONE, 2), new ItemStack(EGG))
                 .outputItems(WITCH_SPAWN_EGG)
                 .save(provider);
 
@@ -326,7 +335,6 @@ public class MiscRecipeLoader {
                 .EUt(VA[LV])
                 .chancedOutput(new ItemStack(CHICKEN), 8000, 2000)
                 .save(provider);
-
     }
 
     static void createMultiblockRecipes(Consumer<FinishedRecipe> provider) {
@@ -367,12 +375,14 @@ public class MiscRecipeLoader {
                 new MaterialEntry(TagPrefix.rotor, GTMaterials.TungstenSteel), 'C', CustomTags.IV_CIRCUITS, 'W',
                 new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Tungsten));
 
-        VanillaRecipeHelper.addShapedRecipe(provider, true, "diesel_generator_ev", GTSEMachines.COMBUSTION[EV].asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "diesel_generator_ev",
+                GTSEMachines.COMBUSTION[EV].asStack(),
                 "PCP", "EME", "GWG", 'M', GTMachines.HULL[GTValues.EV].asStack(), 'P', GTItems.ELECTRIC_PISTON_EV, 'E',
                 GTItems.ELECTRIC_MOTOR_EV, 'C', CustomTags.EV_CIRCUITS, 'W',
                 new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Aluminium), 'G',
                 new MaterialEntry(TagPrefix.gear, GTMaterials.StainlessSteel));
-        VanillaRecipeHelper.addShapedRecipe(provider, true, "diesel_generator_iv", GTSEMachines.COMBUSTION[IV].asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "diesel_generator_iv",
+                GTSEMachines.COMBUSTION[IV].asStack(),
                 "PCP", "EME", "GWG", 'M', GTMachines.HULL[GTValues.IV].asStack(), 'P', GTItems.ELECTRIC_PISTON_IV, 'E',
                 GTItems.ELECTRIC_MOTOR_IV, 'C', CustomTags.IV_CIRCUITS, 'W',
                 new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Tungsten), 'G',
@@ -380,7 +390,8 @@ public class MiscRecipeLoader {
 
         VanillaRecipeHelper.addShapedRecipe(provider, true, "plasma_turbine_luv",
                 GTSEMachines.PLASMA_TURBINE[LuV].asStack(), "PSP", "SAS", "CSC", 'S',
-                new MaterialEntry(TagPrefix.rotor, GTMaterials.RhodiumPlatedPalladium), 'P', CustomTags.LuV_CIRCUITS, 'A',
+                new MaterialEntry(TagPrefix.rotor, GTMaterials.RhodiumPlatedPalladium), 'P', CustomTags.LuV_CIRCUITS,
+                'A',
                 GTMachines.HULL[GTValues.LuV].asStack(), 'C',
                 new MaterialEntry(TagPrefix.pipeSmallFluid, GTMaterials.NiobiumTitanium));
         VanillaRecipeHelper.addShapedRecipe(provider, true, "plasma_turbine_zpm",
@@ -470,7 +481,8 @@ public class MiscRecipeLoader {
                 .save(provider);
     }
 
-    static void createTreeFarmRecipe(Consumer<FinishedRecipe> provider, String name, ItemLike sapling, ItemLike log, ItemLike fruit) {
+    static void createTreeFarmRecipe(Consumer<FinishedRecipe> provider, String name, ItemLike sapling, ItemLike log,
+                                     ItemLike fruit) {
         var builder = TREE_FARM_RECIPES.recipeBuilder(name)
                 .circuitMeta(1)
                 .duration(20 * 10)
@@ -524,7 +536,8 @@ public class MiscRecipeLoader {
                 .save(provider);
     }
 
-    static GTRecipeBuilder createChancedInput(GTRecipeBuilder builder, TagPrefix tagPrefix, @NotNull Material material, int chance, int tierChanceBoost) {
+    static GTRecipeBuilder createChancedInput(GTRecipeBuilder builder, TagPrefix tagPrefix, @NotNull Material material,
+                                              int chance, int tierChanceBoost) {
         if (0 >= chance || chance > ChanceLogic.getMaxChancedValue()) {
             GTCEu.LOGGER.error("Chance cannot be less or equal to 0 or more than {}. Actual: {}.",
                     ChanceLogic.getMaxChancedValue(), chance, new Throwable());

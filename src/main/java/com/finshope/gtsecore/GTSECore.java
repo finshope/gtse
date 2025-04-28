@@ -5,6 +5,7 @@ import com.finshope.gtsecore.common.data.GTSEItems;
 import com.finshope.gtsecore.common.data.GTSEMachines;
 import com.finshope.gtsecore.common.data.GTSERecipeTypes;
 import com.finshope.gtsecore.config.GTSEConfig;
+
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
@@ -12,6 +13,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -21,6 +23,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +31,7 @@ import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
 
 @Mod(GTSECore.MOD_ID)
 public class GTSECore {
+
     static {
         REGISTRATE.creativeModeTab(() -> GTSECreativeModeTabs.GTSE);
     }
@@ -55,7 +59,6 @@ public class GTSECore {
         // If we want to use annotations to register event listeners,
         // we need to register our object like this!
         MinecraftForge.EVENT_BUS.register(this);
-
     }
 
     private void init() {

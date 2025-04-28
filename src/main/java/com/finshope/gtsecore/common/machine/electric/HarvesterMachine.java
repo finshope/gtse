@@ -3,6 +3,7 @@ package com.finshope.gtsecore.common.machine.electric;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -72,7 +73,6 @@ public class HarvesterMachine extends SimpleTieredMachine {
                 }
             }
         }
-
     }
 
     private boolean insertItemOrDiscard(NotifiableItemStackHandler itemHandler, ItemStack itemStack) {
