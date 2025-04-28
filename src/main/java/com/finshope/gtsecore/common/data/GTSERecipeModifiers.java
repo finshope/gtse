@@ -1,11 +1,15 @@
 package com.finshope.gtsecore.common.data;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.feature.multiblock.IMultiController;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
+import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,5 +54,23 @@ public class GTSERecipeModifiers {
         } else {
             return RecipeModifier.nullWrongType(CoilWorkableElectricMultiblockMachine.class, machine);
         }
+    }
+
+    public static @NotNull ModifierFunction macroBlastFurnaceParallel(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
+        if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine ) {
+            int tier = coilMachine.getCoilTier();
+            double power = Math.pow(4, tier + 1);
+            int maxParallels = (int)Math.min(Integer.MAX_VALUE, power);
+
+            int parallels = ParallelLogic.getParallelAmount(machine, recipe, maxParallels);
+
+            if (parallels == 1) return ModifierFunction.IDENTITY;
+            return ModifierFunction.builder()
+                    .modifyAllContents(ContentModifier.multiplier(parallels))
+                    .eutMultiplier(parallels)
+                    .parallels(parallels)
+                    .build();
+        }
+        return ModifierFunction.IDENTITY;
     }
 }

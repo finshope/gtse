@@ -32,18 +32,17 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.common.data.GTMaterialBlocks;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
-import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
-import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
+import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.SteamHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
@@ -362,6 +361,101 @@ public class GTSEMachines {
             })
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/high_temperature_smelting_casing"),
                     GTCEu.id("block/multiblock/gcym/blast_alloy_smelter"))
+            .additionalDisplay((controller, components) -> {
+                if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
+                    components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",
+                            Component.translatable(FormattingUtil.formatNumbers(coilMachine.getCoilType().getCoilTemperature() + 100L * Math.max(0, coilMachine.getTier() - GTValues.MV)) + "K")
+                                    .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
+                }
+            })
+            .register();
+
+    public static final MultiblockMachineDefinition MACRO_BLAST_FURNACE = REGISTRATE
+            .multiblock("macro_blast_furnace", CoilWorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.BLAST_RECIPES)
+            .recipeModifiers(GTSERecipeModifiers::macroBlastFurnaceParallel, GTRecipeModifiers::ebfOverclock)
+            .appearanceBlock(CASING_INVAR_HEATPROOF)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("XXXXXXXXXXXXXXX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
+                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
+                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
+                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
+                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
+                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
+                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXMXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GC           CG", "GC           CG"
+                            , "GC           CG", "GC           CG", "GC           CG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
+                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
+                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG"
+                            , "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "GCCCCCCCCCCCCCG", "XXXXXXXXXXXXXXX")
+                    .aisle("XXXXXXXXXXXXXXX", "XGGGGGGGGGGGGGX", "XGGGGGGSGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
+                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
+                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX"
+                            , "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XGGGGGGGGGGGGGX", "XXXXXXXXXXXXXXX")
+                    .where('S', controller(blocks(definition.getBlock())))
+                    .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(450)
+                            .or(autoAbilities(definition.getRecipeTypes()))
+                            .or(autoAbilities(true, false, false)))
+                    .where('M', abilities(PartAbility.MUFFLER))
+                    .where('G', blocks(CASING_TEMPERED_GLASS.get()))
+                    .where('C', heatingCoils())
+                    .where(' ', any())
+                    .build())
+            .recoveryItems(
+                    () -> new ItemLike[]{
+                            GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get()})
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_heatproof"),
+                    GTCEu.id("block/multiblock/electric_blast_furnace"))
+            .tooltips(Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.0"),
+                    Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.1"),
+                    Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.2"),
+                    Component.translatable("gtse.machine.macro_blast_furnace.tooltip.0"),
+                    Component.translatable("gtse.machine.macro_blast_furnace.tooltip.1"))
             .additionalDisplay((controller, components) -> {
                 if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
                     components.add(Component.translatable("gtceu.multiblock.blast_furnace.max_temperature",

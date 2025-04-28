@@ -35,6 +35,7 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_MINER;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.machines.GCYMMachines.BLAST_ALLOY_SMELTER;
+import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.ELECTRIC_BLAST_FURNACE;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.PYROLYSE_OVEN;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PISTON;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
@@ -334,15 +335,22 @@ public class MiscRecipeLoader {
                 new MaterialEntry(TagPrefix.rotor, GTMaterials.Steel), 'P', CustomTags.LV_CIRCUITS, 'A',
                 GTMachines.HULL[GTValues.MV].asStack(), 'C', GTItems.ELECTRIC_PUMP_LV.asStack());
 
+        ASSEMBLER_RECIPES.recipeBuilder("macro_blast_furnace")
+                .duration(20 * 100).EUt(VA[LV])
+                .circuitMeta(16)
+                .inputItems(ELECTRIC_BLAST_FURNACE.asStack(64))
+                .outputItems(MACRO_BLAST_FURNACE.asStack())
+                .save(provider);
+
         ASSEMBLER_RECIPES.recipeBuilder("industrial_pyrolyse_oven")
-                .duration(200 * 10).EUt(VA[EV])
+                .duration(20 * 100).EUt(VA[EV])
                 .circuitMeta(16)
                 .inputItems(PYROLYSE_OVEN.asStack(), 16)
                 .outputItems(INDUSTRIAL_PYROLYSE_OVEN.asStack())
                 .save(provider);
 
         ASSEMBLER_RECIPES.recipeBuilder("industrial_alloy_blast_smelter")
-                .duration(200 * 10).EUt(VA[LuV])
+                .duration(20 * 100).EUt(VA[LuV])
                 .circuitMeta(16)
                 .inputItems(BLAST_ALLOY_SMELTER.asStack(), 16)
                 .outputItems(INDUSTRIAL_BLAST_ALLOY_SMELTER.asStack())
