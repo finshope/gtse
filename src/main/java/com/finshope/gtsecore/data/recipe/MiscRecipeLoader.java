@@ -359,8 +359,6 @@ public class MiscRecipeLoader {
                 .EUt(VA[LV])
                 .chancedOutput(new ItemStack(CHICKEN), 8000, 2000)
                 .save(provider);
-
-
     }
 
     static void createMultiblockRecipes(Consumer<FinishedRecipe> provider) {
