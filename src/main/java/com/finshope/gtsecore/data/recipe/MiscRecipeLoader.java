@@ -65,8 +65,8 @@ public class MiscRecipeLoader {
         registerMachineRecipe(provider, GTSEMachines.NETHER_COLLECTOR, "WFW", "PMP", "CFC", 'M', HULL, 'P', PISTON, 'F',
                 GTItems.ITEM_FILTER, 'C', CIRCUIT, 'W', CABLE_DOUBLE);
         registerMachineRecipe(provider, HARVESTER, "HCH", "PMP", "HCH", 'M', HULL, 'P', PUMP, 'C', CIRCUIT, 'H', CABLE);
-        registerMachineRecipe(provider, MOB_SIMULATOR, "HCH", "PMP", "HCH", 'M', HULL, 'P', FIELD_GENERATOR, 'C',
-                CIRCUIT, 'H', CABLE);
+        registerMachineRecipe(provider, MOB_SIMULATOR, "CEC", "SMS", "CEC", 'M', HULL, 'E', EMITTER, 'C',
+                CIRCUIT, 'S', SENSOR);
 
         // vanilla recipe
         FORGE_HAMMER_RECIPES
