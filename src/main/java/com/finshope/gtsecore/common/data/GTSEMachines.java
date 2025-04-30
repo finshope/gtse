@@ -125,7 +125,7 @@ public class GTSEMachines {
             .abilities(PartAbility.STEAM)
             .overlaySteamHullRenderer("large_steam_hatch")
             .tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
-                            SteamHatchPartMachine.INITIAL_TANK_CAPACITY * 64),
+                    SteamHatchPartMachine.INITIAL_TANK_CAPACITY * 64),
                     Component.translatable("gtceu.machine.steam.steam_hatch.tooltip"))
             .register();
 
@@ -477,16 +477,16 @@ public class GTSEMachines {
                     .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(450)
                             .or(autoAbilities(definition.getRecipeTypes()))
                             .or(autoAbilities(true, false, false))
-                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMinGlobalLimited(1).setMaxGlobalLimited(32).setPreviewCount(1))
-                    )
+                            .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMinGlobalLimited(1)
+                                    .setMaxGlobalLimited(32).setPreviewCount(1)))
                     .where('M', abilities(PartAbility.MUFFLER))
                     .where('G', blocks(CASING_TEMPERED_GLASS.get()))
                     .where('C', heatingCoils())
                     .where(' ', any())
                     .build())
             .recoveryItems(
-                    () -> new ItemLike[]{
-                            GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get()})
+                    () -> new ItemLike[] {
+                            GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get() })
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_heatproof"),
                     GTCEu.id("block/multiblock/electric_blast_furnace"))
             .tooltips(Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.0"),
@@ -572,6 +572,5 @@ public class GTSEMachines {
         }
     }
 
-    public static void init() {
-    }
+    public static void init() {}
 }

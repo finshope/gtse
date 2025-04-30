@@ -68,6 +68,15 @@ public class MiscRecipeLoader {
         registerMachineRecipe(provider, MOB_SIMULATOR, "HCH", "PMP", "HCH", 'M', HULL, 'P', FIELD_GENERATOR, 'C',
                 CIRCUIT, 'H', CABLE);
 
+        // vanilla recipe
+        FORGE_HAMMER_RECIPES
+                .recipeBuilder("hammer")
+                .EUt(VA[LV])
+                .duration(1)
+                .inputItems(new ItemStack(Blocks.MAGMA_BLOCK))
+                .outputItems(new ItemStack(MAGMA_CREAM, 4))
+                .save(provider);
+
         // add crafting table recipe for hatch
         for (var machine : GTMachines.FLUID_IMPORT_HATCH) {
             if (machine == null) continue;
@@ -270,6 +279,21 @@ public class MiscRecipeLoader {
                 .chancedOutput(new ItemStack(SHULKER_SHELL), 1000, 2000)
                 .save(provider);
 
+        // slime
+        ASSEMBLER_RECIPES.recipeBuilder("slime_spawn_egg")
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .inputItems(new ItemStack(SLIME_BALL, 4), new ItemStack(EGG))
+                .outputItems(SLIME_SPAWN_EGG)
+                .save(provider);
+        MOB_SIMULATOR_RECIPES.recipeBuilder("slime")
+                .circuitMeta(1)
+                .notConsumable(SLIME_SPAWN_EGG)
+                .duration(20 * 10)
+                .EUt(VA[LV])
+                .chancedOutput(new ItemStack(SLIME_BALL), 8000, 2000)
+                .save(provider);
+
         //////////////////////////////////////
         // ********* animals *********//
         //////////////////////////////////////
@@ -335,6 +359,8 @@ public class MiscRecipeLoader {
                 .EUt(VA[LV])
                 .chancedOutput(new ItemStack(CHICKEN), 8000, 2000)
                 .save(provider);
+
+
     }
 
     static void createMultiblockRecipes(Consumer<FinishedRecipe> provider) {
