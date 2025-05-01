@@ -396,7 +396,8 @@ public class GTSEMachines {
             .multiblock("macro_blast_furnace", CoilWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(GTRecipeTypes.BLAST_RECIPES)
-            .recipeModifiers(GTSERecipeModifiers::macroBlastFurnaceParallel, GTRecipeModifiers::ebfOverclock)
+            .recipeModifiers(GTSERecipeModifiers::macroBlastFurnaceParallel, GTSERecipeModifiers::durationDiscount,
+                    GTRecipeModifiers::ebfOverclock)
             .appearanceBlock(CASING_INVAR_HEATPROOF)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("XXXXXXXXXXXXXXX", "GGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGG",
@@ -495,6 +496,7 @@ public class GTSEMachines {
                     Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.1"),
                     Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.2"),
                     Component.translatable("gtse.tooltip.laser_hatch"),
+                    Component.translatable("gtse.machine.duration_discount"),
                     Component.translatable("gtse.machine.macro_blast_furnace.tooltip.0"),
                     Component.translatable("gtse.machine.macro_blast_furnace.tooltip.1"))
             .additionalDisplay((controller, components) -> {

@@ -63,12 +63,27 @@ public class GTSERecipeModifiers {
         }
     }
 
+    public static @NotNull ModifierFunction durationDiscount(@NotNull MetaMachine machine,
+                                                             @NotNull GTRecipe recipe) {
+        if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
+            int tier = coilMachine.getTier();
+            double power = Math.pow(0.9, tier);
+            if (power < 0.1) {
+                power = 0.1;
+            }
+            return ModifierFunction.builder()
+                    .durationModifier(ContentModifier.multiplier(power))
+                    .build();
+        }
+        return ModifierFunction.IDENTITY;
+    }
+
     public static @NotNull ModifierFunction macroBlastFurnaceParallel(@NotNull MetaMachine machine,
                                                                       @NotNull GTRecipe recipe) {
         if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {
             int tier = coilMachine.getCoilTier();
             double power = Math.pow(4, tier + 1);
-            int maxParallels = (int) Math.min(Integer.MAX_VALUE, power);
+            int maxParallels = Math.max((int) Math.min(Integer.MAX_VALUE, power), 64);
 
             int parallels = ParallelLogic.getParallelAmount(machine, recipe, maxParallels);
 
