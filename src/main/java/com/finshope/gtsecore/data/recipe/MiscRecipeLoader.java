@@ -77,6 +77,25 @@ public class MiscRecipeLoader {
                 .outputItems(new ItemStack(MAGMA_CREAM, 4))
                 .save(provider);
 
+        // add chemical bath cool down recipe for magnesium diboride
+        CHEMICAL_BATH_RECIPES
+                .recipeBuilder("magnesium_diboride_cool_down")
+                .EUt(VA[MV])
+                .duration(20 * 20)
+                .inputItems(ingotHot, MagnesiumDiboride, 1)
+                .inputFluids(Water.getFluid(100))
+                .outputItems(ingot, MagnesiumDiboride)
+                .save(provider);
+
+        CHEMICAL_BATH_RECIPES
+                .recipeBuilder("magnesium_diboride_cool_down_distilled_water")
+                .EUt(VA[MV])
+                .inputItems(ingotHot, MagnesiumDiboride)
+                .inputFluids(DistilledWater.getFluid(100))
+                .outputItems(ingot, MagnesiumDiboride)
+                .duration(250)
+                .save(provider);
+
         // add crafting table recipe for hatch
         for (var machine : GTMachines.FLUID_IMPORT_HATCH) {
             if (machine == null) continue;
