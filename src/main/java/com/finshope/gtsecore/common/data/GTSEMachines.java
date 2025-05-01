@@ -55,6 +55,7 @@ import java.util.function.BiFunction;
 
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
+import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECIPES;
@@ -151,8 +152,8 @@ public class GTSEMachines {
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
-                                    PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                            .or(Predicates.abilities(IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
+                                    IMPORT_ITEMS, EXPORT_ITEMS)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTSECore.id("block/multiblock/steam_centrifuge"))
@@ -180,8 +181,8 @@ public class GTSEMachines {
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
-                                    PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                            .or(Predicates.abilities(IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
+                                    IMPORT_ITEMS, EXPORT_ITEMS)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTSECore.id("block/multiblock/steam_ore_washer"))
@@ -210,8 +211,8 @@ public class GTSEMachines {
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
-                                    PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                            .or(Predicates.abilities(IMPORT_FLUIDS, PartAbility.EXPORT_FLUIDS,
+                                    IMPORT_ITEMS, EXPORT_ITEMS)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTSECore.id("block/multiblock/steam_mixer"))
@@ -245,7 +246,7 @@ public class GTSEMachines {
                             .or(Predicates.abilities(PartAbility.STEAM_IMPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM_EXPORT_ITEMS).setPreviewCount(1))
                             .or(Predicates.abilities(PartAbility.STEAM).setExactLimit(1))
-                            .or(Predicates.abilities(PartAbility.IMPORT_ITEMS, PartAbility.EXPORT_ITEMS)))
+                            .or(Predicates.abilities(IMPORT_ITEMS, EXPORT_ITEMS)))
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/gcym/industrial_steam_casing"),
                     GTCEu.id("block/multiblock/bedrock_ore_miner"))
@@ -474,9 +475,10 @@ public class GTSEMachines {
                             "GGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGG",
                             "GGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGG", "XXXXXXXXXXXXXXX")
                     .where('S', controller(blocks(definition.getBlock())))
-                    .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(450)
-                            .or(autoAbilities(definition.getRecipeTypes()))
-                            .or(autoAbilities(true, false, false))
+                    .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(400)
+                            .or(abilities(IMPORT_FLUIDS, EXPORT_FLUIDS))
+                            .or(abilities(IMPORT_ITEMS, EXPORT_ITEMS))
+                            .or(abilities(MAINTENANCE))
                             .or(abilities(PartAbility.INPUT_ENERGY, PartAbility.INPUT_LASER).setMinGlobalLimited(1)
                                     .setMaxGlobalLimited(32).setPreviewCount(1)))
                     .where('M', abilities(PartAbility.MUFFLER))
