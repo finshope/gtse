@@ -4,12 +4,14 @@ import com.finshope.gtsecore.common.data.GTSECreativeModeTabs;
 import com.finshope.gtsecore.common.data.GTSEItems;
 import com.finshope.gtsecore.common.data.GTSEMachines;
 import com.finshope.gtsecore.common.data.GTSERecipeTypes;
+import com.finshope.gtsecore.common.vanilla.ItemProperties;
 import com.finshope.gtsecore.config.GTSEConfig;
 
 import com.gregtechceu.gtceu.api.GTCEuAPI;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.MaterialRegistryEvent;
 import com.gregtechceu.gtceu.api.data.chemical.material.event.PostMaterialEvent;
+import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.sound.SoundEntry;
@@ -28,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
+import static com.gregtechceu.gtceu.common.data.GTMaterials.Diamond;
 
 @Mod(GTSECore.MOD_ID)
 public class GTSECore {
@@ -64,6 +67,7 @@ public class GTSECore {
     private void init() {
         GTSEConfig.init();
         GTSEItems.init();
+        ItemProperties.init();
         REGISTRATE.registerRegistrate();
     }
 
@@ -116,6 +120,7 @@ public class GTSECore {
      */
     private void modifyMaterials(PostMaterialEvent event) {
         // CustomMaterials.modify();
+        Diamond.getProperty(PropertyKey.DUST).setBurnTime(512 * 10 * 20); // 512 items
     }
 
     /**
