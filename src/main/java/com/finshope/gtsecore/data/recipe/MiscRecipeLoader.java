@@ -522,6 +522,12 @@ public class MiscRecipeLoader {
                 .inputItems(CERTUS_QUARTZ_CRYSTAL.asItem())
                 .outputItems(CERTUS_QUARTZ_DUST.asItem())
                 .save(provider);
+
+        MACERATOR_RECIPES.recipeBuilder("ae2_fluix_dust")
+                .duration(20).EUt(VA[LV])
+                .inputItems(FLUIX_CRYSTAL.asItem())
+                .outputItems(FLUIX_DUST.asItem())
+                .save(provider);
     }
 
     static void createTreeFarmRecipe(Consumer<FinishedRecipe> provider, String name, ItemLike sapling, ItemLike log,
