@@ -423,7 +423,7 @@ public class MiscRecipeLoader {
                 "PCP", "EME", "GWG", 'M', GTMachines.HULL[GTValues.EV].asStack(), 'P', GTItems.ELECTRIC_PISTON_EV, 'E',
                 GTItems.ELECTRIC_MOTOR_EV, 'C', CustomTags.EV_CIRCUITS, 'W',
                 new MaterialEntry(TagPrefix.cableGtSingle, GTMaterials.Aluminium), 'G',
-                new MaterialEntry(TagPrefix.gear, GTMaterials.StainlessSteel));
+                new MaterialEntry(TagPrefix.gear, Titanium));
         VanillaRecipeHelper.addShapedRecipe(provider, true, "diesel_generator_iv",
                 GTSEMachines.COMBUSTION[IV].asStack(),
                 "PCP", "EME", "GWG", 'M', GTMachines.HULL[GTValues.IV].asStack(), 'P', GTItems.ELECTRIC_PISTON_IV, 'E',
