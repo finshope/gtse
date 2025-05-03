@@ -85,7 +85,6 @@ public class GTSECore {
     /**
      * Create a ResourceLocation in the format "modid:path"
      *
-     * @param path
      * @return ResourceLocation with the namespace of your mod
      */
     public static ResourceLocation id(String path) {
@@ -97,7 +96,6 @@ public class GTSECore {
      * You MUST have this if you have custom materials.
      * Remember to register them not to GT's namespace, but your own.
      *
-     * @param event
      */
     private void addMaterialRegistries(MaterialRegistryEvent event) {
         GTCEuAPI.materialManager.createRegistry(GTSECore.MOD_ID);
@@ -107,7 +105,6 @@ public class GTSECore {
      * You will also need this for registering custom materials
      * Call init() from your Material class(es) here
      *
-     * @param event
      */
     private void addMaterials(MaterialEvent event) {
         // CustomMaterials.init();
@@ -116,7 +113,6 @@ public class GTSECore {
     /**
      * (Optional) Used to modify pre-existing materials from GregTech
      *
-     * @param event
      */
     private void modifyMaterials(PostMaterialEvent event) {
         // CustomMaterials.modify();
@@ -127,7 +123,6 @@ public class GTSECore {
      * Used to register your own new RecipeTypes.
      * Call init() from your RecipeType class(es) here
      *
-     * @param event
      */
     private void registerRecipeTypes(GTCEuAPI.RegisterEvent<ResourceLocation, GTRecipeType> event) {
         GTSERecipeTypes.init();
@@ -137,7 +132,6 @@ public class GTSECore {
      * Used to register your own new RecipeTypes.
      * Call init() from your Machine class(es) here
      *
-     * @param event
      */
     private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
         GTSEMachines.init();
@@ -147,7 +141,6 @@ public class GTSECore {
      * Used to register your own new sounds
      * Call init from your Sound class(es) here
      *
-     * @param event
      */
     public void registerSounds(GTCEuAPI.RegisterEvent<ResourceLocation, SoundEntry> event) {
         // CustomSounds.init();
