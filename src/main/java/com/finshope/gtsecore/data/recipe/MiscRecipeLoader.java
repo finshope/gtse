@@ -1,5 +1,6 @@
 package com.finshope.gtsecore.data.recipe;
 
+import com.finshope.gtsecore.common.data.GTMultiMachines;
 import com.finshope.gtsecore.common.data.GTSEMachines;
 
 import com.gregtechceu.gtceu.GTCEu;
@@ -154,17 +155,19 @@ public class MiscRecipeLoader {
                 GCYMBlocks.CASING_INDUSTRIAL_STEAM.asStack(ConfigHolder.INSTANCE.recipes.casingsPerCraft), "PhP", "PBP",
                 "PwP", 'P', new MaterialEntry(TagPrefix.plate, Steel), 'B',
                 new ItemStack(Blocks.BRICKS));
-        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_centrifuge", STEAM_CENTRIFUGE.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_centrifuge",
+                GTMultiMachines.STEAM_CENTRIFUGE.asStack(),
                 "CGC",
                 "FMF", "CGC", 'F', new MaterialEntry(rotor, Bronze), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
                 'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
                 new MaterialEntry(gear, Invar));
-        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_ore_washer", STEAM_ORE_WASHER.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_ore_washer",
+                GTMultiMachines.STEAM_ORE_WASHER.asStack(),
                 "CGC",
                 "FMF", "CGC", 'F', new MaterialEntry(rotor, Steel), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
                 'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
                 new MaterialEntry(pipeLargeFluid, Potin));
-        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_mixer", STEAM_MIXER.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_mixer", GTMultiMachines.STEAM_MIXER.asStack(),
                 "CGC",
                 "FMF", "CGC", 'F', new MaterialEntry(rotor, Steel), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
                 'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
@@ -174,13 +177,13 @@ public class MiscRecipeLoader {
                 .EUt(VA[LV])
                 .duration(20 * 10)
                 .inputItems(STEAM_HATCH.asStack(16))
-                .outputItems(LARGE_STEAM_HATCH)
+                .outputItems(GTMultiMachines.LARGE_STEAM_HATCH)
                 .save(provider);
         COMPRESSOR_RECIPES.recipeBuilder("steam_void_miner")
                 .EUt(VA[LV])
                 .duration(20 * 10)
                 .inputItems(STEAM_MINER.right().asStack(16))
-                .outputItems(STEAM_VOID_MINER)
+                .outputItems(GTMultiMachines.STEAM_VOID_MINER)
                 .save(provider);
     }
 
@@ -382,7 +385,7 @@ public class MiscRecipeLoader {
 
     static void createMultiblockRecipes(Consumer<FinishedRecipe> provider) {
         VanillaRecipeHelper.addShapedRecipe(provider, true, "tree_farm",
-                TREE_FARM.asStack(), "PCP", "SAS", "PCP", 'S',
+                GTMultiMachines.TREE_FARM.asStack(), "PCP", "SAS", "PCP", 'S',
                 new MaterialEntry(TagPrefix.rotor, GTMaterials.Steel), 'P', CustomTags.LV_CIRCUITS, 'A',
                 GTMachines.HULL[GTValues.MV].asStack(), 'C', GTItems.ELECTRIC_PUMP_LV.asStack());
 
@@ -390,21 +393,21 @@ public class MiscRecipeLoader {
                 .duration(20 * 100).EUt(VA[LV])
                 .circuitMeta(16)
                 .inputItems(ELECTRIC_BLAST_FURNACE.asStack(64))
-                .outputItems(MACRO_BLAST_FURNACE.asStack())
+                .outputItems(GTMultiMachines.MACRO_BLAST_FURNACE.asStack())
                 .save(provider);
 
         ASSEMBLER_RECIPES.recipeBuilder("industrial_pyrolyse_oven")
                 .duration(20 * 100).EUt(VA[EV])
                 .circuitMeta(16)
                 .inputItems(PYROLYSE_OVEN.asStack(), 16)
-                .outputItems(INDUSTRIAL_PYROLYSE_OVEN.asStack())
+                .outputItems(GTMultiMachines.INDUSTRIAL_PYROLYSE_OVEN.asStack())
                 .save(provider);
 
         ASSEMBLER_RECIPES.recipeBuilder("industrial_alloy_blast_smelter")
                 .duration(20 * 100).EUt(VA[LuV])
                 .circuitMeta(16)
                 .inputItems(BLAST_ALLOY_SMELTER.asStack(), 16)
-                .outputItems(INDUSTRIAL_BLAST_ALLOY_SMELTER.asStack())
+                .outputItems(GTMultiMachines.INDUSTRIAL_BLAST_ALLOY_SMELTER.asStack())
                 .save(provider);
     }
 
