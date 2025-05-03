@@ -3,6 +3,7 @@ package com.finshope.gtsecore.common.vanilla;
 import com.finshope.gtsecore.GTSECore;
 
 import net.minecraft.world.item.Items;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,5 +21,12 @@ public class ItemProperties {
         if (event.getItemStack().getItem() == Items.DIAMOND_BLOCK) { // 检查是否为钻石块
             event.setBurnTime(5120 * 10 * 20); // 5120 items
         }
+    }
+
+    @SubscribeEvent
+    public void lootLoad(LootTableLoadEvent evt) {
+        // if (evt.getName().toString().equals("minecraft:gameplay/fishing")) {
+        //
+        // }
     }
 }

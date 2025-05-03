@@ -20,11 +20,13 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
@@ -58,8 +60,7 @@ import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECI
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
-import static net.minecraft.world.level.block.Blocks.GLASS;
-import static net.minecraft.world.level.block.Blocks.WATER;
+import static net.minecraft.world.level.block.Blocks.*;
 
 public class GTMultiMachines {
 
@@ -446,6 +447,51 @@ public class GTMultiMachines {
                                     .setStyle(Style.EMPTY.withColor(ChatFormatting.RED))));
                 }
             })
+            .register();
+
+    public static final MultiblockMachineDefinition LARGE_FISHER = REGISTRATE
+            .multiblock("large_fisher", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTSERecipeTypes.LARGE_FISHER_RECIPES)
+            .appearanceBlock(CASING_STEEL_SOLID)
+            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("XXXXXXXXXXX", "XXXXXXXXXXX", "XXXXXXXXXXX", "    XXX    ", "     X     ", "           ",
+                            "           ", "           ")
+                    .aisle("XCCCCCCCCCX", "XWWWXXXWWWX", "XWWWXXXWWWX", "    XFX    ", "    XFX    ", "    XFX    ",
+                            "    XFX    ", "    XGX    ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "           ", "           ", "           ",
+                            "           ", "     F     ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "           ", "           ", "           ",
+                            "           ", "     F     ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "           ", "           ", "           ",
+                            "           ", "     F     ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "     N     ", "     N     ", "     N     ",
+                            "     N     ", "     G     ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "           ", "           ", "           ",
+                            "           ", "           ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "           ", "           ", "           ",
+                            "           ", "           ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "           ", "           ", "           ",
+                            "           ", "           ")
+                    .aisle("XCCCCCCCCCX", "XWWWWWWWWWX", "XWWWWWWWWWX", "           ", "           ", "           ",
+                            "           ", "           ")
+                    .aisle("XXXXXXXXXXX", "XXXXXSXXXXX", "XXXXXXXXXXX", "           ", "           ", "           ",
+                            "           ", "           ")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('W', Predicates.blocks(WATER))
+                    .where('C', Predicates.blocks(MACHINE_CASING_LV.get()))
+                    .where('F',
+                            blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.Steel).get()))
+                    .where('G', Predicates.blocks(CASING_STEEL_GEARBOX.get()))
+                    .where('N', Predicates.blocks(CHAIN))
+                    .where('X', blocks(CASING_STEEL_SOLID.get()).setMinGlobalLimited(10)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, false, false)))
+                    .where(' ', Predicates.any())
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+                    GTCEu.id("block/multiblock/large_miner"), false)
             .register();
 
     public static Component[] workableTiered(int tier, long voltage, long energyCapacity, GTRecipeType recipeType,

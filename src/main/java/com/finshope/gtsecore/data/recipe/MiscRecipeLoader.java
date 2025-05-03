@@ -56,6 +56,7 @@ public class MiscRecipeLoader {
         createGeneratorRecipes(provider);
         createMobSimulatorRecipes(provider);
         createSteamVoidMinerRecipe(provider);
+        createLargeFisherRecipe(provider);
 
         if (GTCEu.Mods.isAE2Loaded()) {
             createAE2Recipes(provider);
@@ -603,5 +604,24 @@ public class MiscRecipeLoader {
         builder.chance = lastChance;
         builder.tierChanceBoost = lastTierChanceBoost;
         return builder;
+    }
+
+    private static void createLargeFisherRecipe(Consumer<FinishedRecipe> provider) {
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_fisher", GTMultiMachines.LARGE_FISHER.asStack(),
+                "FSF",
+                "CMC", "FSF", 'F', FISHING_ROD, 'S', GTBlocks.CASING_STEEL_SOLID.asStack(),
+                'M', HULL.get(MV), 'C',
+                CustomTags.MV_CIRCUITS);
+
+        LARGE_FISHER_RECIPES.recipeBuilder("fishing")
+                .EUt(VA[MV])
+                .circuitMeta(1)
+                .duration(20 * 10)
+                .notConsumable(FISHING_ROD)
+                .chancedOutput(new ItemStack(COD), 6000, 1000)
+                .chancedOutput(new ItemStack(SALMON), 2500, 1000)
+                .chancedOutput(new ItemStack(TROPICAL_FISH), 200, 1000)
+                .chancedOutput(new ItemStack(PUFFERFISH), 1300, 1000)
+                .save(provider);
     }
 }
