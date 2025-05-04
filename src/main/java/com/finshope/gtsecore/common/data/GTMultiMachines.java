@@ -1,6 +1,7 @@
 package com.finshope.gtsecore.common.data;
 
 import com.finshope.gtsecore.GTSECore;
+import com.finshope.gtsecore.api.machine.multiblock.HullWorkableElectricMultiblockMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
 import com.finshope.gtsecore.common.machine.multiblock.part.LargeSteamHatchPartMachine;
 import com.finshope.gtsecore.common.machine.multiblock.steam.IndustrialSteamParallelMultiblockMachine;
@@ -20,10 +21,11 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
-import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
+import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
+import com.gregtechceu.gtceu.api.pattern.error.PatternStringError;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
@@ -37,19 +39,24 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.SteamHatchPartMachin
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
+import com.lowdragmc.lowdraglib.utils.BlockInfo;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import com.tterrag.registrate.util.entry.BlockEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.finshope.gtsecore.api.machine.multiblock.HullWorkableElectricMultiblockMachine.MACHINE_CASING_ALL;
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
@@ -450,11 +457,12 @@ public class GTMultiMachines {
             .register();
 
     public static final MultiblockMachineDefinition LARGE_FISHER = REGISTRATE
-            .multiblock("large_fisher", WorkableElectricMultiblockMachine::new)
+            .multiblock("large_fisher", HullWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeType(GTSERecipeTypes.LARGE_FISHER_RECIPES)
             .appearanceBlock(CASING_STEEL_SOLID)
-            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+            .recipeModifiers(GTMultiMachines::leveledHullMachineRecipeModifier,
+                    ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("XXXXXXXXXXX", "XXXXXXXXXXX", "XXXXXXXXXXX", "    XXX    ", "     X     ", "           ",
                             "           ", "           ")
@@ -480,7 +488,7 @@ public class GTMultiMachines {
                             "           ", "           ")
                     .where('S', Predicates.controller(blocks(definition.getBlock())))
                     .where('W', Predicates.blocks(WATER))
-                    .where('C', Predicates.blocks(MACHINE_CASING_LV.get()))
+                    .where('C', leveledHulls(GTValues.LV))
                     .where('F',
                             blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.Steel).get()))
                     .where('G', Predicates.blocks(CASING_STEEL_GEARBOX.get()))
@@ -492,6 +500,9 @@ public class GTMultiMachines {
                     .build())
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     GTCEu.id("block/multiblock/large_miner"), false)
+            .tooltips(Component.translatable("gtse.tooltip.leveled_hull_machine.0"))
+            .tooltips(Component.translatable("gtse.machine.large_fisher.tooltip.0"))
+            .tooltips(Component.translatable("gtse.machine.large_fisher.tooltip.1"))
             .register();
 
     public static Component[] workableTiered(int tier, long voltage, long energyCapacity, GTRecipeType recipeType,
@@ -540,5 +551,54 @@ public class GTMultiMachines {
         } else {
             return RecipeModifier.nullWrongType(SteamParallelMultiblockMachine.class, machine);
         }
+    }
+
+    public static ModifierFunction leveledHullMachineRecipeModifier(@NotNull MetaMachine machine,
+                                                                    @NotNull GTRecipe recipe) {
+        if (machine instanceof HullWorkableElectricMultiblockMachine hullMachine) {
+            int hullTier = hullMachine.getHullTier();
+            double power = Math.pow(2, hullTier - GTValues.LV);
+            int parallels = Math.max((int) Math.min(Integer.MAX_VALUE, power), 1);
+
+            if (parallels == 1) return ModifierFunction.IDENTITY;
+            return ModifierFunction.builder()
+                    .modifyAllContents(ContentModifier.multiplier(parallels))
+                    .eutMultiplier(parallels)
+                    .parallels(parallels)
+                    .build();
+        } else {
+            return RecipeModifier.nullWrongType(SteamParallelMultiblockMachine.class, machine);
+        }
+    }
+
+    public static TraceabilityPredicate leveledHulls(int lowerTier) {
+        final int maxTier = GTCEuAPI.isHighTier() ? GTValues.MAX : GTValues.UHV;
+        if (lowerTier < GTValues.ULV || lowerTier > maxTier) {
+            throw new IllegalArgumentException("Lower tier must be ULV or higher and not higher than max tier");
+        }
+
+        return new TraceabilityPredicate(blockWorldState -> {
+            var blockState = blockWorldState.getBlockState();
+
+            for (int tier = lowerTier; tier <= maxTier; tier++) {
+                var entry = (BlockEntry<Block>) (MACHINE_CASING_ALL[tier]);
+                if (blockState.is(entry.get())) {
+                    Object currentCasing = blockWorldState.getMatchContext().getOrPut("HullEntry", entry);
+                    if (!currentCasing.equals(entry)) {
+                        blockWorldState.setError(new PatternStringError("gtse.multiblock.pattern.error.hulls"));
+                        return false;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }, () -> {
+            var info = new BlockInfo[MACHINE_CASING_ALL.length - lowerTier];
+            for (int i = 0; i + lowerTier < MACHINE_CASING_ALL.length; i++) {
+                var entry = (BlockEntry<Block>) (MACHINE_CASING_ALL[i + lowerTier]);
+                info[i] = BlockInfo.fromBlockState(entry.get().defaultBlockState());
+            }
+            return info;
+        });
     }
 }
