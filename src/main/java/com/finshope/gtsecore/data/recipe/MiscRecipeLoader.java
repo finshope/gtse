@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static appeng.core.definitions.AEItems.*;
+import static com.finshope.gtsecore.common.data.GTMultiMachines.*;
 import static com.finshope.gtsecore.common.data.GTSEMachines.*;
 import static com.finshope.gtsecore.common.data.GTSERecipeTypes.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
@@ -39,8 +40,7 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_MINER;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.machines.GCYMMachines.BLAST_ALLOY_SMELTER;
-import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.ELECTRIC_BLAST_FURNACE;
-import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.PYROLYSE_OVEN;
+import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.*;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PISTON;
 import static com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader.registerMachineRecipe;
@@ -451,6 +451,19 @@ public class MiscRecipeLoader {
                 new MaterialEntry(TagPrefix.rotor, GTMaterials.Darmstadtium), 'P', CustomTags.UV_CIRCUITS, 'A',
                 GTMachines.HULL[GTValues.UV].asStack(), 'C',
                 new MaterialEntry(TagPrefix.pipeLargeFluid, GTMaterials.Naquadah));
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_advanced_steam_turbine",
+                LARGE_ADVANCED_STEAM_TURBINE.asStack(), " V ", "CMC", " V ", 'V',
+                CONVEYOR.get(HV), 'C', CustomTags.HV_CIRCUITS, 'M',
+                LARGE_STEAM_TURBINE.asStack());
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_advanced_gas_turbine",
+                LARGE_ADVANCED_GAS_TURBINE.asStack(), " V ", "CMC", " V ", 'V',
+                CONVEYOR.get(EV), 'C', CustomTags.EV_CIRCUITS, 'M',
+                LARGE_GAS_TURBINE.asStack());
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_advanced_plasma_turbine",
+                LARGE_ADVANCED_PLASMA_TURBINE.asStack(), " V ", "CMC", " V ", 'V',
+                CONVEYOR.get(IV), 'C', CustomTags.IV_CIRCUITS, 'M',
+                LARGE_PLASMA_TURBINE.asStack());
     }
 
     static void createAE2Recipes(Consumer<FinishedRecipe> provider) {

@@ -59,6 +59,8 @@ import java.util.List;
 import static com.finshope.gtsecore.api.machine.multiblock.HullWorkableElectricMultiblockMachine.MACHINE_CASING_ALL;
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
+import static com.finshope.gtsecore.common.machine.multiblock.generator.LargeAdvancedTurbineMachine.registerAdvancedLargeTurbine;
+import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.machine.multiblock.PartAbility.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.blocks;
@@ -67,6 +69,7 @@ import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECI
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
+import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.registerLargeTurbine;
 import static net.minecraft.world.level.block.Blocks.*;
 
 public class GTMultiMachines {
@@ -504,6 +507,29 @@ public class GTMultiMachines {
             .tooltips(Component.translatable("gtse.machine.large_fisher.tooltip.0"))
             .tooltips(Component.translatable("gtse.machine.large_fisher.tooltip.1"))
             .register();
+
+    public static final MultiblockMachineDefinition LARGE_ADVANCED_STEAM_TURBINE = registerAdvancedLargeTurbine("steam_advanced_large_turbine",
+            HV,
+            GTRecipeTypes.STEAM_TURBINE_FUELS,
+            CASING_STEEL_TURBINE, CASING_STEEL_GEARBOX,
+            GTCEu.id("block/casings/mechanic/machine_casing_turbine_steel"),
+            GTCEu.id("block/multiblock/generator/large_steam_turbine"),
+            false);
+
+    public static final MultiblockMachineDefinition LARGE_ADVANCED_GAS_TURBINE = registerAdvancedLargeTurbine("gas_advanced_large_turbine", EV,
+            GTRecipeTypes.GAS_TURBINE_FUELS,
+            CASING_STAINLESS_TURBINE, CASING_STAINLESS_STEEL_GEARBOX,
+            GTCEu.id("block/casings/mechanic/machine_casing_turbine_stainless_steel"),
+            GTCEu.id("block/multiblock/generator/large_gas_turbine"),
+            true);
+
+    public static final MultiblockMachineDefinition LARGE_ADVANCED_PLASMA_TURBINE = registerAdvancedLargeTurbine("plasma_advanced_large_turbine",
+            IV,
+            GTRecipeTypes.PLASMA_GENERATOR_FUELS,
+            CASING_TUNGSTENSTEEL_TURBINE, CASING_TUNGSTENSTEEL_GEARBOX,
+            GTCEu.id("block/casings/mechanic/machine_casing_turbine_tungstensteel"),
+            GTCEu.id("block/multiblock/generator/large_plasma_turbine"),
+            false);
 
     public static Component[] workableTiered(int tier, long voltage, long energyCapacity, GTRecipeType recipeType,
                                              long tankCapacity, boolean input) {
