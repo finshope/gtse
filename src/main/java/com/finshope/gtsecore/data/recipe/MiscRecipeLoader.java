@@ -131,7 +131,10 @@ public class MiscRecipeLoader {
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_1").circuitMeta(1).duration(20 * 10).EUt(VA[EV])
                 .chancedOutput(TagPrefix.dust, NetherStar, 1000, 2000).save(provider);
         NETHER_COLLECTOR_RECIPES.recipeBuilder("nether_collector_2").circuitMeta(2).duration(20 * 10).EUt(VA[EV])
-                .chancedOutput(dustTiny, Netherite, 1000, 2000).save(provider);
+                .chancedOutput(dust, Netherite, 500, 500)
+                .chancedOutput(dustSmall, Netherite, 1000, 1000)
+                .chancedOutput(dustTiny, Netherite, 2000, 2000)
+                .save(provider);
         HARVESTER_RECIPES
                 .recipeBuilder("harvest")
                 .circuitMeta(1)
