@@ -39,7 +39,7 @@ public class GTSEMachines {
                     .rotationState(RotationState.NON_Y_AXIS)
                     .workableTieredHullRenderer(GTSECore.id("block/machines/nether_collector"))
                     .recipeType(GTSERecipeTypes.NETHER_COLLECTOR_RECIPES)
-                    .tooltips(GTMultiMachines.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
+                    .tooltips(GTSEMultiMachines.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             GTSERecipeTypes.NETHER_COLLECTOR_RECIPES, defaultTankSizeFunction.apply(tier), true))
                     .register(),
             NETHER_COLLECTOR_TIERS);

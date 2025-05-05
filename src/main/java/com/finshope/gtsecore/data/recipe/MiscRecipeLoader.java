@@ -1,7 +1,7 @@
 package com.finshope.gtsecore.data.recipe;
 
-import com.finshope.gtsecore.common.data.GTMultiMachines;
 import com.finshope.gtsecore.common.data.GTSEMachines;
+import com.finshope.gtsecore.common.data.GTSEMultiMachines;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
@@ -26,8 +26,8 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static appeng.core.definitions.AEItems.*;
-import static com.finshope.gtsecore.common.data.GTMultiMachines.*;
 import static com.finshope.gtsecore.common.data.GTSEMachines.*;
+import static com.finshope.gtsecore.common.data.GTSEMultiMachines.*;
 import static com.finshope.gtsecore.common.data.GTSERecipeTypes.*;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
@@ -160,18 +160,18 @@ public class MiscRecipeLoader {
                 "PwP", 'P', new MaterialEntry(TagPrefix.plate, Steel), 'B',
                 new ItemStack(Blocks.BRICKS));
         VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_centrifuge",
-                GTMultiMachines.STEAM_CENTRIFUGE.asStack(),
+                GTSEMultiMachines.STEAM_CENTRIFUGE.asStack(),
                 "CGC",
                 "FMF", "CGC", 'F', new MaterialEntry(rotor, Bronze), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
                 'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
                 new MaterialEntry(gear, Invar));
         VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_ore_washer",
-                GTMultiMachines.STEAM_ORE_WASHER.asStack(),
+                GTSEMultiMachines.STEAM_ORE_WASHER.asStack(),
                 "CGC",
                 "FMF", "CGC", 'F', new MaterialEntry(rotor, Steel), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
                 'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
                 new MaterialEntry(pipeLargeFluid, Potin));
-        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_mixer", GTMultiMachines.STEAM_MIXER.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "steam_mixer", GTSEMultiMachines.STEAM_MIXER.asStack(),
                 "CGC",
                 "FMF", "CGC", 'F', new MaterialEntry(rotor, Steel), 'C', GTBlocks.CASING_STEEL_SOLID.asStack(),
                 'M', CASING_INDUSTRIAL_STEAM.asStack(), 'G',
@@ -181,13 +181,13 @@ public class MiscRecipeLoader {
                 .EUt(VA[LV])
                 .duration(20 * 10)
                 .inputItems(STEAM_HATCH.asStack(16))
-                .outputItems(GTMultiMachines.LARGE_STEAM_HATCH)
+                .outputItems(GTSEMultiMachines.LARGE_STEAM_HATCH)
                 .save(provider);
         COMPRESSOR_RECIPES.recipeBuilder("steam_void_miner")
                 .EUt(VA[LV])
                 .duration(20 * 10)
                 .inputItems(STEAM_MINER.right().asStack(16))
-                .outputItems(GTMultiMachines.STEAM_VOID_MINER)
+                .outputItems(GTSEMultiMachines.STEAM_VOID_MINER)
                 .save(provider);
     }
 
@@ -389,7 +389,7 @@ public class MiscRecipeLoader {
 
     static void createMultiblockRecipes(Consumer<FinishedRecipe> provider) {
         VanillaRecipeHelper.addShapedRecipe(provider, true, "tree_farm",
-                GTMultiMachines.TREE_FARM.asStack(), "PCP", "SAS", "PCP", 'S',
+                GTSEMultiMachines.TREE_FARM.asStack(), "PCP", "SAS", "PCP", 'S',
                 new MaterialEntry(TagPrefix.rotor, GTMaterials.Steel), 'P', CustomTags.LV_CIRCUITS, 'A',
                 GTMachines.HULL[GTValues.MV].asStack(), 'C', GTItems.ELECTRIC_PUMP_LV.asStack());
 
@@ -397,21 +397,21 @@ public class MiscRecipeLoader {
                 .duration(20 * 100).EUt(VA[LV])
                 .circuitMeta(16)
                 .inputItems(ELECTRIC_BLAST_FURNACE.asStack(64))
-                .outputItems(GTMultiMachines.MACRO_BLAST_FURNACE.asStack())
+                .outputItems(GTSEMultiMachines.MACRO_BLAST_FURNACE.asStack())
                 .save(provider);
 
         ASSEMBLER_RECIPES.recipeBuilder("industrial_pyrolyse_oven")
                 .duration(20 * 100).EUt(VA[EV])
                 .circuitMeta(16)
                 .inputItems(PYROLYSE_OVEN.asStack(), 16)
-                .outputItems(GTMultiMachines.INDUSTRIAL_PYROLYSE_OVEN.asStack())
+                .outputItems(GTSEMultiMachines.INDUSTRIAL_PYROLYSE_OVEN.asStack())
                 .save(provider);
 
         ASSEMBLER_RECIPES.recipeBuilder("industrial_alloy_blast_smelter")
                 .duration(20 * 100).EUt(VA[LuV])
                 .circuitMeta(16)
                 .inputItems(BLAST_ALLOY_SMELTER.asStack(), 16)
-                .outputItems(GTMultiMachines.INDUSTRIAL_BLAST_ALLOY_SMELTER.asStack())
+                .outputItems(GTSEMultiMachines.INDUSTRIAL_BLAST_ALLOY_SMELTER.asStack())
                 .save(provider);
     }
 
@@ -623,7 +623,7 @@ public class MiscRecipeLoader {
     }
 
     private static void createLargeFisherRecipe(Consumer<FinishedRecipe> provider) {
-        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_fisher", GTMultiMachines.LARGE_FISHER.asStack(),
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_fisher", GTSEMultiMachines.LARGE_FISHER.asStack(),
                 "FSF",
                 "CMC", "FSF", 'F', FISHING_ROD, 'S', GTBlocks.CASING_STEEL_SOLID.asStack(),
                 'M', HULL.get(MV), 'C',

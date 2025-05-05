@@ -19,11 +19,14 @@ import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
+
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -33,6 +36,7 @@ import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
 public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
+
     @Nullable
     protected TickableSubscription transferRotorSubs;
 
@@ -87,7 +91,8 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
         }
     }
 
-    public static MultiblockMachineDefinition registerAdvancedLargeTurbine(String name, int tier, GTRecipeType recipeType,
+    public static MultiblockMachineDefinition registerAdvancedLargeTurbine(String name, int tier,
+                                                                           GTRecipeType recipeType,
                                                                            Supplier<? extends Block> casing,
                                                                            Supplier<? extends Block> gear,
                                                                            ResourceLocation casingTexture,
@@ -128,8 +133,8 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
                                 .or(abilities(PartAbility.IMPORT_ITEMS)))
                         .build())
                 .recoveryItems(
-                        () -> new ItemLike[]{
-                                GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get()})
+                        () -> new ItemLike[] {
+                                GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get() })
                 .workableCasingRenderer(casingTexture, overlayModel)
                 .tooltips(
                         Component.translatable("gtceu.universal.tooltip.base_production_eut", V[tier] * 2),

@@ -69,10 +69,9 @@ import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECI
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
-import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.registerLargeTurbine;
 import static net.minecraft.world.level.block.Blocks.*;
 
-public class GTMultiMachines {
+public class GTSEMultiMachines {
 
     public static final MachineDefinition LARGE_STEAM_HATCH = REGISTRATE
             .machine("large_steam_input_hatch", LargeSteamHatchPartMachine::new)
@@ -89,7 +88,7 @@ public class GTMultiMachines {
             .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
             .appearanceBlock(CASING_INDUSTRIAL_STEAM)
             .recipeType(GTRecipeTypes.CENTRIFUGE_RECIPES)
-            .recipeModifier(GTMultiMachines::industrialSteamMachineRecipeModifier, true)
+            .recipeModifier(GTSEMultiMachines::industrialSteamMachineRecipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 4)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" FFF ", " FFF ", " FFF ", " FFF ", "     ", " FFF ")
@@ -117,7 +116,7 @@ public class GTMultiMachines {
             .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
             .appearanceBlock(CASING_INDUSTRIAL_STEAM)
             .recipeType(GTRecipeTypes.ORE_WASHER_RECIPES)
-            .recipeModifier(GTMultiMachines::industrialSteamMachineRecipeModifier, true)
+            .recipeModifier(GTSEMultiMachines::industrialSteamMachineRecipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 4)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("FFFFF", "FFFFF", "FFFFF")
@@ -145,7 +144,7 @@ public class GTMultiMachines {
             .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
             .appearanceBlock(CASING_INDUSTRIAL_STEAM)
             .recipeType(GTRecipeTypes.MIXER_RECIPES)
-            .recipeModifier(GTMultiMachines::industrialSteamMachineRecipeModifier, true)
+            .recipeModifier(GTSEMultiMachines::industrialSteamMachineRecipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 4)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle(" FFF ", " FGF ", " FGF ", " FGF ", " FFF ", "  F  ")
@@ -174,7 +173,7 @@ public class GTMultiMachines {
             .tooltips(Component.translatable("gtse.machine.large_steam_machine.tooltip"))
             .appearanceBlock(CASING_INDUSTRIAL_STEAM)
             .recipeType(GTSERecipeTypes.STEAM_VOID_MINER_RECIPES)
-            .recipeModifier(GTMultiMachines::steamVoidMinerMachineRecipeModifier, true)
+            .recipeModifier(GTSEMultiMachines::steamVoidMinerMachineRecipeModifier, true)
             .addOutputLimit(ItemRecipeCapability.CAP, 6)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("F   F", "F   F", "F   F", "XXXXX", "     ", "     ", "     ", "     ", "     ", "     ",
@@ -464,7 +463,7 @@ public class GTMultiMachines {
             .rotationState(RotationState.ALL)
             .recipeType(GTSERecipeTypes.LARGE_FISHER_RECIPES)
             .appearanceBlock(CASING_STEEL_SOLID)
-            .recipeModifiers(GTMultiMachines::leveledHullMachineRecipeModifier,
+            .recipeModifiers(GTSEMultiMachines::leveledHullMachineRecipeModifier,
                     ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("XXXXXXXXXXX", "XXXXXXXXXXX", "XXXXXXXXXXX", "    XXX    ", "     X     ", "           ",
@@ -508,7 +507,8 @@ public class GTMultiMachines {
             .tooltips(Component.translatable("gtse.machine.large_fisher.tooltip.1"))
             .register();
 
-    public static final MultiblockMachineDefinition LARGE_ADVANCED_STEAM_TURBINE = registerAdvancedLargeTurbine("steam_advanced_large_turbine",
+    public static final MultiblockMachineDefinition LARGE_ADVANCED_STEAM_TURBINE = registerAdvancedLargeTurbine(
+            "steam_advanced_large_turbine",
             HV,
             GTRecipeTypes.STEAM_TURBINE_FUELS,
             CASING_STEEL_TURBINE, CASING_STEEL_GEARBOX,
@@ -516,14 +516,16 @@ public class GTMultiMachines {
             GTCEu.id("block/multiblock/generator/large_steam_turbine"),
             false);
 
-    public static final MultiblockMachineDefinition LARGE_ADVANCED_GAS_TURBINE = registerAdvancedLargeTurbine("gas_advanced_large_turbine", EV,
+    public static final MultiblockMachineDefinition LARGE_ADVANCED_GAS_TURBINE = registerAdvancedLargeTurbine(
+            "gas_advanced_large_turbine", EV,
             GTRecipeTypes.GAS_TURBINE_FUELS,
             CASING_STAINLESS_TURBINE, CASING_STAINLESS_STEEL_GEARBOX,
             GTCEu.id("block/casings/mechanic/machine_casing_turbine_stainless_steel"),
             GTCEu.id("block/multiblock/generator/large_gas_turbine"),
             true);
 
-    public static final MultiblockMachineDefinition LARGE_ADVANCED_PLASMA_TURBINE = registerAdvancedLargeTurbine("plasma_advanced_large_turbine",
+    public static final MultiblockMachineDefinition LARGE_ADVANCED_PLASMA_TURBINE = registerAdvancedLargeTurbine(
+            "plasma_advanced_large_turbine",
             IV,
             GTRecipeTypes.PLASMA_GENERATOR_FUELS,
             CASING_TUNGSTENSTEEL_TURBINE, CASING_TUNGSTENSTEEL_GEARBOX,
