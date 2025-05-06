@@ -16,7 +16,7 @@ public abstract class MixinHelpersMixin {
     /**
      * Allow fortune to be applied to GT ores.
      */
-    @ModifyArg(method = "lambda$generateGTDynamicLoot$25",
+    @ModifyArg(method = "lambda$generateGTDynamicLoot$26",
                remap = false,
                at = @At(value = "INVOKE",
                         remap = true,
