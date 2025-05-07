@@ -30,6 +30,8 @@
   "block.gtse.steam_advanced_large_turbine": "Large Advanced Steam Turbine",
   "block.gtse.gas_advanced_large_turbine": "Large Advanced Gas Turbine",
   "block.gtse.plasma_advanced_large_turbine": "Large Advanced Plasma Turbine",
+  "block.gtse.iv_processing_array": "IV Processing Array",
+  "block.gtse.luv_processing_array": "Luv Processing Array",
   "block.gtceu.ev_combustion": "§5Advanced Combustion Generator III§r",
   "block.gtceu.iv_combustion": "§9Elite Combustion Generator§r",
   "block.gtceu.ev_gas_turbine": "§5Advanced Gas Turbine Generator III§r",

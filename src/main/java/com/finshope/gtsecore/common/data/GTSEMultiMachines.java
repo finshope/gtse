@@ -2,6 +2,7 @@ package com.finshope.gtsecore.common.data;
 
 import com.finshope.gtsecore.GTSECore;
 import com.finshope.gtsecore.api.machine.multiblock.HullWorkableElectricMultiblockMachine;
+import com.finshope.gtsecore.common.machine.multiblock.electric.ProcessingArrayMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
 import com.finshope.gtsecore.common.machine.multiblock.part.LargeSteamHatchPartMachine;
 import com.finshope.gtsecore.common.machine.multiblock.steam.IndustrialSteamParallelMultiblockMachine;
@@ -16,10 +17,12 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
@@ -34,6 +37,7 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.SteamHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.SteamParallelMultiblockMachine;
@@ -48,6 +52,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.shapes.Shapes;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +60,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.BiFunction;
 
 import static com.finshope.gtsecore.api.machine.multiblock.HullWorkableElectricMultiblockMachine.MACHINE_CASING_ALL;
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
@@ -69,6 +76,7 @@ import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECI
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
+import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 import static net.minecraft.world.level.block.Blocks.*;
 
 public class GTSEMultiMachines {
@@ -532,6 +540,57 @@ public class GTSEMultiMachines {
             GTCEu.id("block/casings/mechanic/machine_casing_turbine_tungstensteel"),
             GTCEu.id("block/multiblock/generator/large_plasma_turbine"),
             false);
+
+    public static final MultiblockMachineDefinition[] PROCESSING_ARRAY = registerTieredMultis("processing_array",
+            ProcessingArrayMachine::new,
+            (tier, builder) -> builder
+                    .langValue(VNF[tier] + " Processing Array")
+                    .rotationState(RotationState.ALL)
+                    .blockProp(p -> p.noOcclusion().isViewBlocking((state, level, pos) -> false))
+                    .shape(Shapes.box(0.001, 0.001, 0.001, 0.999, 0.999, 0.999))
+                    .appearanceBlock(() -> ProcessingArrayMachine.getCasingState(tier))
+                    .recipeType(DUMMY_RECIPES)
+                    .recipeModifiers(ProcessingArrayMachine::recipeModifier,
+                            ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+                    .pattern(definition -> FactoryBlockPattern.start()
+                            .aisle("XXX", "CCC", "XXX")
+                            .aisle("XXX", "C#C", "XXX")
+                            .aisle("XSX", "CCC", "XXX")
+                            .where('S', Predicates.controller(blocks(definition.getBlock())))
+                            .where('X', blocks(ProcessingArrayMachine.getCasingState(tier))
+                                    .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setPreviewCount(1))
+                                    .or(Predicates.abilities(PartAbility.EXPORT_ITEMS).setPreviewCount(1))
+                                    .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setPreviewCount(1))
+                                    .or(Predicates.abilities(PartAbility.EXPORT_FLUIDS).setPreviewCount(1))
+                                    .or(Predicates.abilities(PartAbility.INPUT_ENERGY).setMinGlobalLimited(1)
+                                            .setMaxGlobalLimited(4).setPreviewCount(1))
+                                    .or(Predicates.autoAbilities(true, false, false)))
+                            .where('C', blocks(CLEANROOM_GLASS.get()))
+                            .where('#', Predicates.air())
+                            .build())
+                    .tooltips(Component.translatable("gtceu.universal.tooltip.parallel",
+                            ProcessingArrayMachine.getMachineLimit(tier)))
+                    .workableCasingRenderer(tier == IV ?
+                            GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel") :
+                            GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
+                            GTCEu.id("block/multiblock/processing_array"))
+                    .register(),
+            IV, LuV);
+
+    public static MultiblockMachineDefinition[] registerTieredMultis(String name,
+                                                                     BiFunction<IMachineBlockEntity, Integer, MultiblockControllerMachine> factory,
+                                                                     BiFunction<Integer, MultiblockMachineBuilder, MultiblockMachineDefinition> builder,
+                                                                     int... tiers) {
+        MultiblockMachineDefinition[] definitions = new MultiblockMachineDefinition[GTValues.TIER_COUNT];
+        for (int tier : tiers) {
+            var register = REGISTRATE
+                    .multiblock(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
+                            holder -> factory.apply(holder, tier))
+                    .tier(tier);
+            definitions[tier] = builder.apply(tier, register);
+        }
+        return definitions;
+    }
 
     public static Component[] workableTiered(int tier, long voltage, long energyCapacity, GTRecipeType recipeType,
                                              long tankCapacity, boolean input) {

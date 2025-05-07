@@ -70,6 +70,17 @@ public class MiscRecipeLoader {
         registerMachineRecipe(provider, MOB_SIMULATOR, "CEC", "SMS", "CEC", 'M', HULL, 'E', EMITTER, 'C',
                 CIRCUIT, 'S', SENSOR);
 
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "processing_array",
+                GTSEMultiMachines.PROCESSING_ARRAY[GTValues.IV].asStack(), "COC", "RHR", "CPC", 'C',
+                CustomTags.IV_CIRCUITS, 'O', GTItems.TOOL_DATA_ORB.asStack(), 'R', GTItems.ROBOT_ARM_EV.asStack(), 'P',
+                new MaterialEntry(pipeLargeFluid, StainlessSteel), 'H', GTMachines.HULL[GTValues.EV].asStack());
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "advanced_processing_array",
+                GTSEMultiMachines.PROCESSING_ARRAY[GTValues.LuV].asStack(), "RCR", "SPE", "HNH", 'R',
+                GTItems.ROBOT_ARM_LuV.asStack(), 'C', CustomTags.ZPM_CIRCUITS, 'S', GTItems.SENSOR_LuV, 'P',
+                GTSEMultiMachines.PROCESSING_ARRAY[IV].asStack(), 'E', GTItems.EMITTER_LuV.asStack(), 'H',
+                new MaterialEntry(plate, GTMaterials.HSSE), 'N',
+                new MaterialEntry(pipeLargeFluid, GTMaterials.Naquadah));
+
         // vanilla recipe
         FORGE_HAMMER_RECIPES
                 .recipeBuilder("hammer")
