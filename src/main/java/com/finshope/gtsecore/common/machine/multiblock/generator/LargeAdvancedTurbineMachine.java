@@ -60,12 +60,26 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
         return null;
     }
 
+    private boolean hasRotor() {
+        var holder = getRotorHolder();
+        if (holder == null) {
+            return false;
+        }
+        if (!holder.hasRotor()) {
+            return false;
+        }
+        if (holder.getRotorMaterial() == GTMaterials.NULL) {
+            return false;
+        }
+        return true;
+    }
+
     public void transferRotors() {
         if (getOffsetTimer() % 20 != 0) return;
         if (!isFormed()) return;
 
         var holder = getRotorHolder();
-        if (holder != null && !holder.hasRotor() && holder instanceof RotorHolderPartMachine rotorHolder) {
+        if (holder != null && !hasRotor() && holder instanceof RotorHolderPartMachine rotorHolder) {
             for (IMultiPart part : getParts()) {
                 if (part instanceof ItemBusPartMachine bus) {
                     var inventory = bus.getInventory();
