@@ -194,14 +194,14 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
         if (machine instanceof ProcessingArrayMachine processingArray &&
                 processingArray.machineStorage.storage.getStackInSlot(0).getCount() > 0) {
             if (RecipeHelper.getRecipeEUtTier(recipe) > processingArray.getTier())
-                return ModifierFunction.IDENTITY;
+                return ModifierFunction.NULL;
 
             int parallelLimit = Math.min(
                     processingArray.machineStorage.storage.getStackInSlot(0).getCount(),
                     (int) (processingArray.getMaxVoltage() / RecipeHelper.getInputEUt(recipe)));
 
             if (parallelLimit <= 0)
-                return ModifierFunction.IDENTITY;
+                return ModifierFunction.NULL;
 
             var parallels = Math.min(parallelLimit, getMachineLimit(machine.getDefinition().getTier()));
             if (parallels == 1) return ModifierFunction.IDENTITY;
@@ -211,7 +211,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
                     .parallels(parallels)
                     .build();
         }
-        return ModifierFunction.IDENTITY;
+        return ModifierFunction.NULL;
     }
 
     // @Override
