@@ -188,6 +188,25 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
         return getOverclockTier();
     }
 
+    @Override
+    public long getOverclockVoltage() {
+        if (this.energyContainer == null) {
+            this.energyContainer = this.getEnergyContainer();
+        }
+
+        long voltage;
+        long amperage;
+        if (this.energyContainer.getInputVoltage() > this.energyContainer.getOutputVoltage()) {
+            voltage = this.energyContainer.getInputVoltage();
+            amperage = this.energyContainer.getInputAmperage();
+        } else {
+            voltage = this.energyContainer.getOutputVoltage();
+            amperage = this.energyContainer.getOutputAmperage();
+        }
+
+        return amperage == 1L ? GTValues.VEX[GTUtil.getFloorTierByVoltage(voltage)] : voltage;
+    }
+
     @Nullable
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine,
                                                   @NotNull GTRecipe recipe) {
