@@ -124,7 +124,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             recipeTypeCache = definition == null ? null : definition.getRecipeTypes();
         }
         if (recipeTypeCache == null) {
-            recipeTypeCache = new GTRecipeType[]{GTRecipeTypes.DUMMY_RECIPES};
+            recipeTypeCache = new GTRecipeType[] { GTRecipeTypes.DUMMY_RECIPES };
         }
         return recipeTypeCache;
     }
@@ -239,6 +239,13 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
         return amperage == 1L ? GTValues.VEX[GTUtil.getFloorTierByVoltage(voltage)] : voltage;
     }
 
+    public long getInputVoltage() {
+        if (this.energyContainer == null) {
+            this.energyContainer = this.getEnergyContainer();
+        }
+        return this.energyContainer.getInputVoltage();
+    }
+
     @Nullable
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine,
                                                   @NotNull GTRecipe recipe) {
@@ -253,7 +260,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             if (eut > 0) {
                 int parallelLimit = Math.min(
                         processingArray.machineStorage.storage.getStackInSlot(0).getCount(),
-                        (int) (processingArray.getMaxVoltage() / eut));
+                        (int) (processingArray.getInputVoltage() / eut));
 
                 if (parallelLimit <= 0)
                     return ModifierFunction.NULL;
@@ -267,7 +274,8 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
                     return ModifierFunction.NULL;
                 }
                 int tier = def.getTier();
-                int maxParallel = (int) (GTValues.V[tier] * processingArray.machineStorage.storage.getStackInSlot(0).getCount() / eut);
+                int maxParallel = (int) (GTValues.V[tier] *
+                        processingArray.machineStorage.storage.getStackInSlot(0).getCount() / eut);
                 parallels = ParallelLogic.getParallelAmount(processingArray, recipe, maxParallel);
             }
 
