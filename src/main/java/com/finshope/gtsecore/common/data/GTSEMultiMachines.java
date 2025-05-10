@@ -550,8 +550,7 @@ public class GTSEMultiMachines {
                     .shape(Shapes.box(0.001, 0.001, 0.001, 0.999, 0.999, 0.999))
                     .appearanceBlock(() -> ProcessingArrayMachine.getCasingState(tier))
                     .recipeType(DUMMY_RECIPES)
-                    .recipeModifiers(ProcessingArrayMachine::recipeModifier,
-                            ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
+                    .recipeModifiers(ProcessingArrayMachine::recipeModifier)
                     .pattern(definition -> FactoryBlockPattern.start()
                             .aisle("XXX", "CCC", "XXX")
                             .aisle("XXX", "C#C", "XXX")

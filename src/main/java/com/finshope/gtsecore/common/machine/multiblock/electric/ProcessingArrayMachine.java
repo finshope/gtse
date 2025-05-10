@@ -11,9 +11,11 @@ import com.gregtechceu.gtceu.api.machine.multiblock.TieredWorkableElectricMultib
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
+import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -38,6 +40,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 
 /**
  * @author KilaBash
@@ -120,7 +124,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             recipeTypeCache = definition == null ? null : definition.getRecipeTypes();
         }
         if (recipeTypeCache == null) {
-            recipeTypeCache = new GTRecipeType[] { GTRecipeTypes.DUMMY_RECIPES };
+            recipeTypeCache = new GTRecipeType[]{GTRecipeTypes.DUMMY_RECIPES};
         }
         return recipeTypeCache;
     }
@@ -243,24 +247,42 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             if (RecipeHelper.getRecipeEUtTier(recipe) > processingArray.getTier())
                 return ModifierFunction.NULL;
 
+            boolean isGenerator = false;
             long eut = RecipeHelper.getInputEUt(recipe);
-            if (eut == 0) {
+            int parallels;
+            if (eut > 0) {
+                int parallelLimit = Math.min(
+                        processingArray.machineStorage.storage.getStackInSlot(0).getCount(),
+                        (int) (processingArray.getMaxVoltage() / eut));
+
+                if (parallelLimit <= 0)
+                    return ModifierFunction.NULL;
+
+                parallels = Math.min(parallelLimit, getMachineLimit(machine.getDefinition().getTier()));
+            } else {
+                isGenerator = true;
                 eut = RecipeHelper.getOutputEUt(recipe);
+                var def = processingArray.getMachineDefinition();
+                if (def == null) {
+                    return ModifierFunction.NULL;
+                }
+                int tier = def.getTier();
+                int maxParallel = (int) (GTValues.V[tier] * processingArray.machineStorage.storage.getStackInSlot(0).getCount() / eut);
+                parallels = ParallelLogic.getParallelAmount(processingArray, recipe, maxParallel);
             }
-            int parallelLimit = Math.min(
-                    processingArray.machineStorage.storage.getStackInSlot(0).getCount(),
-                    (int) (processingArray.getMaxVoltage() / eut));
 
-            if (parallelLimit <= 0)
-                return ModifierFunction.NULL;
-
-            var parallels = Math.min(parallelLimit, getMachineLimit(machine.getDefinition().getTier()));
             if (parallels == 1) return ModifierFunction.IDENTITY;
-            return ModifierFunction.builder()
+            var modifier = ModifierFunction.builder()
                     .modifyAllContents(ContentModifier.multiplier(parallels))
                     .eutMultiplier(parallels)
                     .parallels(parallels)
                     .build();
+            if (isGenerator) {
+                return modifier;
+            }
+            var oc = ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK);
+            var newRecipe = modifier.apply(recipe);
+            return modifier.andThen(oc.getModifier(machine, newRecipe));
         }
         return ModifierFunction.NULL;
     }
