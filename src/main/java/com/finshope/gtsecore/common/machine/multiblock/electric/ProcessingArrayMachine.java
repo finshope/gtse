@@ -5,10 +5,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.BlockableSlotWidget;
 import com.gregtechceu.gtceu.api.item.MetaMachineItem;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MachineDefinition;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.TieredWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
@@ -171,6 +168,37 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
     }
 
     @Override
+    public long getMaxVoltage() {
+        if (this.energyContainer == null) {
+            this.energyContainer = getEnergyContainer();
+        }
+        if (energyContainer.getOutputVoltage() > 0) {
+            // Generators
+            long voltage = energyContainer.getOutputVoltage();
+            long amperage = energyContainer.getOutputAmperage();
+            if (amperage == 1) {
+                // Amperage is 1 when the energy is not exactly on a tier.
+                // The voltage for recipe search is always on tier, so take the closest lower tier.
+                // List check is done because single hatches will always be a "clean voltage," no need
+                // for any additional checks.
+                return GTValues.V[Math.min(GTUtil.getFloorTierByVoltage(voltage), GTValues.MAX)];
+            } else {
+                return voltage;
+            }
+        } else {
+            // Machines
+            long highestVoltage = energyContainer.getHighestInputVoltage();
+            if (energyContainer.getNumHighestInputContainers() > 1) {
+                // allow tier + 1 if there are multiple hatches present at the highest tier
+                int tier = GTUtil.getTierByVoltage(highestVoltage);
+                return GTValues.V[Math.min(tier + 1, GTValues.MAX)];
+            } else {
+                return highestVoltage;
+            }
+        }
+    }
+
+    @Override
     public int getOverclockTier() {
         MachineDefinition machineDefinition = getMachineDefinition();
         int machineTier = machineDefinition == null ? getDefinition().getTier() :
@@ -215,9 +243,13 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             if (RecipeHelper.getRecipeEUtTier(recipe) > processingArray.getTier())
                 return ModifierFunction.NULL;
 
+            long eut = RecipeHelper.getInputEUt(recipe);
+            if (eut == 0) {
+                eut = RecipeHelper.getOutputEUt(recipe);
+            }
             int parallelLimit = Math.min(
                     processingArray.machineStorage.storage.getStackInSlot(0).getCount(),
-                    (int) (processingArray.getMaxVoltage() / RecipeHelper.getInputEUt(recipe)));
+                    (int) (processingArray.getMaxVoltage() / eut));
 
             if (parallelLimit <= 0)
                 return ModifierFunction.NULL;
