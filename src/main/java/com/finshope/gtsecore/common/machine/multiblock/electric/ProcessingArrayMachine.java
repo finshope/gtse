@@ -266,6 +266,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
                     return ModifierFunction.NULL;
 
                 parallels = Math.min(parallelLimit, getMachineLimit(machine.getDefinition().getTier()));
+                parallels = ParallelLogic.getParallelAmount(processingArray, recipe, parallels);
             } else {
                 isGenerator = true;
                 eut = RecipeHelper.getOutputEUt(recipe);
