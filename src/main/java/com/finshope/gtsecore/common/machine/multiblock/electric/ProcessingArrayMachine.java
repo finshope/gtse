@@ -124,7 +124,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             recipeTypeCache = definition == null ? null : definition.getRecipeTypes();
         }
         if (recipeTypeCache == null) {
-            recipeTypeCache = new GTRecipeType[]{GTRecipeTypes.DUMMY_RECIPES};
+            recipeTypeCache = new GTRecipeType[] { GTRecipeTypes.DUMMY_RECIPES };
         }
         return recipeTypeCache;
     }

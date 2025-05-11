@@ -2,6 +2,7 @@ package com.finshope.gtsecore.common.data;
 
 import com.finshope.gtsecore.GTSECore;
 import com.finshope.gtsecore.api.machine.multiblock.HullWorkableElectricMultiblockMachine;
+import com.finshope.gtsecore.common.machine.multiblock.electric.LargeCombustionSetMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.ProcessingArrayMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
 import com.finshope.gtsecore.common.machine.multiblock.part.LargeSteamHatchPartMachine;
@@ -17,10 +18,7 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
-import com.gregtechceu.gtceu.api.machine.MachineDefinition;
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
@@ -508,11 +506,8 @@ public class GTSEMultiMachines {
                             .or(Predicates.autoAbilities(true, false, false)))
                     .where(' ', Predicates.any())
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
                     GTCEu.id("block/multiblock/large_miner"), false)
-            .tooltips(Component.translatable("gtse.tooltip.leveled_hull_machine.0"))
-            .tooltips(Component.translatable("gtse.machine.large_fisher.tooltip.0"))
-            .tooltips(Component.translatable("gtse.machine.large_fisher.tooltip.1"))
             .register();
 
     public static final MultiblockMachineDefinition LARGE_ADVANCED_STEAM_TURBINE = registerAdvancedLargeTurbine(
@@ -575,6 +570,39 @@ public class GTSEMultiMachines {
                             GTCEu.id("block/multiblock/processing_array"))
                     .register(),
             IV, LuV);
+
+    public static final MultiblockMachineDefinition LARGE_COMBUSTION_SET = REGISTRATE
+            .multiblock("large_combustion_set", LargeCombustionSetMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.COMBUSTION_GENERATOR_FUELS)
+            .appearanceBlock(CASING_HSSE_STURDY)
+            .recipeModifier(LargeCombustionSetMachine::recipeModifier, true)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("XXXXXXX", "F     F", "F     F", "F     F", "F     F", "F     F", "XXXXXXX")
+                    .aisle("XXXXXXX", " XXXXX ", " GGGGG ", " GGGGG ", " GGGGG ", " XXXXX ", "XXXXXXX")
+                    .aisle("XXXXXXX", " XBBBX ", " GHHHG ", " GHHHG ", " GHHHG ", " XBBBX ", "XXXXXXX")
+                    .aisle("XXXXXXX", " XBBBX ", " GHHHG ", " GHHHG ", " GHHHG ", " XBBBX ", "XXXMXXX")
+                    .aisle("XXXXXXX", " XBBBX ", " GHHHG ", " GHHHG ", " GHHHG ", " XBBBX ", "XXXXXXX")
+                    .aisle("XXXXXXX", " XXXXX ", " GGGGG ", " GGGGG ", " GGGGG ", " XXXXX ", "XXXXXXX")
+                    .aisle("XXXSXXX", "F     F", "F     F", "F     F", "F     F", "F     F", "XXXXXXX")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('F', blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.HSSE).get()))
+                    .where('G', blocks(CASING_HSSE_STURDY.get())
+                            .or(blocks(FUSION_GLASS.get())))
+                    .where('B', blocks(CASING_TUNGSTENSTEEL_GEARBOX.get()))
+                    .where('H', blocks(HIGH_POWER_CASING.get()))
+                    .where('M', Predicates.abilities(MUFFLER))
+                    .where('X', blocks(CASING_HSSE_STURDY.get()).setMinGlobalLimited(160)
+                            .or(Predicates.abilities(IMPORT_FLUIDS).setPreviewCount(1))
+                            .or(Predicates.abilities(OUTPUT_ENERGY).setPreviewCount(1))
+                            .or(Predicates.abilities(MAINTENANCE).setPreviewCount(1))
+                            .or(Predicates.abilities(OUTPUT_LASER).setPreviewCount(1)))
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
+                    GTCEu.id("block/multiblock/generator/extreme_combustion_engine"), false)
+            .tooltips(Component.translatable("gtse.tooltip.laser_hatch"))
+
+            .register();
 
     public static MultiblockMachineDefinition[] registerTieredMultis(String name,
                                                                      BiFunction<IMachineBlockEntity, Integer, MultiblockControllerMachine> factory,

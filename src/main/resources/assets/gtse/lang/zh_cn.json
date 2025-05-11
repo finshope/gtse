@@ -40,6 +40,7 @@
   "block.gtse.plasma_advanced_large_turbine": "进阶大型等离子涡轮",
   "block.gtse.iv_processing_array": "处理阵列",
   "block.gtse.luv_processing_array": "进阶处理阵列",
+  "block.gtse.large_combustion_set": "大型内燃机组",
   "item.gtse.complete_card": "完成卡",
   "item.gtse.complete_card.tooltip": "潜行右键机器以立即完成当前配方",
   "gtse.machine.industrial_pyrolyse_oven.tooltip.1": "§a白铜§7线圈会使效率降低§f25%%§7，§a坎塔尔合金§7后的每个线圈都会增加§f50%%§7的速度。",

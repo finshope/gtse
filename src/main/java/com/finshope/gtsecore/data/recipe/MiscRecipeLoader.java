@@ -478,6 +478,13 @@ public class MiscRecipeLoader {
                 LARGE_ADVANCED_PLASMA_TURBINE.asStack(), " V ", "CMC", " V ", 'V',
                 CONVEYOR.get(IV), 'C', CustomTags.IV_CIRCUITS, 'M',
                 LARGE_PLASMA_TURBINE.asStack());
+
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_combustion_st",
+                LARGE_COMBUSTION_SET.asStack(), "PCP", "EME", "GWG", 'M',
+                EXTREME_COMBUSTION_ENGINE.asStack(), 'P', GTItems.EMITTER_LuV.asStack(), 'E',
+                GTItems.ELECTRIC_MOTOR_LuV.asStack(), 'C', CustomTags.ZPM_CIRCUITS, 'W',
+                new MaterialEntry(TagPrefix.cableGtSingle, NiobiumTitanium), 'G',
+                GTItems.SENSOR_LuV.asStack());
     }
 
     static void createAE2Recipes(Consumer<FinishedRecipe> provider) {
