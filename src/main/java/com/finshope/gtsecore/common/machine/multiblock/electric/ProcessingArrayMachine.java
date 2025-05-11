@@ -124,7 +124,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             recipeTypeCache = definition == null ? null : definition.getRecipeTypes();
         }
         if (recipeTypeCache == null) {
-            recipeTypeCache = new GTRecipeType[] { GTRecipeTypes.DUMMY_RECIPES };
+            recipeTypeCache = new GTRecipeType[]{GTRecipeTypes.DUMMY_RECIPES};
         }
         return recipeTypeCache;
     }
@@ -291,6 +291,9 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             }
             var oc = ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK);
             var newRecipe = modifier.apply(recipe);
+            if (newRecipe == null) {
+                return ModifierFunction.NULL;
+            }
             return modifier.andThen(oc.getModifier(machine, newRecipe));
         }
         return ModifierFunction.NULL;
