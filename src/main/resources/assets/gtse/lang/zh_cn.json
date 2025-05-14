@@ -61,5 +61,6 @@
   "gtceu.harvester": "收割",
   "gtceu.tree_farm": "工业树场",
   "gtceu.nether_collector": "下界拾荒",
+  "gtceu.large_gas_collector": "大型集气室",
   "behaviour.complete_card.complete_logic": "生成一个平行世界，等待一段时间，将平行世界的机器替换成当前机器，然后销毁平行世界。"
 }
