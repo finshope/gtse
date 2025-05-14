@@ -23,6 +23,7 @@ import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.MultiblockShapeInfo;
 import com.gregtechceu.gtceu.api.pattern.Predicates;
@@ -604,6 +605,41 @@ public class GTSEMultiMachines {
             .hasTESR(true)
             .tooltips(Component.translatable("gtse.tooltip.laser_hatch"))
 
+            .register();
+
+    public static final MultiblockMachineDefinition LARGE_GAS_COLLECTOR = REGISTRATE
+            .multiblock("large_gas_collector", WorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTSERecipeTypes.LARGE_GAS_COLLECTOR_RECIPES)
+            .appearanceBlock(CASING_STRESS_PROOF)
+            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(PERFECT_OVERCLOCK_SUBSECOND))
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("    XXX    ", "    XXX    ", "    XXX    ", "   XXXXX   ", "XXXXXXXXXXX", "XXXXXXXXXXX",
+                            "XXXXXXXXXXX", "   XXXXX   ", "    XXX    ", "    XXX    ", "    XXX    ")
+                    .aisle("    CIC    ", "    IPI    ", "    CIC    ", "           ", "CIC XXX CIC", "IPI XPX IPI",
+                            "CIC XXX CIC", "           ", "    CIC    ", "    IPI    ", "    CIC    ")
+                    .aisle("    CIC    ", "    IPI    ", "    CIC    ", "           ", "CIC XXX CIC", "IPI XPX IPI",
+                            "CIC XXX CIC", "           ", "    CIC    ", "    IPI    ", "    CIC    ")
+                    .aisle("    CIC    ", "    IPI    ", "    CIC    ", "           ", "CIC XXX CIC", "IPI XPX IPI",
+                            "CIC XXX CIC", "           ", "    CIC    ", "    IPI    ", "    CIC    ")
+                    .aisle("           ", "     P     ", "           ", "           ", "    XXX    ", " P  XPX  P ",
+                            "    XXX    ", "           ", "           ", "     P     ", "           ")
+                    .aisle("           ", "     P     ", "     P     ", "     P     ", "    XPX    ", " PPPPPPPPP ",
+                            "    XPX    ", "     P     ", "     P     ", "     P     ", "           ")
+                    .aisle("           ", "           ", "           ", "           ", "    XXX    ", "    XSX    ",
+                            "    XXX    ", "           ", "           ", "           ", "           ")
+                    .where('S', Predicates.controller(blocks(definition.getBlock())))
+                    .where('P', blocks(CASING_TUNGSTENSTEEL_PIPE.get()))
+                    .where('I', blocks(CASING_EXTREME_ENGINE_INTAKE.get()))
+                    .where('C', blocks(CASING_TUNGSTENSTEEL_ROBUST.get()))
+                    .where('X', blocks(CASING_STRESS_PROOF.get()).setMinGlobalLimited(90)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.abilities(MAINTENANCE).setPreviewCount(1)))
+                    .where('#', Predicates.air())
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/gcym/stress_proof_casing"),
+                    GTSECore.id("block/multiblock/large_gas_collector"), false)
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
             .register();
 
     public static MultiblockMachineDefinition[] registerTieredMultis(String name,

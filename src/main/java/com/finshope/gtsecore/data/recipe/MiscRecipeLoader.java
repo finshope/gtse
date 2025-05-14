@@ -34,15 +34,17 @@ import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_INDUSTRIAL_STEAM;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_LOG;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_SAPLING;
+import static com.gregtechceu.gtceu.common.data.GTItems.ELECTRIC_PUMP_LuV;
 import static com.gregtechceu.gtceu.common.data.GTItems.STICKY_RESIN;
-import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_HATCH;
-import static com.gregtechceu.gtceu.common.data.GTMachines.STEAM_MINER;
+import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 import static com.gregtechceu.gtceu.common.data.machines.GCYMMachines.BLAST_ALLOY_SMELTER;
 import static com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.*;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.*;
+import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.HULL;
 import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PISTON;
+import static com.gregtechceu.gtceu.data.recipe.GTCraftingComponents.PUMP;
 import static com.gregtechceu.gtceu.data.recipe.misc.MetaTileEntityLoader.registerMachineRecipe;
 import static net.minecraft.tags.ItemTags.WOOL;
 import static net.minecraft.world.item.Items.*;
@@ -57,10 +59,45 @@ public class MiscRecipeLoader {
         createMobSimulatorRecipes(provider);
         createSteamVoidMinerRecipe(provider);
         createLargeFisherRecipe(provider);
+        createLargeGasCollectorRecipe(provider);
 
         if (GTCEu.Mods.isAE2Loaded()) {
             createAE2Recipes(provider);
         }
+    }
+
+    private static void createLargeGasCollectorRecipe(Consumer<FinishedRecipe> provider) {
+        // large gas collector
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "large_gas_collector",
+                LARGE_GAS_COLLECTOR.asStack(), "PCP", "FGF", "PCP", 'C',
+                CustomTags.ZPM_CIRCUITS, 'P', ELECTRIC_PUMP_LuV.asStack(), 'F',
+                GTItems.FLUID_FILTER, 'G', GAS_COLLECTOR[LuV].asStack());
+        LARGE_GAS_COLLECTOR_RECIPES.recipeBuilder("air")
+                .circuitMeta(1)
+                .outputFluids(Air.getFluid(10000))
+                .duration(200).EUt(16).save(provider);
+
+        LARGE_GAS_COLLECTOR_RECIPES.recipeBuilder("nether_air")
+                .circuitMeta(2)
+                .outputFluids(NetherAir.getFluid(10000))
+                .duration(200).EUt(64).save(provider);
+
+        LARGE_GAS_COLLECTOR_RECIPES.recipeBuilder("ender_air")
+                .circuitMeta(3)
+                .outputFluids(EnderAir.getFluid(10000))
+                .duration(200).EUt(256).save(provider);
+        LARGE_GAS_COLLECTOR_RECIPES.recipeBuilder("liquid_air")
+                .circuitMeta(4)
+                .outputFluids(LiquidAir.getFluid(10000))
+                .duration(200).EUt(64).save(provider);
+        LARGE_GAS_COLLECTOR_RECIPES.recipeBuilder("liquid_nether_air")
+                .circuitMeta(5)
+                .outputFluids(LiquidNetherAir.getFluid(10000))
+                .duration(200).EUt(256).save(provider);
+        LARGE_GAS_COLLECTOR_RECIPES.recipeBuilder("liquid_ender_air")
+                .circuitMeta(6)
+                .outputFluids(LiquidEnderAir.getFluid(10000))
+                .duration(200).EUt(1024).save(provider);
     }
 
     static void createCustomRecipes(Consumer<FinishedRecipe> provider) {

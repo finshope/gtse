@@ -42,5 +42,15 @@ public class GTSERecipeTypes {
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
 
+    public final static GTRecipeType LARGE_GAS_COLLECTOR_RECIPES = GTRecipeTypes
+            .register("large_gas_collector", ELECTRIC)
+            .setMaxIOSize(1, 0, 0, 1).setEUIO(IO.IN)
+            .setSlotOverlay(false, false, GuiTextures.INT_CIRCUIT_OVERLAY)
+            .setSlotOverlay(true, true, GuiTextures.CENTRIFUGE_OVERLAY)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_GAS_COLLECTOR, LEFT_TO_RIGHT)
+            .setMaxTooltips(4)
+            .setOffsetVoltageText(true)
+            .setSound(GTSoundEntries.COOLING);
+
     public static void init() {}
 }
