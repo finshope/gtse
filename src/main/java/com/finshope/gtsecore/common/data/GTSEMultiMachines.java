@@ -507,7 +507,7 @@ public class GTSEMultiMachines {
                             .or(Predicates.autoAbilities(true, false, false)))
                     .where(' ', Predicates.any())
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_solid_steel"),
                     GTCEu.id("block/multiblock/large_miner"), false)
             .register();
 
