@@ -599,7 +599,7 @@ public class GTSEMultiMachines {
                             .or(Predicates.abilities(MAINTENANCE).setPreviewCount(1))
                             .or(Predicates.abilities(OUTPUT_LASER).setPreviewCount(1)))
                     .build())
-            .renderer(()->new LargeCombustionSetRenderer(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
+            .renderer(() -> new LargeCombustionSetRenderer(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
                     GTCEu.id("block/multiblock/generator/extreme_combustion_engine")))
             .hasTESR(true)
             .tooltips(Component.translatable("gtse.tooltip.laser_hatch"))

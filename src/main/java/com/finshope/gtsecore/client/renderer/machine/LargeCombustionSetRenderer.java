@@ -1,11 +1,11 @@
 package com.finshope.gtsecore.client.renderer.machine;
 
 import com.finshope.gtsecore.common.machine.multiblock.electric.LargeCombustionSetMachine;
+
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Axis;
+
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
@@ -13,18 +13,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import org.joml.Matrix4f;
 
 import static com.finshope.gtsecore.client.renderer.GTSERenderTypes.SIMPLE_TRIANGLE_STRIP;
 
 public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
+
     public LargeCombustionSetRenderer(ResourceLocation baseCasing, ResourceLocation workableModel) {
         super(baseCasing, workableModel);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(BlockEntity blockEntity, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    public void render(BlockEntity blockEntity, float partialTicks, PoseStack stack, MultiBufferSource buffer,
+                       int combinedLight, int combinedOverlay) {
         if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
                 machineBlockEntity.getMetaMachine() instanceof LargeCombustionSetMachine machine) {
             if (!machine.recipeLogic.isWorking()) {
@@ -41,7 +46,8 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
         mat.translate(x, y, z);
     }
 
-    private VertexConsumer vertexDirection(VertexConsumer vc, Matrix4f mat, Direction dx, Direction dy, Direction dz, float x, float y, float z) {
+    private VertexConsumer vertexDirection(VertexConsumer vc, Matrix4f mat, Direction dx, Direction dy, Direction dz,
+                                           float x, float y, float z) {
         float px = dx.getStepX() * x + dy.getStepX() * y + dz.getStepX() * z;
         float py = dx.getStepY() * x + dy.getStepY() * y + dz.getStepY() * z;
         float pz = dx.getStepZ() * x + dy.getStepZ() * y + dz.getStepZ() * z;
@@ -49,7 +55,8 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderMachine(LargeCombustionSetMachine machine, BlockEntity blockEntity, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    private void renderMachine(LargeCombustionSetMachine machine, BlockEntity blockEntity, float partialTicks,
+                               PoseStack stack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
         // render a rotated block
         stack.pushPose();
 
@@ -91,7 +98,8 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
         stack.popPose();
     }
 
-    private void drawFace(LargeCombustionSetMachine machine, Matrix4f mat4, float angle, MultiBufferSource buffer, Direction up, Direction back, Direction right, float radius) {
+    private void drawFace(LargeCombustionSetMachine machine, Matrix4f mat4, float angle, MultiBufferSource buffer,
+                          Direction up, Direction back, Direction right, float radius) {
         var vc = buffer.getBuffer(SIMPLE_TRIANGLE_STRIP);
         angle = 0;
         switch (back) {
@@ -128,12 +136,18 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
             alpha = 1.3f - alpha;
         }
 
-        vertexDirection(vc, mat4, right, up, back, -radius, -radius, 0).color(red, green, 0, alpha).uv(0, 0).uv2(0, 0).normal(1, 0, 0).endVertex();
-        vertexDirection(vc, mat4, right, up, back, radius, -radius, 0).color(0, green, 0, alpha).uv(0, 1).uv2(0, 1).normal(0, 1, 0).endVertex();
-        vertexDirection(vc, mat4, right, up, back, radius, radius, 0).color(red, green, blue, alpha).uv(1, 1).uv2(1, 1).normal(1, 1, 1).endVertex();
-        vertexDirection(vc, mat4, right, up, back, radius, radius, 0).color(red, green, blue, alpha).uv(1, 1).uv2(1, 1).normal(1, 1, 1).endVertex();
-        vertexDirection(vc, mat4, right, up, back, -radius, radius, 0).color(0f, 0, blue, alpha).uv(1, 0).uv2(1, 0).normal(0, 0, 1).endVertex();
-        vertexDirection(vc, mat4, right, up, back, -radius, -radius, 0).color(red, green, 0, alpha).uv(0, 0).uv2(0, 0).normal(1, 0, 0).endVertex();
+        vertexDirection(vc, mat4, right, up, back, -radius, -radius, 0).color(red, green, 0, alpha).uv(0, 0).uv2(0, 0)
+                .normal(1, 0, 0).endVertex();
+        vertexDirection(vc, mat4, right, up, back, radius, -radius, 0).color(0, green, 0, alpha).uv(0, 1).uv2(0, 1)
+                .normal(0, 1, 0).endVertex();
+        vertexDirection(vc, mat4, right, up, back, radius, radius, 0).color(red, green, blue, alpha).uv(1, 1).uv2(1, 1)
+                .normal(1, 1, 1).endVertex();
+        vertexDirection(vc, mat4, right, up, back, radius, radius, 0).color(red, green, blue, alpha).uv(1, 1).uv2(1, 1)
+                .normal(1, 1, 1).endVertex();
+        vertexDirection(vc, mat4, right, up, back, -radius, radius, 0).color(0f, 0, blue, alpha).uv(1, 0).uv2(1, 0)
+                .normal(0, 0, 1).endVertex();
+        vertexDirection(vc, mat4, right, up, back, -radius, -radius, 0).color(red, green, 0, alpha).uv(0, 0).uv2(0, 0)
+                .normal(1, 0, 0).endVertex();
     }
 
     @Override
@@ -152,9 +166,9 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
     public int getViewDistance() {
         return 256;
     }
-//
-//    @Override
-//    public boolean shouldRender(BlockEntity blockEntity, Vec3 cameraPos) {
-//        return true;
-//    }
+    //
+    // @Override
+    // public boolean shouldRender(BlockEntity blockEntity, Vec3 cameraPos) {
+    // return true;
+    // }
 }
