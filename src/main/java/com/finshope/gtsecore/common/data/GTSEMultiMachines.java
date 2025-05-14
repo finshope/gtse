@@ -2,6 +2,7 @@ package com.finshope.gtsecore.common.data;
 
 import com.finshope.gtsecore.GTSECore;
 import com.finshope.gtsecore.api.machine.multiblock.HullWorkableElectricMultiblockMachine;
+import com.finshope.gtsecore.client.renderer.machine.LargeCombustionSetRenderer;
 import com.finshope.gtsecore.common.machine.multiblock.electric.LargeCombustionSetMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.ProcessingArrayMachine;
 import com.finshope.gtsecore.common.machine.multiblock.electric.TreeFarmMachine;
@@ -598,8 +599,9 @@ public class GTSEMultiMachines {
                             .or(Predicates.abilities(MAINTENANCE).setPreviewCount(1))
                             .or(Predicates.abilities(OUTPUT_LASER).setPreviewCount(1)))
                     .build())
-            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
-                    GTCEu.id("block/multiblock/generator/extreme_combustion_engine"), false)
+            .renderer(()->new LargeCombustionSetRenderer(GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
+                    GTCEu.id("block/multiblock/generator/extreme_combustion_engine")))
+            .hasTESR(true)
             .tooltips(Component.translatable("gtse.tooltip.laser_hatch"))
 
             .register();
