@@ -124,7 +124,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             recipeTypeCache = definition == null ? null : definition.getRecipeTypes();
         }
         if (recipeTypeCache == null) {
-            recipeTypeCache = new GTRecipeType[] { GTRecipeTypes.DUMMY_RECIPES };
+            recipeTypeCache = new GTRecipeType[]{GTRecipeTypes.DUMMY_RECIPES};
         }
         return recipeTypeCache;
     }
@@ -257,10 +257,12 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             boolean isGenerator = false;
             long eut = RecipeHelper.getInputEUt(recipe);
             int parallels;
+            int theoryParallels = processingArray.machineStorage.storage.getStackInSlot(0).getCount();
+            if (machine.getDefinition().getTier() >= GTValues.LuV) {
+                theoryParallels *= 4;
+            }
             if (eut > 0) {
-                int parallelLimit = Math.min(
-                        processingArray.machineStorage.storage.getStackInSlot(0).getCount(),
-                        (int) (processingArray.getInputVoltage() / eut));
+                int parallelLimit = Math.min(theoryParallels, (int) (processingArray.getInputVoltage() / eut));
 
                 if (parallelLimit <= 0)
                     return ModifierFunction.NULL;
@@ -275,8 +277,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
                     return ModifierFunction.NULL;
                 }
                 int tier = def.getTier();
-                int maxParallel = (int) (GTValues.V[tier] *
-                        processingArray.machineStorage.storage.getStackInSlot(0).getCount() / eut);
+                int maxParallel = (int) (GTValues.V[tier] * theoryParallels / eut);
                 parallels = ParallelLogic.getParallelAmount(processingArray, recipe, maxParallel);
             }
 
@@ -346,6 +347,6 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
     }
 
     public static int getMachineLimit(Integer tier) {
-        return tier <= GTValues.IV ? 16 : 64;
+        return tier <= GTValues.IV ? 16 : 256;
     }
 }
