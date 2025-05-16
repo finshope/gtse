@@ -461,6 +461,13 @@ public class MiscRecipeLoader {
                 .inputItems(BLAST_ALLOY_SMELTER.asStack(), 16)
                 .outputItems(GTSEMultiMachines.INDUSTRIAL_BLAST_ALLOY_SMELTER.asStack())
                 .save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder("industrial_cracker")
+                .duration(20 * 100).EUt(VA[IV])
+                .circuitMeta(16)
+                .inputItems(CRACKER.asStack(), 16)
+                .outputItems(INDUSTRIAL_CRACKER.asStack())
+                .save(provider);
     }
 
     static void createGeneratorRecipes(Consumer<FinishedRecipe> provider) {

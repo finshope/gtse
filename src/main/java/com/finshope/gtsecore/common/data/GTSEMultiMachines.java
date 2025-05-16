@@ -642,6 +642,35 @@ public class GTSEMultiMachines {
             .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
             .register();
 
+    public static final MultiblockMachineDefinition INDUSTRIAL_CRACKER = REGISTRATE
+            .multiblock("industrial_cracker", CoilWorkableElectricMultiblockMachine::new)
+            .rotationState(RotationState.ALL)
+            .recipeType(GTRecipeTypes.CRACKING_RECIPES)
+            .recipeModifier(GTSERecipeModifiers::industrialCrackerOverclock)
+            .appearanceBlock(CASING_STAINLESS_CLEAN)
+            .pattern(definition -> FactoryBlockPattern.start()
+                    .aisle("HCHCH", "HCHCH", "HCHCH")
+                    .aisle("HCHCH", "H###H", "HCHCH")
+                    .aisle("HCHCH", "HCOCH", "HCHCH")
+                    .where('O', Predicates.controller(blocks(definition.get())))
+                    .where('H', blocks(CASING_STAINLESS_CLEAN.get()).setMinGlobalLimited(12)
+                            .or(Predicates.autoAbilities(definition.getRecipeTypes()))
+                            .or(Predicates.autoAbilities(true, true, false)))
+                    .where('#', Predicates.air())
+                    .where('C', Predicates.heatingCoils())
+                    .build())
+            .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"),
+                    GTCEu.id("block/multiblock/cracking_unit"))
+            .tooltips(Component.translatable("gtceu.machine.cracker.tooltip.1"))
+            .tooltips(Component.translatable("gtceu.machine.perfect_oc"))
+            .additionalDisplay((controller, components) -> {
+                if (controller instanceof CoilWorkableElectricMultiblockMachine coilMachine && controller.isFormed()) {
+                    components.add(Component.translatable("gtceu.multiblock.cracking_unit.energy",
+                            100 - 10 * coilMachine.getCoilTier()));
+                }
+            })
+            .register();
+
     public static MultiblockMachineDefinition[] registerTieredMultis(String name,
                                                                      BiFunction<IMachineBlockEntity, Integer, MultiblockControllerMachine> factory,
                                                                      BiFunction<Integer, MultiblockMachineBuilder, MultiblockMachineDefinition> builder,

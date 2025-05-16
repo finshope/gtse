@@ -63,6 +63,24 @@ public class GTSERecipeModifiers {
         }
     }
 
+    public static @NotNull ModifierFunction industrialCrackerOverclock(@NotNull MetaMachine machine,
+                                                                       @NotNull GTRecipe recipe) {
+        if (!(machine instanceof CoilWorkableElectricMultiblockMachine coilMachine)) {
+            return RecipeModifier.nullWrongType(CoilWorkableElectricMultiblockMachine.class, machine);
+        }
+        if (RecipeHelper.getRecipeEUtTier(recipe) > coilMachine.getTier()) return ModifierFunction.NULL;
+
+        var oc = PERFECT_OVERCLOCK_SUBSECOND.getModifier(machine, recipe,
+                coilMachine.getOverclockVoltage());
+        if (coilMachine.getCoilTier() > 0) {
+            var coilModifier = ModifierFunction.builder()
+                    .eutMultiplier(1.0 - coilMachine.getCoilTier() * 0.1)
+                    .build();
+            oc = oc.andThen(coilModifier);
+        }
+        return oc;
+    }
+
     public static @NotNull ModifierFunction durationDiscount(@NotNull MetaMachine machine,
                                                              @NotNull GTRecipe recipe) {
         if (machine instanceof CoilWorkableElectricMultiblockMachine coilMachine) {

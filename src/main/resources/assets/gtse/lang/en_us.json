@@ -41,6 +41,7 @@
   "block.gtceu.luv_plasma_turbine": "§dElite plasma turbine II§r",
   "block.gtceu.zpm_plasma_turbine": "§cElite plasma turbine III§r",
   "block.gtceu.uv_plasma_turbine": "§3Ultimate plasma turbine §r",
+  "block.gtse.industrial_cracker": "Industrial cracker",
   "item.gtse.complete_card": "Complete card",
   "item.gtse.complete_card.tooltip": "Shift right click on a machine to complete current recipe immediately.",
   "gtse.machine.industrial_pyrolyse_oven.tooltip.1": "§6Cupronickel §7coils are §f25%%§7 slower. Every coil after §bKant-hal§7 increases speed by §f50%%§7.",
