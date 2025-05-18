@@ -468,6 +468,27 @@ public class MiscRecipeLoader {
                 .inputItems(CRACKER.asStack(), 16)
                 .outputItems(INDUSTRIAL_CRACKER.asStack())
                 .save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder("advanced_fusion_reactor_mk1")
+                .duration(20 * 100).EUt(VA[LuV])
+                .circuitMeta(16)
+                .inputItems(FUSION_REACTOR[LuV].asStack(), 16)
+                .outputItems(ADVANCED_FUSION_REACTOR[LuV].asStack())
+                .save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder("advanced_fusion_reactor_mk2")
+                .duration(20 * 100).EUt(VA[ZPM])
+                .circuitMeta(16)
+                .inputItems(FUSION_REACTOR[ZPM].asStack(), 16)
+                .outputItems(ADVANCED_FUSION_REACTOR[ZPM].asStack())
+                .save(provider);
+
+        ASSEMBLER_RECIPES.recipeBuilder("advanced_fusion_reactor_mk3")
+                .duration(20 * 100).EUt(VA[UV])
+                .circuitMeta(16)
+                .inputItems(FUSION_REACTOR[UV].asStack(), 16)
+                .outputItems(ADVANCED_FUSION_REACTOR[UV].asStack())
+                .save(provider);
     }
 
     static void createGeneratorRecipes(Consumer<FinishedRecipe> provider) {
