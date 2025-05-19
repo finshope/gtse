@@ -11,7 +11,7 @@ public class OverclockingLogic {
                                                                                                             PERFECT_DURATION_FACTOR,
                                                                                                             STD_VOLTAGE_FACTOR);
 
-    static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult subSecondParallelOC(com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCParams params,
+    public static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult subSecondParallelOC(com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCParams params,
                                                                                            long maxVoltage,
                                                                                            double durationFactor,
                                                                                            double voltageFactor) {

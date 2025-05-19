@@ -1,7 +1,14 @@
 package com.finshope.gtsecore.common.data;
 
+import com.gregtechceu.gtceu.api.GTValues;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.capability.recipe.IRecipeCapabilityHolder;
+import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.feature.IRecipeLogicMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.CoilWorkableElectricMultiblockMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
@@ -10,10 +17,21 @@ import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 
+import com.gregtechceu.gtceu.utils.GTHashMaps;
+import com.gregtechceu.gtceu.utils.GTUtil;
+import com.gregtechceu.gtceu.utils.OverlayedItemHandler;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 
-import static com.finshope.gtsecore.api.recipe.OverclockingLogic.PERFECT_OVERCLOCK_SUBSECOND;
-import static com.finshope.gtsecore.api.recipe.OverclockingLogic.industrialHeatingCoilOC;
+import java.util.function.Predicate;
+
+import static com.finshope.gtsecore.api.recipe.OverclockingLogic.*;
+import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.PERFECT_DURATION_FACTOR;
+import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.STD_VOLTAGE_FACTOR;
+import static com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic.limitByInput;
 
 public class GTSERecipeModifiers {
 
@@ -113,5 +131,128 @@ public class GTSERecipeModifiers {
                     .build();
         }
         return ModifierFunction.IDENTITY;
+    }
+
+    public static @NotNull ModifierFunction fastParallel(@NotNull MetaMachine metaMachine,
+                                                         @NotNull GTRecipe recipe) {
+        if (!(metaMachine instanceof WorkableElectricMultiblockMachine machine)) {
+            return RecipeModifier.nullWrongType(WorkableElectricMultiblockMachine.class, metaMachine);
+        }
+
+        long EUt = Math.abs(RecipeHelper.getRealEUt(recipe));
+        if (EUt == 0) return ModifierFunction.IDENTITY;
+
+        int recipeTier = GTUtil.getTierByVoltage(EUt);
+        int maximumTier = GTUtil.getOCTierByVoltage(machine.getOverclockVoltage());
+        int OCs = maximumTier - recipeTier;
+        if (recipeTier == GTValues.ULV) OCs--;
+        if (OCs == 0) return ModifierFunction.IDENTITY;
+
+        int maxParallels;
+        maxParallels = getParallelAmountFast(machine, recipe, Integer.MAX_VALUE);
+
+
+        OverclockingLogic.OCParams params = new OverclockingLogic.OCParams(EUt, recipe.duration, OCs, maxParallels);
+        OverclockingLogic.OCResult result = subSecondParallelOC(params, machine.getOverclockVoltage(), PERFECT_DURATION_FACTOR, STD_VOLTAGE_FACTOR);
+        return result.toModifier();
+    }
+
+    public static int getParallelAmountFast(MetaMachine machine, GTRecipe recipe, int parallelLimit) {
+        if (parallelLimit <= 1) return parallelLimit;
+        if (!(machine instanceof IRecipeLogicMachine rlm)) return 1;
+        // First check if we are limited by recipe inputs. This can short circuit a lot of consecutive checking
+        int maxInputMultiplier = limitByInput(rlm, recipe, parallelLimit);
+        if (maxInputMultiplier == 0) return 0;
+
+        // Simulate the merging of the maximum amount of recipes that can be run with these items
+        // and limit by the amount we can successfully merge
+        return limitByOutputMergingFast(rlm, recipe, maxInputMultiplier, rlm::canVoidRecipeOutputs);
+    }
+
+    public static int limitByOutputMergingFast(IRecipeCapabilityHolder holder, GTRecipe recipe, int parallelLimit,
+                                               Predicate<RecipeCapability<?>> canVoid) {
+        int minimum = parallelLimit;
+        for (RecipeCapability<?> cap : recipe.outputs.keySet()) {
+            if (canVoid.test(cap) || !cap.doMatchInRecipe()) {
+                continue;
+            }
+            // Check both normal item outputs and chanced item outputs
+            if (!recipe.getOutputContents(cap).isEmpty()) {
+                int limit = limitParallelFast(recipe, holder, parallelLimit);
+                // If we are not voiding, and cannot fit any items, return 0
+                if (limit == 0) {
+                    return 0;
+                }
+                minimum = Math.min(minimum, limit);
+            }
+        }
+        for (RecipeCapability<?> cap : recipe.tickOutputs.keySet()) {
+            if (canVoid.test(cap) || !cap.doMatchInRecipe()) {
+                continue;
+            }
+            // Check both normal item outputs and chanced item outputs
+            if (!recipe.getTickOutputContents(cap).isEmpty()) {
+                int limit;
+                if (cap instanceof ItemRecipeCapability itemCap) {
+                    limit = limitParallelFast(recipe, holder, parallelLimit);
+                } else {
+                    limit = cap.limitParallel(recipe, holder, parallelLimit);
+                }
+                // If we are not voiding, and cannot fit any items, return 0
+                if (limit == 0) {
+                    return 0;
+                }
+                minimum = Math.min(minimum, limit);
+            }
+        }
+        return minimum;
+    }
+
+    public static int limitParallelFast(GTRecipe recipe, IRecipeCapabilityHolder holder, int multiplier) {
+        if (holder instanceof ItemRecipeCapability.ICustomParallel p) return p.limitParallel(recipe, multiplier);
+
+        int minMultiplier = 0;
+        int maxMultiplier = multiplier;
+
+        FastOverlayedItemHandler itemHandler = new FastOverlayedItemHandler(new CombinedInvWrapper(
+                holder.getCapabilitiesFlat(IO.OUT, ItemRecipeCapability.CAP).stream()
+                        .filter(IItemHandlerModifiable.class::isInstance)
+                        .map(IItemHandlerModifiable.class::cast)
+                        .toArray(IItemHandlerModifiable[]::new)));
+
+        Object2IntMap<ItemStack> recipeOutputs = GTHashMaps
+                .fromItemStackCollection(recipe.getOutputContents(ItemRecipeCapability.CAP)
+                        .stream()
+                        .map(content -> ItemRecipeCapability.CAP.of(content.getContent()))
+                        .filter(ingredient -> !ingredient.isEmpty())
+                        .map(ingredient -> ingredient.getItems()[0])
+                        .toList());
+
+        while (minMultiplier != maxMultiplier) {
+            itemHandler.reset();
+
+            int returnedAmount = 0;
+            int amountToInsert;
+
+            for (Object2IntMap.Entry<ItemStack> entry : recipeOutputs.object2IntEntrySet()) {
+                // Since multiplier starts at Int.MAX, check here for integer overflow
+                if (entry.getIntValue() != 0 && multiplier > Integer.MAX_VALUE / entry.getIntValue()) {
+                    amountToInsert = Integer.MAX_VALUE;
+                } else {
+                    amountToInsert = entry.getIntValue() * multiplier;
+                }
+                returnedAmount = itemHandler.insertStackedItemStack(entry.getKey(), amountToInsert);
+                if (returnedAmount > 0) {
+                    break;
+                }
+            }
+
+            int[] bin = ParallelLogic.adjustMultiplier(returnedAmount == 0, minMultiplier, multiplier, maxMultiplier);
+            minMultiplier = bin[0];
+            multiplier = bin[1];
+            maxMultiplier = bin[2];
+
+        }
+        return multiplier;
     }
 }

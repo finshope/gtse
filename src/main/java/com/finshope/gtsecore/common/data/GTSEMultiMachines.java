@@ -216,7 +216,7 @@ public class GTSEMultiMachines {
             .rotationState(RotationState.ALL)
             .recipeType(GTSERecipeTypes.TREE_FARM_RECIPES)
             .appearanceBlock(CASING_STEEL_SOLID)
-            .recipeModifiers(ELECTRIC_OVERCLOCK.apply(PERFECT_OVERCLOCK_SUBSECOND))
+            .recipeModifiers(GTSERecipeModifiers::fastParallel)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("XXX", "XXX", "XXX")
                     .aisle("XXX", "X#X", "XXX")
