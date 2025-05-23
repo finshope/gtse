@@ -34,8 +34,8 @@ import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.*;
 import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_INDUSTRIAL_STEAM;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_LOG;
 import static com.gregtechceu.gtceu.common.data.GTBlocks.RUBBER_SAPLING;
-import static com.gregtechceu.gtceu.common.data.GTItems.ELECTRIC_PUMP_LuV;
-import static com.gregtechceu.gtceu.common.data.GTItems.STICKY_RESIN;
+import static com.gregtechceu.gtceu.common.data.GTItems.*;
+import static com.gregtechceu.gtceu.common.data.GTItems.NAQUADAH_WAFER;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
@@ -60,10 +60,57 @@ public class MiscRecipeLoader {
         createSteamVoidMinerRecipe(provider);
         createLargeFisherRecipe(provider);
         createLargeGasCollectorRecipe(provider);
+        createSolarPanelRecipe(provider);
 
         if (GTCEu.Mods.isAE2Loaded()) {
             createAE2Recipes(provider);
         }
+    }
+
+    private static void createSolarPanelRecipe(Consumer<FinishedRecipe> provider) {
+        // solar panel
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_lv", COVER_SOLAR_PANEL_LV.asStack(), "WGW", "CAC",
+                "SPS", 'W', SILICON_WAFER.asStack(), 'G', GTBlocks.CASING_TEMPERED_GLASS.asStack(), 'C',
+                CustomTags.MV_CIRCUITS, 'P', new MaterialEntry(plate, GalliumArsenide), 'A',
+                new MaterialEntry(wireGtDouble, ManganesePhosphide), 'S', new MaterialEntry(plateDouble, Silver));
+
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_mv", COVER_SOLAR_PANEL_MV.asStack(), "WGW", "CAC",
+                "SPS", 'W', SILICON_WAFER.asStack(), 'G', GTBlocks.CASING_TEMPERED_GLASS.asStack(), 'C',
+                CustomTags.HV_CIRCUITS, 'P', new MaterialEntry(plate, GalliumArsenide), 'A',
+                new MaterialEntry(wireGtDouble, MagnesiumDiboride), 'S', COVER_SOLAR_PANEL_LV.asStack());
+
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_hv", COVER_SOLAR_PANEL_HV.asStack(), "WGW", "CAC",
+                "SPS", 'W', PHOSPHORUS_WAFER.asStack(), 'G', GTBlocks.CASING_LAMINATED_GLASS.asStack(), 'C',
+                CustomTags.EV_CIRCUITS, 'P', new MaterialEntry(plateDouble, GalliumArsenide), 'A',
+                new MaterialEntry(wireGtDouble, MercuryBariumCalciumCuprate), 'S', COVER_SOLAR_PANEL_MV.asStack());
+
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_ev", COVER_SOLAR_PANEL_EV.asStack(), "WGW", "CAC",
+                "SPS", 'W', PHOSPHORUS_WAFER.asStack(), 'G', GTBlocks.CASING_LAMINATED_GLASS.asStack(), 'C',
+                CustomTags.IV_CIRCUITS, 'P', new MaterialEntry(plateDouble, GalliumArsenide), 'A',
+                new MaterialEntry(wireGtDouble, UraniumTriplatinum), 'S', COVER_SOLAR_PANEL_HV.asStack());
+
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_iv", COVER_SOLAR_PANEL_IV.asStack(), "WGW", "CAC",
+                "SPS", 'W', NAQUADAH_WAFER.asStack(), 'G', GTBlocks.FUSION_GLASS.asStack(), 'C',
+                CustomTags.LuV_CIRCUITS, 'P', new MaterialEntry(plate, IndiumGalliumPhosphide), 'A',
+                new MaterialEntry(wireGtDouble, SamariumIronArsenicOxide), 'S', COVER_SOLAR_PANEL_EV.asStack());
+
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_luv", COVER_SOLAR_PANEL_LuV.asStack(), "WGW",
+                "CAC",
+                "SPS", 'W', NAQUADAH_WAFER.asStack(), 'G', GTBlocks.FUSION_GLASS.asStack(), 'C',
+                CustomTags.ZPM_CIRCUITS, 'P', new MaterialEntry(plate, IndiumGalliumPhosphide), 'A',
+                new MaterialEntry(wireGtDouble, IndiumTinBariumTitaniumCuprate), 'S', COVER_SOLAR_PANEL_IV.asStack());
+
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_zpm", COVER_SOLAR_PANEL_ZPM.asStack(), "WGW",
+                "CAC",
+                "SPS", 'W', NEUTRONIUM_WAFER.asStack(), 'G', GTBlocks.FUSION_GLASS.asStack(), 'C',
+                CustomTags.UV_CIRCUITS, 'P', new MaterialEntry(plateDouble, IndiumGalliumPhosphide), 'A',
+                new MaterialEntry(wireGtDouble, UraniumRhodiumDinaquadide), 'S', COVER_SOLAR_PANEL_LuV.asStack());
+
+        VanillaRecipeHelper.addShapedRecipe(provider, "se_solar_panel_uv", COVER_SOLAR_PANEL_UV.asStack(), "WGW", "CAC",
+                "SPS", 'W', NEUTRONIUM_WAFER.asStack(), 'G', GTBlocks.FUSION_GLASS.asStack(), 'C',
+                CustomTags.UHV_CIRCUITS, 'P', new MaterialEntry(plateDouble, IndiumGalliumPhosphide), 'A',
+                new MaterialEntry(wireGtDouble, EnrichedNaquadahTriniumEuropiumDuranide), 'S',
+                COVER_SOLAR_PANEL_ZPM.asStack());
     }
 
     private static void createLargeGasCollectorRecipe(Consumer<FinishedRecipe> provider) {
