@@ -12,9 +12,9 @@ public class OverclockingLogic {
                                                                                                             STD_VOLTAGE_FACTOR);
 
     public static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCResult subSecondParallelOC(com.gregtechceu.gtceu.api.recipe.OverclockingLogic.OCParams params,
-                                                                                           long maxVoltage,
-                                                                                           double durationFactor,
-                                                                                           double voltageFactor) {
+                                                                                                  long maxVoltage,
+                                                                                                  double durationFactor,
+                                                                                                  double voltageFactor) {
         double duration = params.duration();
         double eut = params.eut();
         int ocAmount = params.ocAmount();

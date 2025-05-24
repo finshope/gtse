@@ -80,7 +80,6 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 import static com.gregtechceu.gtceu.common.data.GTMachines.*;
 import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
-import static com.gregtechceu.gtceu.common.data.machines.GTMachineUtils.registerTieredMultis;
 import static net.minecraft.world.level.block.Blocks.*;
 
 public class GTSEMultiMachines {
@@ -216,7 +215,7 @@ public class GTSEMultiMachines {
             .rotationState(RotationState.ALL)
             .recipeType(GTSERecipeTypes.TREE_FARM_RECIPES)
             .appearanceBlock(CASING_STEEL_SOLID)
-            .recipeModifiers(GTSERecipeModifiers::fastParallel)
+            .recipeModifiers(GTSERecipeModifiers::fastPerfectOcSubsecondParallel)
             .pattern(definition -> FactoryBlockPattern.start()
                     .aisle("XXX", "XXX", "XXX")
                     .aisle("XXX", "X#X", "XXX")

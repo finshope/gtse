@@ -1,7 +1,5 @@
 package com.finshope.gtsecore.common.data;
 
-
-import com.gregtechceu.gtceu.utils.OverlayedItemHandler;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -61,8 +59,8 @@ public class FastOverlayedItemHandler {
             if (slotKey.isEmpty() || ItemStack.isSameItemSameTags(slotKey, stack)) {
                 // if the slot is not full
                 // what if the slot can accept more than the max stack size?
-//                int canInsertUpTo = Math.min(this.slots[i].getSlotLimit() - this.slots[i].getCount(),
-//                        stack.getMaxStackSize());
+                // int canInsertUpTo = Math.min(this.slots[i].getSlotLimit() - this.slots[i].getCount(),
+                // stack.getMaxStackSize());
                 int canInsertUpTo = this.slots[i].getSlotLimit() - this.slots[i].getCount();
                 if (canInsertUpTo > 0) {
                     int insertedAmount = Math.min(canInsertUpTo, amountToInsert);

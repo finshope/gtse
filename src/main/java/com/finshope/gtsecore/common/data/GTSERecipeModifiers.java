@@ -16,21 +16,20 @@ import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
-
 import com.gregtechceu.gtceu.utils.GTHashMaps;
 import com.gregtechceu.gtceu.utils.GTUtil;
-import com.gregtechceu.gtceu.utils.OverlayedItemHandler;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
 import static com.finshope.gtsecore.api.recipe.OverclockingLogic.*;
-import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.PERFECT_DURATION_FACTOR;
-import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.STD_VOLTAGE_FACTOR;
+import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.*;
 import static com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic.limitByInput;
 
 public class GTSERecipeModifiers {
@@ -133,8 +132,9 @@ public class GTSERecipeModifiers {
         return ModifierFunction.IDENTITY;
     }
 
-    public static @NotNull ModifierFunction fastParallel(@NotNull MetaMachine metaMachine,
-                                                         @NotNull GTRecipe recipe) {
+    public static @NotNull ModifierFunction createModifier(@NotNull MetaMachine metaMachine,
+                                                           @NotNull GTRecipe recipe, double durationFactor,
+                                                           double volatageFactor) {
         if (!(metaMachine instanceof WorkableElectricMultiblockMachine machine)) {
             return RecipeModifier.nullWrongType(WorkableElectricMultiblockMachine.class, metaMachine);
         }
@@ -151,10 +151,20 @@ public class GTSERecipeModifiers {
         int maxParallels;
         maxParallels = getParallelAmountFast(machine, recipe, Integer.MAX_VALUE);
 
-
         OverclockingLogic.OCParams params = new OverclockingLogic.OCParams(EUt, recipe.duration, OCs, maxParallels);
-        OverclockingLogic.OCResult result = subSecondParallelOC(params, machine.getOverclockVoltage(), PERFECT_DURATION_FACTOR, STD_VOLTAGE_FACTOR);
+        OverclockingLogic.OCResult result = subSecondParallelOC(params, machine.getOverclockVoltage(),
+                durationFactor, volatageFactor);
         return result.toModifier();
+    }
+
+    public static @NotNull ModifierFunction fastPerfectOcSubsecondParallel(@NotNull MetaMachine metaMachine,
+                                                                           @NotNull GTRecipe recipe) {
+        return createModifier(metaMachine, recipe, PERFECT_DURATION_FACTOR, STD_VOLTAGE_FACTOR);
+    }
+
+    public static @NotNull ModifierFunction fastNonPerfectOcSubsecondParallel(@NotNull MetaMachine metaMachine,
+                                                                              @NotNull GTRecipe recipe) {
+        return createModifier(metaMachine, recipe, STD_DURATION_FACTOR, STD_VOLTAGE_FACTOR);
     }
 
     public static int getParallelAmountFast(MetaMachine machine, GTRecipe recipe, int parallelLimit) {

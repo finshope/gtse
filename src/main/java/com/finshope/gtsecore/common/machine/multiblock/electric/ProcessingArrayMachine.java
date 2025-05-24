@@ -1,5 +1,7 @@
 package com.finshope.gtsecore.common.machine.multiblock.electric;
 
+import com.finshope.gtsecore.common.data.GTSERecipeModifiers;
+
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
@@ -11,7 +13,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.TieredWorkableElectricMultib
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
-import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
@@ -41,7 +42,7 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERCLOCK;
+import static com.finshope.gtsecore.common.data.GTSERecipeModifiers.fastNonPerfectOcSubsecondParallel;
 
 /**
  * @author KilaBash
@@ -268,7 +269,7 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
                     return ModifierFunction.NULL;
 
                 parallels = Math.min(parallelLimit, getMachineLimit(machine.getDefinition().getTier()));
-                parallels = ParallelLogic.getParallelAmount(processingArray, recipe, parallels);
+                parallels = GTSERecipeModifiers.getParallelAmountFast(processingArray, recipe, parallels);
             } else {
                 isGenerator = true;
                 eut = RecipeHelper.getOutputEUt(recipe);
@@ -290,12 +291,12 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
             if (isGenerator) {
                 return modifier;
             }
-            var oc = ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK);
             var newRecipe = modifier.apply(recipe);
             if (newRecipe == null) {
                 return ModifierFunction.NULL;
             }
-            return modifier.andThen(oc.getModifier(machine, newRecipe));
+            var oc = fastNonPerfectOcSubsecondParallel(processingArray, newRecipe);
+            return modifier.andThen(oc);
         }
         return ModifierFunction.NULL;
     }
