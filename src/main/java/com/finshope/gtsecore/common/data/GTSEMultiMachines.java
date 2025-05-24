@@ -578,7 +578,7 @@ public class GTSEMultiMachines {
 
     public static final MultiblockMachineDefinition LARGE_COMBUSTION_SET = REGISTRATE
             .multiblock("large_combustion_set", LargeCombustionSetMachine::new)
-            .rotationState(RotationState.ALL)
+            .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.COMBUSTION_GENERATOR_FUELS)
             .appearanceBlock(CASING_HSSE_STURDY)
             .recipeModifier(LargeCombustionSetMachine::recipeModifier, true)

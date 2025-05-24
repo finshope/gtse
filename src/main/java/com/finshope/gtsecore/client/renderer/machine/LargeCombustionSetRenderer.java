@@ -4,12 +4,21 @@ import com.finshope.gtsecore.common.machine.multiblock.electric.LargeCombustionS
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
+import com.gregtechceu.gtceu.client.model.ModelUtil;
 import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -17,6 +26,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
+import java.util.*;
 
 import static com.finshope.gtsecore.client.renderer.GTSERenderTypes.SIMPLE_TRIANGLE_STRIP;
 
@@ -72,7 +84,8 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
 
         mat4.translate(0.5f, 0.5f, 0.5f);
         float radius = 1.5f;
-        var angle = System.currentTimeMillis() % 1000 / 1000f * 360f;
+        int period = 1000;
+        var angle = (System.currentTimeMillis() % period) / (float) period * 360f;
 
         Matrix4f backMat = new Matrix4f(mat4);
         translate(backMat, up, 3f);
@@ -95,6 +108,94 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
         translate(leftMat, right, -1.501f);
         translate(leftMat, back, 3f);
         drawFace(machine, leftMat, angle, buffer, up, right, back, radius);
+
+        stack.popPose();
+
+        // drawRotation(stack, blockEntity.getBlockPos(), level, buffer, combinedLight, combinedOverlay, up, back,
+        // right);
+    }
+
+    private void drawRotation(PoseStack stack, BlockPos pos, ClientLevel level, MultiBufferSource buffer,
+                              int combinedLight, int combinedOverlay, Direction up, Direction back, Direction right) {
+        stack.pushPose();
+        var pose = stack.last();
+        var mat4 = pose.pose();
+        mat4.translate(0, 8.001f, 0);
+        var rel = pos.relative(right, 4).subtract(pos);
+        mat4.translate(rel.getX(), rel.getY(), rel.getZ());
+
+        BlockRenderDispatcher brd = Minecraft.getInstance().getBlockRenderer();
+        RandomSource rand = level.getRandom();
+        rel = pos.relative(right, -4).relative(back, 3).subtract(pos);
+        var axis = Axis.YP;
+        switch (back) {
+            case UP:
+                axis = Axis.YP;
+                break;
+            case DOWN:
+                axis = Axis.YN;
+                break;
+            case NORTH:
+                axis = Axis.ZP;
+                break;
+            case SOUTH:
+                axis = Axis.ZN;
+                break;
+            case EAST:
+                axis = Axis.XP;
+                break;
+            case WEST:
+                axis = Axis.XN;
+                break;
+        }
+        int period = 1000;
+        var angle = (System.currentTimeMillis() % period) / (float) period * 360f;
+
+        mat4.rotateAround(axis.rotationDegrees(angle), rel.getX() + 0.5f, 0, rel.getZ() + 0.5f);
+
+        int light = LightTexture.pack(15, 15);
+        var center = pos.relative(up, 6).relative(right, 3);
+        int width = 7;
+        int height = 7;
+
+        Vector3f rightStep = new Vector3f(-right.getStepX(), -right.getStepY(), -right.getStepZ());
+        rel = pos.relative(back, 1).relative(right, height).subtract(pos);
+        Vector3f resetStep = new Vector3f(rel.getX(), rel.getY(), rel.getZ());
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                var currentPos = center.relative(back, i).relative(right, -j);
+                var state = level.getBlockState(currentPos);
+                if (state.isAir()) {
+                    continue;
+                }
+                BakedModel model = brd.getBlockModel(state);
+
+                mat4.translate(rightStep);
+
+                List<BakedQuad> quads = new ArrayList<>();
+                quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, up, rand));
+                quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, up.getOpposite(), rand));
+                if (i == 0) {
+                    quads.addAll(
+                            ModelUtil.getBakedModelQuads(model, level, currentPos, state, back.getOpposite(), rand));
+                } else if (i == height - 1) {
+                    quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, back, rand));
+                }
+                if (j == 0) {
+                    quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, right, rand));
+                } else if (j == width - 1) {
+                    quads.addAll(
+                            ModelUtil.getBakedModelQuads(model, level, currentPos, state, right.getOpposite(), rand));
+                }
+
+                for (BakedQuad bakedQuad : quads) {
+                    buffer.getBuffer(RenderType.cutout()).putBulkData(pose, bakedQuad, 1, 1, 1, light,
+                            combinedOverlay);
+                }
+            }
+            mat4.translate(resetStep);
+        }
+
         stack.popPose();
     }
 
@@ -171,4 +272,8 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
     // public boolean shouldRender(BlockEntity blockEntity, Vec3 cameraPos) {
     // return true;
     // }
+
+    public record BlockPosFace(
+                               BlockPos position,
+                               Direction face) {}
 }
