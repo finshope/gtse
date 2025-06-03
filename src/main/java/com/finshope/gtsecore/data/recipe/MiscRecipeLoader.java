@@ -488,6 +488,11 @@ public class MiscRecipeLoader {
                 new MaterialEntry(TagPrefix.rotor, GTMaterials.Steel), 'P', CustomTags.LV_CIRCUITS, 'A',
                 GTMachines.HULL[GTValues.MV].asStack(), 'C', GTItems.ELECTRIC_PUMP_LV.asStack());
 
+        VanillaRecipeHelper.addShapedRecipe(provider, true, "personal_beacon",
+                PERSONAL_BEACON.asStack(), "PCP", "SAS", "PCP", 'S',
+                ENDER_PEARL, 'P', CustomTags.LV_CIRCUITS, 'A',
+                GTMachines.HULL[GTValues.LV].asStack(), 'C', FIELD_GENERATOR_LV.asStack());
+
         ASSEMBLER_RECIPES.recipeBuilder("macro_blast_furnace")
                 .duration(20 * 100).EUt(VA[LV])
                 .circuitMeta(16)
