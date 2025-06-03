@@ -80,7 +80,9 @@ public class PersonalBeaconRecipeLogic extends RecipeLogic {
                     setStatus(Status.WORKING);
                     // Apply the potion effects to the player
                     for (MobEffectInstance effect : effects) {
-                        player.addEffect(new MobEffectInstance(effect.getEffect(), eachApplyDuration, effect.getAmplifier() + amplifierBoost, effect.isAmbient(), effect.isVisible(), effect.showIcon()));
+                        player.addEffect(new MobEffectInstance(effect.getEffect(), eachApplyDuration,
+                                effect.getAmplifier() + amplifierBoost, effect.isAmbient(), effect.isVisible(),
+                                effect.showIcon()));
                     }
                 }
             }

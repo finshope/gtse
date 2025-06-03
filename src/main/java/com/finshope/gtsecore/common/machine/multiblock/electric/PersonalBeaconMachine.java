@@ -35,6 +35,8 @@ import java.util.Map;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static com.gregtechceu.gtceu.api.recipe.OverclockingLogic.STD_VOLTAGE_FACTOR;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class PersonalBeaconMachine extends WorkableElectricMultiblockMachine {
@@ -120,6 +122,12 @@ public class PersonalBeaconMachine extends WorkableElectricMultiblockMachine {
     @Override
     public int getOverclockTier() {
         return GTUtil.getFloorTierByVoltage(getMaxVoltage());
+    }
+
+    @Override
+    public long getOverclockVoltage() {
+        long power = (long) (GTValues.VA[GTValues.LV] * Math.pow(STD_VOLTAGE_FACTOR, getOverclockTier() - GTValues.LV));
+        return Math.min(power, super.getOverclockVoltage());
     }
 
     public boolean drainInput(boolean simulate) {

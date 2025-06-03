@@ -88,7 +88,7 @@ public class GTSEMultiMachines {
             .abilities(PartAbility.STEAM)
             .overlaySteamHullRenderer("large_steam_hatch")
             .tooltips(Component.translatable("gtceu.universal.tooltip.fluid_storage_capacity",
-                            SteamHatchPartMachine.INITIAL_TANK_CAPACITY * 64),
+                    SteamHatchPartMachine.INITIAL_TANK_CAPACITY * 64),
                     Component.translatable("gtceu.machine.steam.steam_hatch.tooltip"))
             .register();
     public static final MultiblockMachineDefinition STEAM_CENTRIFUGE = REGISTRATE
@@ -442,8 +442,8 @@ public class GTSEMultiMachines {
                     .where(' ', any())
                     .build())
             .recoveryItems(
-                    () -> new ItemLike[]{
-                            GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get()})
+                    () -> new ItemLike[] {
+                            GTMaterialItems.MATERIAL_ITEMS.get(TagPrefix.dustTiny, GTMaterials.Ash).get() })
             .workableCasingRenderer(GTCEu.id("block/casings/solid/machine_casing_heatproof"),
                     GTCEu.id("block/multiblock/electric_blast_furnace"))
             .tooltips(Component.translatable("gtceu.machine.electric_blast_furnace.tooltip.0"),
@@ -568,8 +568,8 @@ public class GTSEMultiMachines {
                     .tooltips(Component.translatable("gtceu.universal.tooltip.parallel",
                             ProcessingArrayMachine.getMachineLimit(tier)))
                     .workableCasingRenderer(tier == IV ?
-                                    GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel") :
-                                    GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
+                            GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel") :
+                            GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
                             GTCEu.id("block/multiblock/processing_array"))
                     .register(),
             IV, LuV);
@@ -782,7 +782,8 @@ public class GTSEMultiMachines {
                     .aisle("XXXXXXXXX", " XXXXXXX ", "         ", "         ", "         ", "         ", "         ")
                     .aisle("XXXXSXXXX", "F       F", "F       F", "F       F", "F       F", "G       G", "         ")
                     .where('S', Predicates.controller(blocks(definition.getBlock())))
-                    .where('F', blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.Steel).get()))
+                    .where('F',
+                            blocks(GTMaterialBlocks.MATERIAL_BLOCKS.get(TagPrefix.frameGt, GTMaterials.Steel).get()))
                     .where('G', blocks(CASING_TEMPERED_GLASS.get()))
                     .where('X', blocks(CASING_STEEL_SOLID.get()).setMinGlobalLimited(10)
                             .or(abilities(IMPORT_FLUIDS).setMinGlobalLimited(1, 1))

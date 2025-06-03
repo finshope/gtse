@@ -49,7 +49,7 @@ public class PersonalBeaconRenderer extends WorkableCasingMachineRenderer {
         var up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
         var back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
         var right = RelativeDirection.RIGHT.getRelativeFacing(front, upwards, flipped);
-        var beamColor = new float[]{
+        var beamColor = new float[] {
                 0f, 0.5f, 1f
         };
 
