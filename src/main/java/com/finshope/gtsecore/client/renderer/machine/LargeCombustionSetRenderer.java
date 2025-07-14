@@ -2,10 +2,9 @@ package com.finshope.gtsecore.client.renderer.machine;
 
 import com.finshope.gtsecore.common.machine.multiblock.electric.LargeCombustionSetMachine;
 
-import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
-import com.gregtechceu.gtceu.client.model.ModelUtil;
-import com.gregtechceu.gtceu.client.renderer.machine.WorkableCasingMachineRenderer;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRender;
+import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderType;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,14 +16,14 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
+import com.mojang.serialization.Codec;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -32,24 +31,11 @@ import java.util.*;
 
 import static com.finshope.gtsecore.client.renderer.GTSERenderTypes.SIMPLE_TRIANGLE_STRIP;
 
-public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
+public class LargeCombustionSetRenderer extends DynamicRender<LargeCombustionSetMachine, LargeCombustionSetRenderer> {
 
-    public LargeCombustionSetRenderer(ResourceLocation baseCasing, ResourceLocation workableModel) {
-        super(baseCasing, workableModel);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void render(BlockEntity blockEntity, float partialTicks, PoseStack stack, MultiBufferSource buffer,
-                       int combinedLight, int combinedOverlay) {
-        if (blockEntity instanceof IMachineBlockEntity machineBlockEntity &&
-                machineBlockEntity.getMetaMachine() instanceof LargeCombustionSetMachine machine) {
-            if (!machine.recipeLogic.isWorking()) {
-                return;
-            }
-            renderMachine(machine, blockEntity, partialTicks, stack, buffer, combinedLight, combinedOverlay);
-        }
-    }
+    public static final Codec<LargeCombustionSetRenderer> CODEC = Codec.unit(LargeCombustionSetRenderer::new);
+    public static final DynamicRenderType<LargeCombustionSetMachine, LargeCombustionSetRenderer> TYPE = new DynamicRenderType<>(
+            LargeCombustionSetRenderer.CODEC);
 
     private void translate(Matrix4f mat, Direction direction, float mv) {
         float x = direction.getStepX() * mv;
@@ -67,20 +53,20 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void renderMachine(LargeCombustionSetMachine machine, BlockEntity blockEntity, float partialTicks,
+    private void renderMachine(LargeCombustionSetMachine machine, float partialTicks,
                                PoseStack stack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
         // render a rotated block
         stack.pushPose();
 
         var mat4 = stack.last().pose();
         var vc = buffer.getBuffer(SIMPLE_TRIANGLE_STRIP);
-        var level = (ClientLevel) blockEntity.getLevel();
+        var level = (ClientLevel) machine.getLevel();
         var front = machine.getFrontFacing();
         var upwards = machine.getUpwardsFacing();
         var flipped = machine.isFlipped();
-        var up = RelativeDirection.UP.getRelativeFacing(front, upwards, flipped);
-        var back = RelativeDirection.BACK.getRelativeFacing(front, upwards, flipped);
-        var right = RelativeDirection.RIGHT.getRelativeFacing(front, upwards, flipped);
+        var up = RelativeDirection.UP.getRelative(front, upwards, flipped);
+        var back = RelativeDirection.BACK.getRelative(front, upwards, flipped);
+        var right = RelativeDirection.RIGHT.getRelative(front, upwards, flipped);
 
         mat4.translate(0.5f, 0.5f, 0.5f);
         float radius = 1.5f;
@@ -173,20 +159,20 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
                 mat4.translate(rightStep);
 
                 List<BakedQuad> quads = new ArrayList<>();
-                quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, up, rand));
-                quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, up.getOpposite(), rand));
-                if (i == 0) {
-                    quads.addAll(
-                            ModelUtil.getBakedModelQuads(model, level, currentPos, state, back.getOpposite(), rand));
-                } else if (i == height - 1) {
-                    quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, back, rand));
-                }
-                if (j == 0) {
-                    quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, right, rand));
-                } else if (j == width - 1) {
-                    quads.addAll(
-                            ModelUtil.getBakedModelQuads(model, level, currentPos, state, right.getOpposite(), rand));
-                }
+                // quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, up, rand));
+                // quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, up.getOpposite(), rand));
+                // if (i == 0) {
+                // quads.addAll(
+                // ModelUtil.getBakedModelQuads(model, level, currentPos, state, back.getOpposite(), rand));
+                // } else if (i == height - 1) {
+                // quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, back, rand));
+                // }
+                // if (j == 0) {
+                // quads.addAll(ModelUtil.getBakedModelQuads(model, level, currentPos, state, right, rand));
+                // } else if (j == width - 1) {
+                // quads.addAll(
+                // ModelUtil.getBakedModelQuads(model, level, currentPos, state, right.getOpposite(), rand));
+                // }
 
                 for (BakedQuad bakedQuad : quads) {
                     buffer.getBuffer(RenderType.cutout()).putBulkData(pose, bakedQuad, 1, 1, 1, light,
@@ -252,28 +238,27 @@ public class LargeCombustionSetRenderer extends WorkableCasingMachineRenderer {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean hasTESR(BlockEntity blockEntity) {
-        return true;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean isGlobalRenderer(BlockEntity blockEntity) {
-        return true;
+    public void render(LargeCombustionSetMachine largeCombustionSetMachine, float partialTick,
+                       PoseStack poseStack, MultiBufferSource buffer,
+                       int packedLight, int packedOverlay) {
+        if (!largeCombustionSetMachine.recipeLogic.isWorking()) {
+            return;
+        }
+        renderMachine(largeCombustionSetMachine, partialTick, poseStack, buffer, packedLight, packedOverlay);
     }
 
     @Override
     public int getViewDistance() {
         return 256;
     }
-    //
-    // @Override
-    // public boolean shouldRender(BlockEntity blockEntity, Vec3 cameraPos) {
-    // return true;
-    // }
 
-    public record BlockPosFace(
-                               BlockPos position,
-                               Direction face) {}
+    @Override
+    public boolean shouldRender(LargeCombustionSetMachine machine, Vec3 cameraPos) {
+        return machine.recipeLogic.isWorking();
+    }
+
+    @Override
+    public DynamicRenderType<LargeCombustionSetMachine, LargeCombustionSetRenderer> getType() {
+        return TYPE;
+    }
 }

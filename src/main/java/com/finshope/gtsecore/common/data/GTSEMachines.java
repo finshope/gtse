@@ -15,7 +15,6 @@ import com.gregtechceu.gtceu.api.machine.*;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
 import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
-import com.gregtechceu.gtceu.client.renderer.machine.SimpleGeneratorMachineRenderer;
 import com.gregtechceu.gtceu.common.data.*;
 
 import net.minecraft.network.chat.Component;
@@ -45,7 +44,7 @@ public class GTSEMachines {
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("nether_collector"),
                             GTSERecipeTypes.NETHER_COLLECTOR_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .workableTieredHullRenderer(GTSECore.id("block/machines/nether_collector"))
+                    .workableTieredHullModel(GTSECore.id("block/machines/nether_collector"))
                     .recipeType(GTSERecipeTypes.NETHER_COLLECTOR_RECIPES)
                     .tooltips(GTSEMultiMachines.workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
                             GTSERecipeTypes.NETHER_COLLECTOR_RECIPES, defaultTankSizeFunction.apply(tier), true))
@@ -58,7 +57,7 @@ public class GTSEMachines {
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("harvester"),
                             GTSERecipeTypes.HARVESTER_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .workableTieredHullRenderer(GTSECore.id("block/machines/harvester"))
+                    .workableTieredHullModel(GTSECore.id("block/machines/harvester"))
                     .recipeType(GTSERecipeTypes.HARVESTER_RECIPES)
                     .tooltips(Component.translatable("gtse.machine.harvester.tooltip"))
                     .register(),
@@ -71,7 +70,7 @@ public class GTSEMachines {
                     .editableUI(SimpleTieredMachine.EDITABLE_UI_CREATOR.apply(GTSECore.id("mob_simulator"),
                             GTSERecipeTypes.MOB_SIMULATOR_RECIPES))
                     .rotationState(RotationState.NON_Y_AXIS)
-                    .workableTieredHullRenderer(GTSECore.id("block/machines/mob_simulator"))
+                    .workableTieredHullModel(GTSECore.id("block/machines/mob_simulator"))
                     .recipeModifiers(ELECTRIC_OVERCLOCK.apply(OverclockingLogic.NON_PERFECT_OVERCLOCK_SUBTICK))
                     .recipeType(GTSERecipeTypes.MOB_SIMULATOR_RECIPES)
                     .register(),
@@ -101,7 +100,7 @@ public class GTSEMachines {
                         .recipeModifier(SimpleGeneratorMachine::recipeModifier, true)
                         .addOutputLimit(ItemRecipeCapability.CAP, 0)
                         .addOutputLimit(FluidRecipeCapability.CAP, 0)
-                        .renderer(() -> new SimpleGeneratorMachineRenderer(tier, GTCEu.id("block/generators/" + name)))
+                        .simpleGeneratorModel(GTCEu.id("block/generators/" + name))
                         .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64, recipeType,
                                 tankScalingFunction.apply(tier), false))
                         .register(),

@@ -1,5 +1,6 @@
 package com.finshope.gtsecore;
 
+import com.finshope.gtsecore.client.renderer.GTSERenderers;
 import com.finshope.gtsecore.common.data.GTSECreativeModeTabs;
 import com.finshope.gtsecore.common.data.GTSEItems;
 import com.finshope.gtsecore.common.data.GTSEMachines;
@@ -68,6 +69,7 @@ public class GTSECore {
         GTSEConfig.init();
         GTSEItems.init();
         ItemProperties.init();
+        GTSERenderers.init();
         REGISTRATE.registerRegistrate();
     }
 

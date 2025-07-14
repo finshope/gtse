@@ -21,7 +21,8 @@ public class LargeCombustionSetMachine extends WorkableElectricMultiblockMachine
 
     public static ModifierFunction recipeModifier(@NotNull MetaMachine machine, @NotNull GTRecipe recipe) {
         if (machine instanceof LargeCombustionSetMachine generator) {
-            long EUt = RecipeHelper.getOutputEUt(recipe);
+            var realEUt = RecipeHelper.getRealEUt(recipe);
+            long EUt = realEUt.voltage();
             if (EUt <= 0L) {
                 return ModifierFunction.NULL;
             } else {

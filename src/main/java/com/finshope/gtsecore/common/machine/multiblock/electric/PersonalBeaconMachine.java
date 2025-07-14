@@ -195,7 +195,7 @@ public class PersonalBeaconMachine extends WorkableElectricMultiblockMachine {
 
     private String durationToString(Integer value) {
         int seconds = value / 20;
-        if( seconds < 60) {
+        if (seconds < 60) {
             return "%ds".formatted(seconds);
         } else {
             int minutes = seconds / 60;

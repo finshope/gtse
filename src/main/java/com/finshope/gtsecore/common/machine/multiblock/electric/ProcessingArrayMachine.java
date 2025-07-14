@@ -256,13 +256,14 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
                 return ModifierFunction.NULL;
 
             boolean isGenerator = false;
-            long eut = RecipeHelper.getInputEUt(recipe);
+            var realEUt = RecipeHelper.getRealEUtWithIO(recipe);
+            long eut = realEUt.voltage();
             int parallels;
             int theoryParallels = processingArray.machineStorage.storage.getStackInSlot(0).getCount();
             if (machine.getDefinition().getTier() >= GTValues.LuV) {
                 theoryParallels *= 4;
             }
-            if (eut > 0) {
+            if (realEUt.isInput()) {
                 int parallelLimit = Math.min(theoryParallels, (int) (processingArray.getInputVoltage() / eut));
 
                 if (parallelLimit <= 0)
@@ -272,7 +273,6 @@ public class ProcessingArrayMachine extends TieredWorkableElectricMultiblockMach
                 parallels = GTSERecipeModifiers.getParallelAmountFast(processingArray, recipe, parallels);
             } else {
                 isGenerator = true;
-                eut = RecipeHelper.getOutputEUt(recipe);
                 var def = processingArray.getMachineDefinition();
                 if (def == null) {
                     return ModifierFunction.NULL;
