@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "gtse:block/machine/opv_nether_collector",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gtse:block/machine/opv_nether_collector"
+    },
+    "facing=south": {
+      "model": "gtse:block/machine/opv_nether_collector",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gtse:block/machine/opv_nether_collector",
+      "y": 270
+    }
+  }
+}

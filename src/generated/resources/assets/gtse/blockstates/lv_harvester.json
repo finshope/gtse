@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "gtse:block/machine/lv_harvester",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gtse:block/machine/lv_harvester"
+    },
+    "facing=south": {
+      "model": "gtse:block/machine/lv_harvester",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gtse:block/machine/lv_harvester",
+      "y": 270
+    }
+  }
+}

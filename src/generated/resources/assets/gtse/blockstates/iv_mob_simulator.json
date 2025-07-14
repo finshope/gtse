@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "gtse:block/machine/iv_mob_simulator",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "gtse:block/machine/iv_mob_simulator"
+    },
+    "facing=south": {
+      "model": "gtse:block/machine/iv_mob_simulator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "gtse:block/machine/iv_mob_simulator",
+      "y": 270
+    }
+  }
+}
