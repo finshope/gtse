@@ -9,6 +9,7 @@
         "textures": {
           "bottom": "gtceu:block/casings/voltage/ev/bottom",
           "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
+          "overlay_side": "gtceu:block/generators/gas_turbine/overlay_side",
           "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "side": "gtceu:block/casings/voltage/ev/side",
           "top": "gtceu:block/casings/voltage/ev/top"
@@ -21,6 +22,7 @@
         "textures": {
           "bottom": "gtceu:block/casings/voltage/ev/bottom",
           "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
+          "overlay_side": "gtceu:block/generators/gas_turbine/overlay_side",
           "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "side": "gtceu:block/casings/voltage/ev/side",
           "top": "gtceu:block/casings/voltage/ev/top"
@@ -33,6 +35,7 @@
         "textures": {
           "bottom": "gtceu:block/casings/voltage/ev/bottom",
           "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
+          "overlay_side": "gtceu:block/generators/gas_turbine/overlay_side_active",
           "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "side": "gtceu:block/casings/voltage/ev/side",
           "top": "gtceu:block/casings/voltage/ev/top"
@@ -45,6 +48,7 @@
         "textures": {
           "bottom": "gtceu:block/casings/voltage/ev/bottom",
           "overlay": "gtceu:block/overlay/machine/overlay_energy_1a_out",
+          "overlay_side": "gtceu:block/generators/gas_turbine/overlay_side_active",
           "overlay_tinted": "gtceu:block/overlay/machine/overlay_energy_1a_tinted",
           "side": "gtceu:block/casings/voltage/ev/side",
           "top": "gtceu:block/casings/voltage/ev/top"

@@ -241,7 +241,7 @@ public class GTSEMultiMachines {
                     .aisle("XXX", "XSX", "XXX")
                     .where('S', Predicates.controller(blocks(definition.get())))
                     .where('X',
-                            blocks(MACHINE_CASING_EV.get()).setMinGlobalLimited(6)
+                            blocks(CASING_TITANIUM_STABLE.get()).setMinGlobalLimited(6)
                                     .or(Predicates.autoAbilities(definition.getRecipeTypes()))
                                     .or(Predicates.autoAbilities(true, true, false)))
                     .where('C', Predicates.heatingCoils())
@@ -255,7 +255,7 @@ public class GTSEMultiMachines {
                         .aisle("CCC", "C#C", "CCC")
                         .aisle("EEX", "XHX", "XXX")
                         .where('S', definition, Direction.NORTH)
-                        .where('X', MACHINE_CASING_EV.getDefaultState())
+                        .where('X', CASING_TITANIUM_STABLE.getDefaultState())
                         .where('E', ENERGY_INPUT_HATCH[GTValues.LV], Direction.SOUTH)
                         .where('I', ITEM_IMPORT_BUS[GTValues.LV], Direction.NORTH)
                         .where('O', ITEM_EXPORT_BUS[GTValues.LV], Direction.NORTH)
@@ -571,7 +571,7 @@ public class GTSEMultiMachines {
                     .workableCasingModel(tier == IV ?
                             GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel") :
                             GTCEu.id("block/casings/solid/machine_casing_sturdy_hsse"),
-                            GTCEu.id("block/multiblock/processing_array"))
+                            GTSECore.id("block/multiblock/processing_array"))
                     .register(),
             IV, LuV);
 
