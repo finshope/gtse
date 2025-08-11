@@ -24,5 +24,11 @@ public class GTSEConfig {
         @Configurable
         @Configurable.Comment({ "Maximum parallel count of industrial steam machine", "Default: 64" })
         public int industrialSteamMachineMaxParallels = 64;
+
+        @Configurable
+        @Configurable.Comment({
+                "Whether large advanced turbine will blow up entities in front of rotor holder when working",
+                "Default: true" })
+        public boolean enableAdvancedTurbineBlowing = true;
     }
 }

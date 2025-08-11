@@ -1,5 +1,7 @@
 package com.finshope.gtsecore.common.machine.multiblock.generator;
 
+import com.finshope.gtsecore.config.GTSEConfig;
+
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
@@ -12,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.pattern.FactoryBlockPattern;
 import com.gregtechceu.gtceu.api.pattern.TraceabilityPredicate;
 import com.gregtechceu.gtceu.api.pattern.predicates.SimplePredicate;
+import com.gregtechceu.gtceu.api.pattern.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTItems;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
@@ -22,20 +25,31 @@ import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachi
 
 import com.lowdragmc.lowdraglib.utils.BlockInfo;
 
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Supplier;
 
+import static com.finshope.gtsecore.GTSECore.LOGGER;
 import static com.finshope.gtsecore.api.registries.GTSERegistires.REGISTRATE;
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.api.pattern.Predicates.*;
 
 public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
+
+    private AABB fanArea;
+    private Direction facing;
+    private TickableSubscription blowSub;
 
     @Nullable
     protected TickableSubscription transferRotorSubs;
@@ -47,7 +61,67 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
     @Override
     public void onLoad() {
         super.onLoad();
+        subscribeBlowSub();
         transferRotorSubs = subscribeServerTick(transferRotorSubs, this::transferRotors);
+    }
+
+    @Override
+    public void onStructureFormed() {
+        subscribeBlowSub();
+        super.onStructureFormed();
+    }
+
+    private void subscribeBlowSub() {
+        if (GTSEConfig.INSTANCE.server.enableAdvancedTurbineBlowing) {
+            blowSub = subscribeServerTick(this::blowEntities);
+            // setup blow area
+            var pos = getPos();
+            var front = getFrontFacing();
+            var upwards = getUpwardsFacing();
+            var flipped = isFlipped();
+            var ul = RelativeDirection.offsetPos(pos, front, upwards, flipped, 1, -2, 0);
+            var br = RelativeDirection.offsetPos(pos, front, upwards, flipped, -1, -9, -2);
+            fanArea = new AABB(Math.min(ul.getX(), br.getX()), Math.min(ul.getY(), br.getY()),
+                    Math.min(ul.getZ(), br.getZ()),
+                    Math.max(ul.getX() + 1, br.getX() + 1), Math.max(ul.getY() + 1, br.getY() + 1),
+                    Math.max(ul.getZ() + 1, br.getZ() + 1));
+
+            facing = front.getCounterClockWise();
+            // XXX: why getUpwardsFacing() never returning up and done?
+            if (upwards != Direction.DOWN && upwards != Direction.UP) {
+                // get rotor position
+                var rotorPos = RelativeDirection.offsetPos(pos, front, upwards, flipped, 0, -1, -1);
+
+                if (getMachine(getLevel(), rotorPos) instanceof IRotorHolderMachine rotorHolder) {
+                    if (rotorPos.getY() > pos.getY()) {
+                        facing = Direction.UP;
+                    } else if (rotorPos.getY() < pos.getY()) {
+                        facing = Direction.DOWN;
+                    }
+                } else {
+                    rotorPos = RelativeDirection.offsetPos(pos, front, upwards, flipped, 0, 1, -1);
+                    if (getMachine(getLevel(), rotorPos) instanceof IRotorHolderMachine rotorHolder) {
+                        if (rotorPos.getY() > pos.getY()) {
+                            facing = Direction.UP;
+                        } else if (rotorPos.getY() < pos.getY()) {
+                            facing = Direction.DOWN;
+                        }
+                    } else {
+                        LOGGER.warn("No rotor holder found for large turbine at {}", pos);
+                    }
+                }
+            }
+            LOGGER.info("Fan area is {}. Rotor facing is {}.", fanArea.toString(), facing);
+        }
+    }
+
+    @Override
+    public void onUnload() {
+        super.onUnload();
+        unsubscribe(transferRotorSubs);
+        transferRotorSubs = null;
+        unsubscribe(blowSub);
+        blowSub = null;
     }
 
     @Nullable
@@ -100,6 +174,36 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
                             return;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private void blowEntities() {
+        if (isRemote() || getLevel() == null) return;
+        if (!getRecipeLogic().isWorking()) {
+            return;
+        }
+        var rotor = getRotorHolder();
+        if (rotor == null) {
+            return;
+        }
+        double speed = rotor.getRotorSpeed() / 1123.3D;
+        List<Entity> list = getLevel().getEntitiesOfClass(Entity.class, fanArea);
+
+        for (Entity entity : list) {
+            if (entity != null) {
+                if (entity instanceof Entity) {
+                    if (facing != Direction.UP && facing != Direction.DOWN) {
+                        var dx = speed * Mth.sin((float) Math.toRadians(((facing.toYRot()))));
+                        var dz = -speed * Mth.cos((float) Math.toRadians(((facing.toYRot()))));
+                        entity.push(dx, 0D, dz);
+                    } else if (facing == Direction.UP) {
+                        Vec3 vec3d = entity.getDeltaMovement();
+                        entity.setDeltaMovement(vec3d.x * speed, 0.125F * speed, vec3d.z * speed);
+                        entity.push(0D, 0.25D * speed, 0D);
+                        entity.fallDistance = 0;
+                    } else entity.push(0D, -0.2D * speed, 0D);
                 }
             }
         }
