@@ -49,6 +49,8 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
 
     private AABB fanArea;
     private Direction facing;
+    private double dx;
+    private double dz;
     private TickableSubscription blowSub;
 
     @Nullable
@@ -111,6 +113,8 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
                     }
                 }
             }
+            dx = Mth.sin((float) Math.toRadians(((facing.toYRot()))));
+            dz = - Mth.cos((float) Math.toRadians(((facing.toYRot()))));
             LOGGER.info("Fan area is {}. Rotor facing is {}.", fanArea.toString(), facing);
         }
     }
@@ -189,16 +193,14 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
         if (rotor == null) {
             return;
         }
-        double speed = rotor.getRotorSpeed() / 1123.3D;
+        double speed = rotor.getRotorSpeed() / 11233D;
         List<Entity> list = getLevel().getEntitiesOfClass(Entity.class, fanArea);
 
         for (Entity entity : list) {
             if (entity != null) {
                 if (entity instanceof Entity) {
                     if (facing != Direction.UP && facing != Direction.DOWN) {
-                        var dx = speed * Mth.sin((float) Math.toRadians(((facing.toYRot()))));
-                        var dz = -speed * Mth.cos((float) Math.toRadians(((facing.toYRot()))));
-                        entity.push(dx, 0D, dz);
+                        entity.push(dx * speed, 0D, dz * speed);
                     } else if (facing == Direction.UP) {
                         Vec3 vec3d = entity.getDeltaMovement();
                         entity.setDeltaMovement(vec3d.x * speed, 0.125F * speed, vec3d.z * speed);
