@@ -134,7 +134,8 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
         return null;
     }
 
-    private boolean hasRotor() {
+    @Override
+    public boolean hasRotor() {
         var holder = getRotorHolder();
         if (holder == null) {
             return false;
