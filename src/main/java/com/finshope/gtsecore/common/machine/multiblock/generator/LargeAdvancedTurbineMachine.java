@@ -114,7 +114,7 @@ public class LargeAdvancedTurbineMachine extends LargeTurbineMachine {
                 }
             }
             dx = Mth.sin((float) Math.toRadians(((facing.toYRot()))));
-            dz = - Mth.cos((float) Math.toRadians(((facing.toYRot()))));
+            dz = -Mth.cos((float) Math.toRadians(((facing.toYRot()))));
             LOGGER.info("Fan area is {}. Rotor facing is {}.", fanArea.toString(), facing);
         }
     }
