@@ -38,7 +38,7 @@ public class GTSERecipeTypes {
             .setSound(GTSoundEntries.SCIENCE);
 
     public static final GTRecipeType LARGE_FISHER_RECIPES = GTRecipeTypes.register("large_fisher", MULTIBLOCK)
-            .setMaxIOSize(1, 32, 0, 0).setEUIO(IO.IN)
+            .setMaxIOSize(2, 16, 0, 0).setEUIO(IO.IN)
             .setProgressBar(GuiTextures.PROGRESS_BAR_MACERATE, LEFT_TO_RIGHT)
             .setSound(GTSoundEntries.SCIENCE);
 
